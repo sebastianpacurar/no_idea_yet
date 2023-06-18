@@ -72,3 +72,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 /.idea
+/mono_*.blob
+
+/[Aa]ssets/Cainos
+/[Aa]ssets/Gothicvania-Town
