@@ -351,6 +351,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 731526213}
+  - component: {fileID: 731526214}
   m_Layer: 0
   m_Name: GroundChecker
   m_TagString: Untagged
@@ -373,6 +374,41 @@ Transform:
   m_Father: {fileID: 1298913717}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &731526214
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731526212}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.75, y: 0.2}
+  m_Direction: 1
 --- !u!1 &1173543537
 GameObject:
   m_ObjectHideFlags: 0
@@ -554,6 +590,7 @@ GameObject:
   - component: {fileID: 1298913718}
   - component: {fileID: 1298913721}
   - component: {fileID: 1298913720}
+  - component: {fileID: 1298913722}
   m_Layer: 0
   m_Name: Knight
   m_TagString: Untagged
@@ -711,7 +748,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &1298913720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -738,7 +775,7 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_DefaultControlScheme: Keyboard
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
@@ -754,10 +791,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f70963e1ad2cf079a0ba93a6ba503b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runSpeed: 0
+  runSpeed: 5
+  jumpForce: 5
   moveInputVal: 0
   isGrounded: 0
-  groundChecker: {fileID: 0}
+  isJumpPressed: 0
+  groundChecker: {fileID: 731526213}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+--- !u!114 &1298913722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298913714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b4151163baaf36289e06ef915ce3dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isAscending: 0
+  isDescending: 0
+  isFalling: 0
 --- !u!1 &1905294335
 GameObject:
   m_ObjectHideFlags: 0
@@ -773,7 +830,7 @@ GameObject:
   - component: {fileID: 1905294341}
   - component: {fileID: 1905294340}
   - component: {fileID: 1905294339}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
