@@ -25,14 +25,16 @@ namespace Knight {
         private void HandleAnimations() {
             var moveVal = _controllerScript.moveInputVal;
             var grounded = _controllerScript.isGrounded;
+            var isAttacking = _controllerScript.isAttacking;
 
             // set initial state to default to idle. in case any of the below conditions fail, then Player is in idle
             var state = AnimationState.Idle;
 
             if (moveVal != 0f && grounded) state = AnimationState.Run;
-            else if (isAscending) state = AnimationState.Ascend;
-            else if (isDescending) state = AnimationState.Descend;
-            else if (isFalling) state = AnimationState.Fall;
+            if (isAscending) state = AnimationState.Ascend;
+            if (isDescending) state = AnimationState.Descend;
+            if (isFalling) state = AnimationState.Fall;
+            if (isAttacking) state = AnimationState.Attack;
 
             _animator.SetInteger("State", (int)state);
         }
@@ -40,7 +42,7 @@ namespace Knight {
         private void SetVariables() {
             var velY = _rb.velocity.y;
             var grounded = _controllerScript.isGrounded;
-            
+
             isAscending = velY > 0.5f && !grounded;
             isDescending = velY < -0.5f && !grounded;
 
@@ -54,13 +56,18 @@ namespace Knight {
             isFalling = true;
         }
 
+        // called in Attack animation
+        public void StopAttackAnimation() {
+            _controllerScript.isAttacking = false;
+        }
+
         private enum AnimationState {
             Idle,
             Run,
             Ascend,
             Descend,
             Fall,
-            FirstAttack,
+            Attack,
             Death
         }
     }

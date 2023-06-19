@@ -9,6 +9,8 @@ namespace Knight {
         public float moveInputVal;
         public bool isGrounded;
         public bool isJumpPressed;
+        public bool isAttacking;
+        public bool isInteractPressed;
 
         [Space(10)]
         [Header("References")]
@@ -21,35 +23,29 @@ namespace Knight {
         #region input actions
         private InputAction _runAction;
         private InputAction _jumpAction;
+        private InputAction _attackAction;
         #endregion
 
 
+        # region unity callback methods
         private void Awake() {
             InitializeInputControls();
             _rb = GetComponent<Rigidbody2D>();
         }
 
         private void Update() {
-            // update the isGrounded variable
             CheckIfGrounded();
         }
 
         private void FixedUpdate() {
-            var x = moveInputVal;
-
-            // change the object based on its velocity
-            _rb.velocity = new Vector2(x * runSpeed, _rb.velocity.y);
-
-            if (isJumpPressed && isGrounded) {
-                var jumpVector = new Vector2(0f, jumpForce);
-                _rb.AddForce(jumpVector, ForceMode2D.Impulse);
-                isJumpPressed = false;
-            }
-
+            HandleMoveFunctionality();
+            HandleJumpFunctionality();
             FlipPlayerScale();
         }
+        #endregion
 
 
+        #region input actions related methods
         private void Move(InputAction.CallbackContext ctx) {
             switch (ctx.phase) {
                 case InputActionPhase.Started:
@@ -71,6 +67,21 @@ namespace Knight {
             }
         }
 
+        private void Attack(InputAction.CallbackContext ctx) {
+            if (isGrounded && !isAttacking) isAttacking = true;
+        }
+
+        private void Interact(InputAction.CallbackContext ctx) {
+            switch (ctx.phase) {
+                case InputActionPhase.Started:
+                case InputActionPhase.Performed:
+                    isInteractPressed = true;
+                    break;
+            }
+        }
+        #endregion
+
+
         private void CheckIfGrounded() {
             var pos = groundChecker.position;
             var size = new Vector2(0.75f, 0.2f);
@@ -89,24 +100,42 @@ namespace Knight {
             }
         }
 
+        private void HandleJumpFunctionality() {
+            if (isJumpPressed && isGrounded && !isAttacking) {
+                var jumpVector = new Vector2(0f, jumpForce);
+                _rb.AddForce(jumpVector, ForceMode2D.Impulse);
+                isJumpPressed = false;
+            }
+        }
+
+        private void HandleMoveFunctionality() {
+            _rb.velocity = new Vector2(moveInputVal * runSpeed, _rb.velocity.y);
+        }
+
         private void InitializeInputControls() {
             _controls = new InputControls();
             _runAction = _controls.Player.Run;
             _jumpAction = _controls.Player.Jump;
+            _attackAction = _controls.Player.Attack;
         }
 
+        #region Subscribe/Unsubscribe methods as callbacks for events
         private void OnEnable() {
             _runAction.Enable();
             _jumpAction.Enable();
+            _attackAction.Enable();
 
+            //Unsubscribe the Move, Jump and Attack methods (call relevant methods when actions are performed) 
             _runAction.performed += Move;
             _runAction.canceled += Move;
             _jumpAction.performed += Jump;
             _jumpAction.canceled += Jump;
+            _attackAction.performed += Attack;
         }
 
 
         private void OnDisable() {
+            //Unsubscribe the Move, Jump and Attack methods
             _runAction.performed -= Move;
             _runAction.canceled -= Move;
             _jumpAction.performed -= Jump;
@@ -114,6 +143,8 @@ namespace Knight {
 
             _runAction.Disable();
             _jumpAction.Disable();
+            _attackAction.Disable();
         }
+        #endregion
     }
 }
