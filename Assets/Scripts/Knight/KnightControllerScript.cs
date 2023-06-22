@@ -86,7 +86,7 @@ namespace Knight {
 
         private void CheckIfGrounded() {
             var pos = groundChecker.position;
-            var size = new Vector2(0.75f, 0.2f);
+            var size = new Vector2(1.1f, 0.2f);
             var direction = CapsuleDirection2D.Horizontal;
             var angle = 0f;
 

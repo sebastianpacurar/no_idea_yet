@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8953707960451960682}
   - component: {fileID: 562056405025431877}
   - component: {fileID: 6020742557134490750}
+  - component: {fileID: 5613083615080309088}
   - component: {fileID: 4191901517011260274}
   - component: {fileID: 9065348108485356145}
   - component: {fileID: 7270911348157067900}
@@ -38,7 +39,7 @@ Transform:
   m_Children:
   - {fileID: 6226779607630766128}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3390893277784370572
 SpriteRenderer:
@@ -147,7 +148,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5519859093111188052}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -175,6 +176,51 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1.4156289, y: 2.3786225}
   m_Direction: 0
+--- !u!61 &5613083615080309088
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5519859093111188052}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: ad84478f534ef4517a4d9825c25d6f74, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.054255962, y: -0.039239764}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.45, y: 0.5}
+    oldSize: {x: 7.5, y: 2.5}
+    newSize: {x: 3.75, y: 1.25}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.1419249, y: 2.2930996}
+  m_EdgeRadius: 0
 --- !u!114 &4191901517011260274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,7 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runSpeed: 5
-  jumpForce: 10
+  jumpForce: 12.5
   moveInputVal: 0
   isGrounded: 0
   isJumpPressed: 0
@@ -323,5 +369,5 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.75, y: 0.2}
+  m_Size: {x: 1.1, y: 0.2}
   m_Direction: 1

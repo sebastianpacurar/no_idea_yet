@@ -589,7 +589,7 @@ TextureImporter:
         width: 45
         height: 45
       alignment: 9
-      pivot: {x: 0.4888889, y: 0.4888889}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -610,7 +610,7 @@ TextureImporter:
         width: 35
         height: 35
       alignment: 9
-      pivot: {x: 0.4857143, y: 0.4857143}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1130,7 +1130,7 @@ TextureImporter:
       name: TX Village Props - Billboard
       rect:
         serializedVersion: 2
-        x: 189
+        x: 191
         y: 800
         width: 68
         height: 61
@@ -1282,7 +1282,7 @@ TextureImporter:
         width: 87
         height: 91
       alignment: 9
-      pivot: {x: 0.56458426, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1403,8 +1403,8 @@ TextureImporter:
       name: TX Village Props - Hay Pile
       rect:
         serializedVersion: 2
-        x: 192
-        y: 736
+        x: 193
+        y: 737
         width: 62
         height: 34
       alignment: 0
@@ -1807,7 +1807,7 @@ TextureImporter:
         width: 96
         height: 40
       alignment: 9
-      pivot: {x: 0.6772346, y: 0.3914589}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

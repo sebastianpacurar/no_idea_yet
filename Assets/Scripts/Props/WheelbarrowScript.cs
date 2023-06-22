@@ -7,10 +7,12 @@ namespace Props {
         [Header("References")]
         [SerializeField] private GameObject[] wheels;
         [SerializeField] private float speedThreshold;
+        [SerializeField] private float rotationFactor;
 
         [Header("For Debugging purposes")]
         [SerializeField] private float speed;
         [SerializeField] private float direction;
+        [SerializeField] private Vector2 localVelocity;
 
         private void Awake() {
             _rb = GetComponent<Rigidbody2D>();
@@ -34,11 +36,18 @@ namespace Props {
         }
 
         private void SetSpeedAndDirection() {
-            var localVelocity = transform.InverseTransformDirection(_rb.velocity);
-            speed = localVelocity.magnitude * 100;
+            // transform velocity from WorldSpace to LocalSpace
+            localVelocity = transform.InverseTransformDirection(_rb.velocity);
+
+            // get the length (speed) of the localVelocity (multiplied by rotFactor to get desired effect)
+            speed = localVelocity.magnitude * rotationFactor;
 
             // rotation is done on the opposite side of the direction
             direction = -Mathf.Sign(localVelocity.x);
+        }
+
+        public bool IsMoving() {
+            return speed > 1f;
         }
     }
 }

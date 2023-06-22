@@ -43,8 +43,8 @@ namespace Knight {
             var velY = _rb.velocity.y;
             var grounded = _controllerScript.isGrounded;
 
-            isAscending = velY > 0.5f && !grounded;
-            isDescending = velY < -0.5f && !grounded;
+            isAscending = velY > 0.1f && !grounded;
+            isDescending = velY < 0f && !grounded;
 
             if (isFalling && grounded) {
                 isFalling = false;
