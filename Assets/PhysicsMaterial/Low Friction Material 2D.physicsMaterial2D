@@ -6,6 +6,6 @@ PhysicsMaterial2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Small Crate Physics Material 2D
-  friction: 0.075
+  m_Name: Low Friction Material 2D
+  friction: 0.4
   bounciness: 0

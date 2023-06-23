@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 4860340377375689117}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.75, y: 1.75, z: 1}
+  m_LocalScale: {x: 2.25, y: 2.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3914702196849212985}
@@ -131,11 +131,11 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 5
-  m_LinearDrag: 10
+  m_Mass: 4
+  m_LinearDrag: 1
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 3a03210f5a5b5ac77ae90be63309798f, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -155,7 +155,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 7471573481177739236}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: cd47d0ba274997776b5638c8aa74e5cf, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -189,7 +189,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.9, y: 1.825}
+  m_Size: {x: 2.45, y: 2.4}
   m_EdgeRadius: 0
 --- !u!114 &694991272275878015
 MonoBehaviour:
@@ -203,6 +203,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feb8b26d5eb1329688e1330fbdae711d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialParentTransform: {fileID: 0}
-  bound: 0
-  offset: {x: 0, y: 0, z: 0}
+  targetObj: {fileID: 0}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  rayDistance: 0
+  rayDistanceFactor: 5
+  lowFriction: {fileID: 6200000, guid: 3a03210f5a5b5ac77ae90be63309798f, type: 2}
+  highFriction: {fileID: 6200000, guid: f8de3bd95d900c20097391549bebec3f, type: 2}

@@ -3,23 +3,33 @@ using UnityEngine;
 namespace Props {
     public class WheelbarrowScript : MonoBehaviour {
         private Rigidbody2D _rb;
+        private BoxCollider2D _box;
 
         [Header("References")]
         [SerializeField] private GameObject[] wheels;
         [SerializeField] private float speedThreshold;
         [SerializeField] private float rotationFactor;
+        [SerializeField] private float maxSpeed;
+        [SerializeField] private PhysicsMaterial2D lowFriction;
+        [SerializeField] private PhysicsMaterial2D highFriction;
 
         [Header("For Debugging purposes")]
         [SerializeField] private float speed;
         [SerializeField] private float direction;
         [SerializeField] private Vector2 localVelocity;
+        [SerializeField] private bool isPlayerCollision;
 
         private void Awake() {
             _rb = GetComponent<Rigidbody2D>();
+            _box = GetComponent<BoxCollider2D>();
         }
 
         private void Update() {
             SetSpeedAndDirection();
+
+            // in Update() because changing the friction of box not rigidbody
+            SetPhysicsMaterial(isPlayerCollision ? lowFriction : highFriction);
+
 
             foreach (var wheel in wheels) {
                 wheel.transform.Rotate(0, 0, speed * direction * Time.deltaTime);
@@ -46,8 +56,22 @@ namespace Props {
             direction = -Mathf.Sign(localVelocity.x);
         }
 
-        public bool IsMoving() {
-            return speed > 1f;
+        private void OnCollisionEnter2D(Collision2D other) {
+            if (other.gameObject.CompareTag("Player")) {
+                isPlayerCollision = true;
+            }
+        }
+
+        private void OnCollisionExit2D(Collision2D other) {
+            if (other.gameObject.CompareTag("Player")) {
+                isPlayerCollision = false;
+            }
+        }
+
+
+        // Set the PhysicsMaterial2D with the provided version
+        private void SetPhysicsMaterial(PhysicsMaterial2D material) {
+            _box.sharedMaterial = material;
         }
     }
 }
