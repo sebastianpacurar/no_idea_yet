@@ -72,7 +72,10 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 /.idea
+
+# editor crashes logs
 /mono_*.blob
+/.attach_pid*
 
 /[Aa]ssets/Cainos
 /[Aa]ssets/Gothicvania-Town

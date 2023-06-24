@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace Props {
-    public class WheelbarrowScript : MonoBehaviour {
+    public class CartScript : MonoBehaviour {
         private Rigidbody2D _rb;
         private BoxCollider2D _box;
 
@@ -9,7 +9,6 @@ namespace Props {
         [SerializeField] private GameObject[] wheels;
         [SerializeField] private float speedThreshold;
         [SerializeField] private float rotationFactor;
-        [SerializeField] private float maxSpeed;
         [SerializeField] private PhysicsMaterial2D lowFriction;
         [SerializeField] private PhysicsMaterial2D highFriction;
 
@@ -30,7 +29,7 @@ namespace Props {
             // in Update() because changing the friction of box not rigidbody
             SetPhysicsMaterial(isPlayerCollision ? lowFriction : highFriction);
 
-
+            // rotate wheels
             foreach (var wheel in wheels) {
                 wheel.transform.Rotate(0, 0, speed * direction * Time.deltaTime);
             }
@@ -38,6 +37,7 @@ namespace Props {
 
         private void FixedUpdate() {
             SetMaxVelocity();
+            HaltCartWhenNoPlayerCollision();
         }
 
         private void SetMaxVelocity() {
@@ -68,6 +68,9 @@ namespace Props {
             }
         }
 
+        private void HaltCartWhenNoPlayerCollision() {
+            _rb.mass = isPlayerCollision ? 2 : 20;
+        }
 
         // Set the PhysicsMaterial2D with the provided version
         private void SetPhysicsMaterial(PhysicsMaterial2D material) {

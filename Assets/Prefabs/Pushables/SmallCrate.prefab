@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 6263849464328755489}
   - component: {fileID: 4830679967222629205}
   - component: {fileID: 694991272275878015}
+  - component: {fileID: 3208663552983643118}
   m_Layer: 6
   m_Name: SmallCrate
   m_TagString: Pushable
@@ -203,14 +204,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feb8b26d5eb1329688e1330fbdae711d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetObj: {fileID: 0}
+  lowFriction: {fileID: 6200000, guid: 3a03210f5a5b5ac77ae90be63309798f, type: 2}
+  highFriction: {fileID: 6200000, guid: f8de3bd95d900c20097391549bebec3f, type: 2}
+--- !u!114 &3208663552983643118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7471573481177739236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc46a6b0e11c7bbc793bfa5425e5390c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  rayDistance: 0
-  rayDistanceFactor: 5
-  lowFriction: {fileID: 6200000, guid: 3a03210f5a5b5ac77ae90be63309798f, type: 2}
-  highFriction: {fileID: 6200000, guid: f8de3bd95d900c20097391549bebec3f, type: 2}
+  distFromPlayerX: 0
+  distFromPlayerFactorX: 5
+  distFromGround: 10

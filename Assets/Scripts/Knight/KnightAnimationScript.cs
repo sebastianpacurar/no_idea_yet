@@ -12,9 +12,10 @@ namespace Knight {
         [SerializeField] private bool isFalling;
 
         private void Awake() {
+            var parent = transform.parent;
             _animator = GetComponent<Animator>();
-            _rb = GetComponent<Rigidbody2D>();
-            _controllerScript = GetComponent<KnightControllerScript>();
+            _rb = parent.GetComponent<Rigidbody2D>();
+            _controllerScript = parent.GetComponent<KnightControllerScript>();
         }
 
         private void Update() {
