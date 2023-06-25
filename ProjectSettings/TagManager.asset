@@ -16,7 +16,7 @@ TagManager:
   - UI
   - Pushable
   - Character
-  - 
+  - TownFolk
   - 
   - 
   - 
@@ -55,4 +55,7 @@ TagManager:
     locked: 0
   - name: PropsAfterPlayer
     uniqueID: 3091377915
+    locked: 0
+  - name: InteractionUI
+    uniqueID: 160814615
     locked: 0

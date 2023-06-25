@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2359106131010607088, guid: f98d0f39fcc67a34f844abd8a50f2c03, type: 3}
+      propertyPath: gemType
+      value: 
+      objectReference: {fileID: 8625683422514546649, guid: dd54903e1614d9542aad6982dd85c691, type: 3}
     - target: {fileID: 2505392169562815574, guid: f98d0f39fcc67a34f844abd8a50f2c03, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -24,6 +28,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2989231385014749405, guid: f98d0f39fcc67a34f844abd8a50f2c03, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 295395546, guid: d325874f668b8da4583b8259e525d97c, type: 3}
     - target: {fileID: 6063230242488560833, guid: f98d0f39fcc67a34f844abd8a50f2c03, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -89,6 +97,10 @@ PrefabInstance:
       value: SilverChest
       objectReference: {fileID: 0}
     - target: {fileID: 7032948834266337753, guid: f98d0f39fcc67a34f844abd8a50f2c03, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 22100000, guid: 3eb6b251820742b6f897c493db6186c4, type: 2}
+    - target: {fileID: 8131149003902021998, guid: f98d0f39fcc67a34f844abd8a50f2c03, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 22100000, guid: 3eb6b251820742b6f897c493db6186c4, type: 2}

@@ -4,64 +4,41 @@ using UnityEngine;
 namespace Chest {
     public class ChestControllerScript : MonoBehaviour {
         [SerializeField] private GameObject notificationObj;
-        [SerializeField] private GameObject overlappingImg;
-        private Animator _animator;
-        public bool isOpen;
-
-        private void Awake() {
-            _animator = GetComponent<Animator>();
-        }
+        [SerializeField] private SpriteRenderer xLightImg;
+        [SerializeField] private SpriteRenderer xDarkImg;
 
         private void Start() {
+            // false since no contact with the player when script gets started
             notificationObj.SetActive(false);
         }
 
-        private IEnumerator ToggleImgVisibility() {
+        private IEnumerator ToggleSprite() {
             while (true) {
+                // execute what's below yield, every half a second
                 yield return new WaitForSeconds(0.5f);
-                var currentActiveStatus = overlappingImg.activeInHierarchy;
-                overlappingImg.SetActive(!currentActiveStatus);
+
+                // swap the order in the Sorting Layer between the images
+                (xLightImg.sortingOrder, xDarkImg.sortingOrder) = (xDarkImg.sortingOrder, xLightImg.sortingOrder);
             }
         }
 
-        #region collider logic
         private void OnTriggerEnter2D(Collider2D other) {
             if (other.gameObject.CompareTag("Player")) {
-                HandleNotificationReveal();
+                // reveal notification and start the ToggleSprite Coroutine
+
+                notificationObj.SetActive(true);
+                StartCoroutine(nameof(ToggleSprite));
             }
         }
 
 
         private void OnTriggerExit2D(Collider2D other) {
             if (other.gameObject.CompareTag("Player")) {
-                HandleNotificationHide();
+                // hide notification and stop the ToggleSprite Coroutine
+
+                notificationObj.SetActive(false);
+                StopCoroutine(nameof(ToggleSprite));
             }
-        }
-        #endregion
-
-
-        private void HandleNotificationReveal() {
-            notificationObj.SetActive(true);
-            StartCoroutine(nameof(ToggleImgVisibility));
-        }
-
-        private void HandleNotificationHide() {
-            if (isOpen) {
-                CloseChest();
-            }
-
-            notificationObj.SetActive(false);
-            StopCoroutine(nameof(ToggleImgVisibility));
-        }
-
-        public void OpenChest() {
-            _animator.SetBool("IsOpened", true);
-            isOpen = true;
-        }
-
-        public void CloseChest() {
-            _animator.SetBool("IsOpened", false);
-            isOpen = false;
         }
     }
 }

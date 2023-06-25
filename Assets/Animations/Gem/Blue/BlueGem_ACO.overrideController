@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: BlueGem_ACO
+  m_Controller: {fileID: 9100000, guid: 340b4da34f66c00aaaf6eaee2ea64436, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: cf0c485e0e46da72c8c52b2e61c8289d, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 5f1ea25dcc66b393cb0ddaae03bb5d71, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: d02e599ac677243cb8036eab4dcde9f4, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e7dd41ce940631faa86c037af5310b2a, type: 2}

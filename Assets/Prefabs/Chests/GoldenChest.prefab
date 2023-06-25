@@ -8,17 +8,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2359106131010607088, guid: f98d0f39fcc67a34f844abd8a50f2c03, type: 3}
+      propertyPath: gemType
+      value: 
+      objectReference: {fileID: 8130793338910354263, guid: 89b890984b5ed4c0d934dbb01048cc7c, type: 3}
+    - target: {fileID: 2989231385014749405, guid: f98d0f39fcc67a34f844abd8a50f2c03, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -463854072, guid: d325874f668b8da4583b8259e525d97c, type: 3}
     - target: {fileID: 6063230242488560833, guid: f98d0f39fcc67a34f844abd8a50f2c03, type: 3}
       propertyPath: m_RootOrder
       value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 6063230242488560833, guid: f98d0f39fcc67a34f844abd8a50f2c03, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.04
+      value: -19.5
       objectReference: {fileID: 0}
     - target: {fileID: 6063230242488560833, guid: f98d0f39fcc67a34f844abd8a50f2c03, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6063230242488560833, guid: f98d0f39fcc67a34f844abd8a50f2c03, type: 3}
       propertyPath: m_LocalPosition.z
@@ -57,6 +65,10 @@ PrefabInstance:
       value: GoldenChest
       objectReference: {fileID: 0}
     - target: {fileID: 7032948834266337753, guid: f98d0f39fcc67a34f844abd8a50f2c03, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 22100000, guid: 8dead6d702e3d1d6b924a0218d586987, type: 2}
+    - target: {fileID: 8131149003902021998, guid: f98d0f39fcc67a34f844abd8a50f2c03, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 22100000, guid: 8dead6d702e3d1d6b924a0218d586987, type: 2}
