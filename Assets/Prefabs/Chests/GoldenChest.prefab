@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6444162992911803967, guid: f98d0f39fcc67a34f844abd8a50f2c03, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: 8262c5b3fdc2af34eb38b91a84539d95, type: 2}
     - target: {fileID: 6555802641292658610, guid: f98d0f39fcc67a34f844abd8a50f2c03, type: 3}
       propertyPath: m_Name
       value: GoldenChest

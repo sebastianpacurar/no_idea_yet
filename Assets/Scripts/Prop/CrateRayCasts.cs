@@ -13,9 +13,9 @@ namespace Prop {
         
         private BoxCollider2D _boxCollider;
 
-        public RaycastHit2D HitPlayerLeft { get; set; }
-        public RaycastHit2D HitPlayerRight { get; set; }
-        public RaycastHit2D HitGroundBottom { get; set; }
+        public RaycastHit2D HitPlayerLeft { get; private set; }
+        public RaycastHit2D HitPlayerRight { get; private set; }
+        public RaycastHit2D HitGroundBottom { get; private set; }
 
         private void Awake() {
             _boxCollider = GetComponent<BoxCollider2D>();

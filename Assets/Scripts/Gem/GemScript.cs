@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace Gem {
     public class GemScript : MonoBehaviour {
-        [SerializeField] private float timeToLive;
+        [SerializeField] private float ttlInSeconds;
         [SerializeField] private float upSpeed;
-        private float _startTime;
+        private float _targetTime;
         private float _counter;
         private Vector3 _initialPos;
         private Animator _animator;
@@ -16,7 +16,9 @@ namespace Gem {
         private void Start() {
             _counter = 0f;
             _initialPos = transform.position;
-            _startTime = Time.time;
+
+            // current time + how many seconds to wait
+            _targetTime = Time.time + ttlInSeconds;
         }
 
         private void Update() {
@@ -27,8 +29,8 @@ namespace Gem {
             // increase counter based on (speed * time per frame
             _counter += upSpeed * Time.deltaTime;
 
-            // while _counter is smaller than 
-            if (Time.time < _startTime + timeToLive) {
+            // if current time smaller than target time
+            if (Time.time < _targetTime) {
                 transform.position = new Vector3(_initialPos.x, _initialPos.y + _counter, _initialPos.z);
             } else {
                 _animator.SetTrigger("Disappear");
