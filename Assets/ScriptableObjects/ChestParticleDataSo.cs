@@ -5,24 +5,23 @@ namespace ScriptableObjects.ChestParticles {
     public class ChestParticleDataSo : ScriptableObject {
         [Header("Main Module")]
         [Space(2)]
-        [SerializeField] private float[] startLifetime = new float[2];
-        [SerializeField] private float[] startSpeed = new float[2];
-        [SerializeField] private float[] startSize = new float[2];
+        [SerializeField] private Vector2 startLifetime;
+        [SerializeField] private Vector2 startSpeed;
+        [SerializeField] private Vector2 startSize;
 
         [Space(10)]
         [Header("Emission Module")]
         [Space(2)]
-        [SerializeField] private float[] emRateOverTime = new float[2];
-
+        [SerializeField] private Vector2 emRateOverTime;
         [Space(10)]
         [Header("Size over Lifetime Module")]
         [Space(2)]
-        [SerializeField] private float[] sizeOverLifetime = new float[2];
+        [SerializeField] private Vector2 sizeOverLifetime;
 
         [Space(10)]
         [Header("Size by Speed Module")]
         [Space(2)]
-        [SerializeField] private float[] sizeBySpeed = new float[2];
+        [SerializeField] private Vector2 sizeBySpeed;
 
         [Space(10)]
         [Header("Color over Lifetime Module")]
@@ -42,12 +41,12 @@ namespace ScriptableObjects.ChestParticles {
 
 
         #region getters
-        public float[] StartLifetime => startLifetime;
-        public float[] StartSpeed => startSpeed;
-        public float[] StartSize => startSize;
-        public float[] EmRateOverTime => emRateOverTime;
-        public float[] SizeOverLifetime => sizeOverLifetime;
-        public float[] SizeBySpeed => sizeBySpeed;
+        public Vector2 StartLifetime => startLifetime;
+        public Vector2 StartSpeed => startSpeed;
+        public Vector2 StartSize => startSize;
+        public Vector2 EmRateOverTime => emRateOverTime;
+        public Vector2 SizeOverLifetime => sizeOverLifetime;
+        public Vector2 SizeBySpeed => sizeBySpeed;
         public Gradient ColOverLifetime => colOverLifetime;
         #endregion
     }

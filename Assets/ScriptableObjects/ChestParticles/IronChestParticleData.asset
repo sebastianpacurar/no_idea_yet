@@ -12,24 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b37d194f3c567689910f5a30630eb1f, type: 3}
   m_Name: IronChestParticleData
   m_EditorClassIdentifier: 
-  startLifetime:
-  - 0.3
-  - 1.25
-  startSpeed:
-  - 0.25
-  - 3
-  startSize:
-  - 0.25
-  - 0.5
-  emRateOverTime:
-  - 5
-  - 10
-  sizeOverLifetime:
-  - 1.1
-  - 0.2
-  sizeBySpeed:
-  - 1.1
-  - 0.1
+  startLifetime: {x: 0.3, y: 1.25}
+  startSpeed: {x: 0.25, y: 3}
+  startSize: {x: 0.25, y: 0.5}
+  emRateOverTime: {x: 5, y: 10}
+  sizeOverLifetime: {x: 1.1, y: 0.2}
+  sizeBySpeed: {x: 1.1, y: 0.1}
   colOverLifetime:
     serializedVersion: 2
     key0: {r: 0, g: 0.47942042, b: 1, a: 1}

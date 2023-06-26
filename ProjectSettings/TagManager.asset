@@ -7,6 +7,7 @@ TagManager:
   - Chest
   - Pushable
   - Terrain
+  - VirtualCam
   layers:
   - Default
   - TransparentFX
@@ -61,4 +62,7 @@ TagManager:
     locked: 0
   - name: InteractionUI
     uniqueID: 160814615
+    locked: 0
+  - name: PlayerStats
+    uniqueID: 2576416885
     locked: 0

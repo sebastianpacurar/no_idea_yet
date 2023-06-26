@@ -12,24 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b37d194f3c567689910f5a30630eb1f, type: 3}
   m_Name: WoodChestParticleData
   m_EditorClassIdentifier: 
-  startLifetime:
-  - 0.25
-  - 1.5
-  startSpeed:
-  - 0.25
-  - 2.5
-  startSize:
-  - 0.1
-  - 0.5
-  emRateOverTime:
-  - 1
-  - 10
-  sizeOverLifetime:
-  - 1
-  - 0.1
-  sizeBySpeed:
-  - 1
-  - 0.1
+  startLifetime: {x: 0.25, y: 1.5}
+  startSpeed: {x: 0.25, y: 2.5}
+  startSize: {x: 0.1, y: 0.5}
+  emRateOverTime: {x: 1, y: 10}
+  sizeOverLifetime: {x: 1, y: 0.1}
+  sizeBySpeed: {x: 1, y: 0.1}
   colOverLifetime:
     serializedVersion: 2
     key0: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}

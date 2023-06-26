@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Knight {
     public class PlayerAnimationScript : MonoBehaviour {
-        private Animator _animator;
         private Rigidbody2D _rb;
         private PlayerControllerScript _controllerScript;
 
@@ -11,11 +10,13 @@ namespace Knight {
         [SerializeField] private bool isDescending;
         [SerializeField] private bool isFalling;
 
+        private Animator _animator;
+
         private void Awake() {
             var parent = transform.parent;
-            _animator = GetComponent<Animator>();
             _rb = parent.GetComponent<Rigidbody2D>();
             _controllerScript = parent.GetComponent<PlayerControllerScript>();
+            _animator = GetComponent<Animator>();
         }
 
         private void Update() {
