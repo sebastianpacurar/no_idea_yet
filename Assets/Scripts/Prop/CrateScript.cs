@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Prop {
@@ -9,6 +10,8 @@ namespace Prop {
         private CrateRayCasts _ray;
         private Rigidbody2D _rb;
         private float _initialMass;
+
+        public bool isOnCart;
 
         private void Awake() {
             _rb = GetComponent<Rigidbody2D>();
@@ -59,6 +62,18 @@ namespace Prop {
         // cause the crate to drop quickly, until it collides with the first bottom object
         private void SetGravityWhenFalling() {
             _rb.gravityScale = _rb.velocity.y < -0.1f ? 10 : 1;
+        }
+
+        private void OnCollisionEnter2D(Collision2D other) {
+            if (other.gameObject.name.Equals("Cart")) {
+                isOnCart = true;
+            }
+        }
+
+        private void OnCollisionExit2D(Collision2D other) {
+            if (other.gameObject.name.Equals("Cart")) {
+                isOnCart = false;
+            }
         }
     }
 }

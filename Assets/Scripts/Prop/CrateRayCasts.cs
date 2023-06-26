@@ -10,8 +10,9 @@ namespace Prop {
         [SerializeField] private float distFromPlayerX; // left and right rays. used only on X axis
         [SerializeField] private float distFromPlayerFactorX;
         [SerializeField] private float distFromGround = 10f;
-        
+
         private BoxCollider2D _boxCollider;
+        private CrateScript _crateScript;
 
         public RaycastHit2D HitPlayerLeft { get; private set; }
         public RaycastHit2D HitPlayerRight { get; private set; }
@@ -19,10 +20,17 @@ namespace Prop {
 
         private void Awake() {
             _boxCollider = GetComponent<BoxCollider2D>();
+            _crateScript = GetComponent<CrateScript>();
         }
-        
+
         private void Update() {
-            distFromPlayerX = _boxCollider.size.x * distFromPlayerFactorX;
+            if (_crateScript.isOnCart) {
+                //HACK: find dynamic value to make crate on cart smooth when pushed
+                distFromPlayerX = _boxCollider.size.x * 2.5f + 0.1f;
+            } else {
+                distFromPlayerX = _boxCollider.size.x * distFromPlayerFactorX;
+            }
+
             CastRays();
         }
 
@@ -33,7 +41,7 @@ namespace Prop {
             HitPlayerRight = Physics2D.Raycast(cratePos, Vector2.right, distFromPlayerX, playerLayer);
             HitGroundBottom = Physics2D.Raycast(cratePos, Vector2.down, distFromGround, groundLayer);
         }
-        
+
         // NOTE: For Debugging
         private void OnDrawGizmos() {
             var pos = transform.position;
