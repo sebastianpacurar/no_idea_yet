@@ -8,6 +8,7 @@ TagManager:
   - Pushable
   - Terrain
   - VirtualCam
+  - GlobalLight
   layers:
   - Default
   - TransparentFX

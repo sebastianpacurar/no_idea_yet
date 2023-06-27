@@ -502,9 +502,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1fe2b21c9804f52ad2303a240cd0ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  swingObject: {fileID: 3699451771363030629}
+  lightOnObj: {fileID: 1561926324586098975}
+  lightOffObj: {fileID: 3853342785676548741}
+  minIntensity: 0.5
+  swingObj: {fileID: 3699451771363030629}
   sinFreq: 2.5
   sinAmplitude: 30
+  stopSmoothTime: 0.5
 --- !u!1 &8096369078453091817
 GameObject:
   m_ObjectHideFlags: 0
