@@ -27,12 +27,14 @@ namespace Knight {
         private void HandleAnimations() {
             var moveVal = _controllerScript.moveInputVal;
             var grounded = _controllerScript.isGrounded;
+            var isSprinting = _controllerScript.isSprinting;
             var isAttacking = _controllerScript.isAttacking;
 
             // set initial state to default to idle. in case any of the below conditions fail, then Player is in idle
             var state = AnimationState.Idle;
 
             if (moveVal != 0f && grounded) state = AnimationState.Run;
+            if (isSprinting) state = AnimationState.Sprint;
             if (isAscending) state = AnimationState.Ascend;
             if (isDescending) state = AnimationState.Descend;
             if (isFalling) state = AnimationState.Fall;
@@ -70,6 +72,7 @@ namespace Knight {
             Descend,
             Fall,
             Attack,
+            Sprint,
             Death
         }
     }

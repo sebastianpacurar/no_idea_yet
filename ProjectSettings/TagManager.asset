@@ -60,6 +60,9 @@ TagManager:
   - name: PropsAfterPlayer
     uniqueID: 3091377915
     locked: 0
+  - name: Collectables
+    uniqueID: 1512909411
+    locked: 0
   - name: InteractionUI
     uniqueID: 160814615
     locked: 0

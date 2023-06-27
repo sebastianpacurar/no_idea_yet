@@ -5,9 +5,12 @@ using UnityEngine.InputSystem;
 namespace Knight {
     public class PlayerControllerScript : MonoBehaviour {
         [SerializeField] private float runSpeed;
+        [SerializeField] private float sprintSpeed;
         [SerializeField] private float jumpForce;
         public float moveInputVal;
         public bool isGrounded;
+        public bool isSprinting;
+        public bool isSprintPressed;
         public bool isJumpPressed;
         public bool isAttacking;
         public bool isInteractPressed;
@@ -23,6 +26,7 @@ namespace Knight {
 
         #region input actions
         private InputAction _runAction;
+        private InputAction _sprintAction;
         private InputAction _jumpAction;
         private InputAction _attackAction;
         private InputAction _interactAction;
@@ -37,10 +41,11 @@ namespace Knight {
 
         private void Update() {
             CheckIfGrounded();
+            CheckIfCanSprint();
         }
 
         private void FixedUpdate() {
-            HandleMoveFunctionality();
+            HandleRunAndSprint();
             HandleJumpFunctionality();
             FlipPlayerScale();
         }
@@ -56,6 +61,20 @@ namespace Knight {
                     break;
                 case InputActionPhase.Canceled:
                     moveInputVal = 0f;
+                    break;
+            }
+        }
+
+        private void Sprint(InputAction.CallbackContext ctx) {
+            switch (ctx.phase) {
+                case InputActionPhase.Started:
+                case InputActionPhase.Performed:
+                    isSprintPressed = true;
+
+                    break;
+                case InputActionPhase.Canceled:
+                    isSprintPressed = false;
+
                     break;
             }
         }
@@ -110,13 +129,28 @@ namespace Knight {
             }
         }
 
-        private void HandleMoveFunctionality() {
-            _rb.velocity = new Vector2(moveInputVal * runSpeed, _rb.velocity.y);
+        // HACK: use sprint speed when jumping, even though the input is canceled (sprint button released)
+        private void CheckIfCanSprint() {
+            if (isGrounded && moveInputVal != 0f && isSprintPressed) {
+                // activate sprinting only when grounded, move keys are pressed and sprint is pressed
+                isSprinting = true;
+            } else if ((isSprinting && isGrounded && !isSprintPressed) || moveInputVal == 0f) {
+                // deactivate when reaches land or move keys are not pressed.
+                // used to cause the player to have same speed when jumping from sprint
+                isSprinting = false;
+            }
+        }
+
+        private void HandleRunAndSprint() {
+            var speed = isSprinting ? sprintSpeed : runSpeed;
+
+            _rb.velocity = new Vector2(moveInputVal * speed, _rb.velocity.y);
         }
 
         private void InitializeInputControls() {
             _controls = new InputControls();
             _runAction = _controls.Player.Run;
+            _sprintAction = _controls.Player.Sprint;
             _jumpAction = _controls.Player.Jump;
             _attackAction = _controls.Player.Attack;
             _interactAction = _controls.Player.Interact;
@@ -125,6 +159,7 @@ namespace Knight {
         #region Subscribe/Unsubscribe methods as callbacks for events
         private void OnEnable() {
             _runAction.Enable();
+            _sprintAction.Enable();
             _jumpAction.Enable();
             _attackAction.Enable();
             _interactAction.Enable();
@@ -132,6 +167,8 @@ namespace Knight {
             //Unsubscribe the Move, Jump and Attack methods (call relevant methods when actions are performed) 
             _runAction.performed += Move;
             _runAction.canceled += Move;
+            _sprintAction.performed += Sprint;
+            _sprintAction.canceled += Sprint;
             _jumpAction.performed += Jump;
             _jumpAction.canceled += Jump;
             _attackAction.performed += Attack;
@@ -143,11 +180,14 @@ namespace Knight {
             //Unsubscribe the Move, Jump and Attack methods
             _runAction.performed -= Move;
             _runAction.canceled -= Move;
+            _sprintAction.performed -= Sprint;
+            _sprintAction.canceled -= Sprint;
             _jumpAction.performed -= Jump;
             _jumpAction.canceled -= Jump;
             _interactAction.canceled -= Interact;
 
             _runAction.Disable();
+            _sprintAction.Disable();
             _jumpAction.Disable();
             _attackAction.Disable();
             _interactAction.Disable();
