@@ -55,6 +55,9 @@ TagManager:
   - name: Terrain
     uniqueID: 1590033707
     locked: 0
+  - name: Npc
+    uniqueID: 149175443
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

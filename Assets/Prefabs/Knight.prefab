@@ -521,8 +521,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e266eec97585104afa4a1eab1781486d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imgCanvas: {fileID: 5060452229346691719}
-  statsCanvas: {fileID: 2850487834287325556}
+  canvasObjects:
+  - {fileID: 5060452229346691719}
+  - {fileID: 2850487834287325556}
 --- !u!1 &7220495024402695843
 GameObject:
   m_ObjectHideFlags: 0
@@ -571,7 +572,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7220495024402695843}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 0}
