@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ScriptableObjects.ChestParticles {
+namespace ScriptableObjects {
     [CreateAssetMenu(fileName = "ChestParticleDataSO", menuName = "Data/ChestParticleData")]
     public class ChestParticleDataSo : ScriptableObject {
         [Header("Main Module")]

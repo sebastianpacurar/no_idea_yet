@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ScriptableObjects.GemLight {
+namespace ScriptableObjects {
     [CreateAssetMenu(fileName = "GemLightDataSO", menuName = "Data/GemLightData")]
     public class GemLightDataSo : ScriptableObject {
         [Header("Sine Data")]

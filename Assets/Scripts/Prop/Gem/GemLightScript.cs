@@ -1,4 +1,4 @@
-using ScriptableObjects.GemLight;
+using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 

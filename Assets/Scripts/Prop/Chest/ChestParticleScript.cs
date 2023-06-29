@@ -1,4 +1,4 @@
-using ScriptableObjects.ChestParticles;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace Chest {
