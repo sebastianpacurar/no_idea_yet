@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8b3b6b1f73644fab5c9479cda07ca98, type: 3}
   m_Name: SkeletonEnemyData
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 6
   followSpeed: 7.5
   damage: 2
-  attackDistance: 2.25
-  followDistance: 5
-  minMaxIdleTime: {x: 1, y: 2}
-  minMaxWalkTime: {x: 2, y: 3}
+  lives: 3
+  knockBackForce: {x: 5, y: 0}
+  attackDistance: 3
+  followDistance: 25
+  minMaxIdleTime: {x: 1.5, y: 2}
+  minMaxWalkTime: {x: 3, y: 4}

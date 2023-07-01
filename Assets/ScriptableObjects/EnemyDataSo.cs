@@ -6,6 +6,8 @@ namespace ScriptableObjects {
         [SerializeField] private float moveSpeed;
         [SerializeField] private float followSpeed;
         [SerializeField] private float damage;
+        [SerializeField] private int lives;
+        [SerializeField] private Vector2 knockBackForce;
         // [SerializeField] private float timeBetweenAttacks;
         [SerializeField] private float attackDistance;
         [SerializeField] private float followDistance;
@@ -16,6 +18,8 @@ namespace ScriptableObjects {
         public float MoveSpeed => moveSpeed;
         public float FollowSpeed => followSpeed;
         public float Damage => damage;
+        public int Lives => lives;
+        public Vector2 KnockBackForce => knockBackForce;
         public float AttackDistance => attackDistance;
         public float FollowDistance => followDistance;
         // public float TimeBetweenAttacks => timeBetweenAttacks;

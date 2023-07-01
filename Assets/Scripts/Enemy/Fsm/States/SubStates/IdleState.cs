@@ -21,14 +21,16 @@ namespace Enemy.Fsm.States.SubStates {
         protected internal override void LogicUpdate() {
             base.LogicUpdate();
 
-            if (Time.time < startTime + _idleTime) {
-                if (canFollowPlayer) {
-                    stateMachine.ChangeState(enemyScript.FollowPlayerState);
-                } else if (canAttackPlayer) {
-                    stateMachine.ChangeState(enemyScript.AttackState);
-                }
-            } else {
+            if (Time.time >= startTime + _idleTime) {
                 stateMachine.ChangeState(enemyScript.WalkState);
+            }
+
+            if (canFollowPlayer) {
+                stateMachine.ChangeState(enemyScript.FollowPlayerState);
+            }
+
+            if (canAttackPlayer) {
+                stateMachine.ChangeState(enemyScript.AttackState);
             }
         }
     }

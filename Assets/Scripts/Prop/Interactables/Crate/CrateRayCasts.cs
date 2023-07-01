@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Prop {
+namespace Prop.Interactables.Crate {
     public class CrateRayCasts : MonoBehaviour {
         [Header("Layers")]
         [SerializeField] private LayerMask playerLayer;
@@ -47,7 +47,7 @@ namespace Prop {
             var pos = transform.position;
 
             Gizmos.color = Color.blue;
-            Gizmos.DrawLine(pos, new Vector3((pos.x - distFromPlayerX), pos.y, pos.z));
+            Gizmos.DrawLine(pos, new Vector3(pos.x - distFromPlayerX, pos.y, pos.z));
 
             // right player detection
             Gizmos.color = Color.red;

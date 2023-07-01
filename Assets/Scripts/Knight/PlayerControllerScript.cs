@@ -14,6 +14,8 @@ namespace Knight {
         public bool isJumpPressed;
         public bool isAttacking;
         public bool isInteractPressed;
+        public bool isHit;
+        public bool isDead;
 
         [Space(10)]
         [Header("References")]

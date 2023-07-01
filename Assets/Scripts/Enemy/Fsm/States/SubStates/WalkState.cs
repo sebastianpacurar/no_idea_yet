@@ -16,22 +16,30 @@ namespace Enemy.Fsm.States.SubStates {
             var maxWalkSeconds = enemyData.MinMaxWalkTime.y;
             _walkTime = Random.Range(minInclusive: minWalkSeconds, maxInclusive: maxWalkSeconds);
 
-            _direction = Random.Range(0, 2) switch {
+            var randDir = Random.Range(0, 2) switch {
                 0 => _direction = -1,
                 1 => _direction = 1,
                 _ => 1,
             };
+
+            if (!randDir.Equals(enemyScript.GetFacingDirection())) {
+                enemyScript.Flip();
+            }
         }
 
         protected internal override void LogicUpdate() {
             base.LogicUpdate();
 
+            if (Time.time >= startTime + _walkTime) {
+                stateMachine.ChangeState(enemyScript.IdleState);
+            }
+
             if (canFollowPlayer) {
                 stateMachine.ChangeState(enemyScript.FollowPlayerState);
             }
 
-            if (Time.time < startTime + _walkTime) {
-                stateMachine.ChangeState(enemyScript.IdleState);
+            if (canAttackPlayer) {
+                stateMachine.ChangeState(enemyScript.AttackState);
             }
         }
 

@@ -25,7 +25,7 @@ namespace Enemy.Fsm.States {
             isAnimationFinished = false;
         }
 
-        protected internal void Exit() {
+        protected internal virtual void Exit() {
             enemyScript.Anim.SetBool(_animBoolName, false);
         }
 

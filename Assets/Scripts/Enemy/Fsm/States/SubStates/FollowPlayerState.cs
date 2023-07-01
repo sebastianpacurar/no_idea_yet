@@ -26,7 +26,7 @@ namespace Enemy.Fsm.States.SubStates {
         protected internal override void PhysicsUpdate() {
             base.PhysicsUpdate();
 
-            enemyScript.SetVelocityX(enemyData.FollowSpeed * enemyScript.GetFacingDirection);
+            enemyScript.SetVelocityX(enemyData.FollowSpeed * enemyScript.GetFacingDirection());
         }
 
         protected override void DoChecks() {

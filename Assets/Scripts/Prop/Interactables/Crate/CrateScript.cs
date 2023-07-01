@@ -1,4 +1,5 @@
 using System;
+using Prop.Interactables.Crate;
 using UnityEngine;
 
 namespace Prop {

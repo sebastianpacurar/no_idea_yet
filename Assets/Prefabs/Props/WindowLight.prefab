@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8987988421654119849
 SpriteRenderer:
@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 4f8a1d092d142ac0778eaabb2bfdc55e933ce40800000000fbae42b8632a2d5a17d6950975009199
+  m_ApplyToSortingLayers: 4f8a1d092d142ac0778eaabb2bfdc55e933ce40800000000fbae42b8632a2d5af1267c2b17d6950975009199
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0

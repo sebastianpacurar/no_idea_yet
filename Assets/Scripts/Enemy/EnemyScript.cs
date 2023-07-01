@@ -1,4 +1,3 @@
-using System;
 using Enemy.Fsm;
 using Enemy.Fsm.States.SubStates;
 using ScriptableObjects;
@@ -13,6 +12,7 @@ namespace Enemy {
         public AttackState AttackState { get; private set; }
         public DeathState DeathState { get; private set; }
         public FollowPlayerState FollowPlayerState { get; private set; }
+        public TakeHitState TakeHitState { get; private set; }
 
         public EnemyDataSo enemyData;
         #endregion
@@ -25,7 +25,11 @@ namespace Enemy {
 
         #region Misc Vars
         public Vector2 currentVelocity;
-        public bool isFacingPlayer;
+        [Header("For Debugging")]
+        [SerializeField] private int livesLeft;
+        [SerializeField] private bool isHit;
+        [SerializeField] private Vector3 dirToPlayer;
+        [SerializeField] private float alignX;
 
         private RaycastHit2D _detectPlayerAttackHit;
         private RaycastHit2D _detectPlayerFollowHit;
@@ -42,15 +46,17 @@ namespace Enemy {
             WalkState = new WalkState(this, StateMachine, enemyData, "walk");
             FollowPlayerState = new FollowPlayerState(this, StateMachine, enemyData, "follow");
             AttackState = new AttackState(this, StateMachine, enemyData, "attack");
+            TakeHitState = new TakeHitState(this, StateMachine, enemyData, "takeHit");
             DeathState = new DeathState(this, StateMachine, enemyData, "death");
 
             _rb = GetComponent<Rigidbody2D>();
             Anim = GetComponent<Animator>();
-            _playerLayer = LayerMask.NameToLayer("Character");
+            _playerLayer = LayerMask.GetMask("Character");
         }
 
         private void Start() {
             _playerPos = GameObject.FindGameObjectWithTag("Player").transform;
+            livesLeft = enemyData.Lives;
 
             StateMachine.Initialize(IdleState);
         }
@@ -59,14 +65,22 @@ namespace Enemy {
             currentVelocity = _rb.velocity;
 
             var pos = transform.position;
-            _detectPlayerFollowHit = Physics2D.Raycast(pos, Vector2.right, enemyData.FollowDistance, _playerLayer);
-            _detectPlayerAttackHit = Physics2D.Raycast(pos, Vector2.right, enemyData.AttackDistance, _playerLayer);
+            dirToPlayer = (_playerPos.position - pos).normalized;
+
+            _detectPlayerFollowHit = Physics2D.Raycast(pos, dirToPlayer, enemyData.FollowDistance, _playerLayer);
+            _detectPlayerAttackHit = Physics2D.Raycast(pos, dirToPlayer, enemyData.AttackDistance, _playerLayer);
 
             StateMachine.CurrentState.LogicUpdate();
         }
 
         private void FixedUpdate() {
             StateMachine.CurrentState.PhysicsUpdate();
+        }
+
+        private void OnTriggerEnter2D(Collider2D other) {
+            if (other.gameObject.CompareTag("PlayerHitPoint")) {
+                isHit = true;
+            }
         }
         #endregion
 
@@ -77,18 +91,30 @@ namespace Enemy {
             currentVelocity = _rb.velocity;
         }
 
-        public void FreezePlayer() => _rb.constraints = RigidbodyConstraints2D.FreezeAll;
-        public void UnFreezePlayer() => _rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        public void SetHitFalse() {
+            isHit = false;
+        }
+
+        public void ApplyKnockBackForce() {
+            var xForce = enemyData.KnockBackForce.x * -GetFacingDirection();
+            var yForce = enemyData.KnockBackForce.y;
+            _rb.AddForce(new Vector2(xForce, yForce), ForceMode2D.Impulse);
+        }
+
+        public void DecrementLife() {
+            livesLeft -= 1;
+        }
         #endregion
 
 
         #region Check Functions
         public void CheckIfShouldFlip() {
-            var dirToPlayer = _playerPos.position - transform.position;
-            var alignX = Vector2.Dot(dirToPlayer, transform.right);
+            if (_detectPlayerFollowHit) {
+                alignX = Vector2.Dot(dirToPlayer, transform.right);
 
-            if (alignX < 0.5f) {
-                Flip();
+                if (alignX < 0f) {
+                    Flip();
+                }
             }
         }
 
@@ -99,15 +125,33 @@ namespace Enemy {
         public bool CheckIfCanFollowPlayer() {
             return _detectPlayerFollowHit;
         }
+
+        public bool CheckIfDead() {
+            return livesLeft <= 0;
+        }
+
+        public bool CheckIfHit() {
+            return isHit;
+        }
         #endregion
 
 
         #region Misc Functions
-        public float GetFacingDirection => transform.localScale.x;
+        public float GetFacingDirection() {
+            return transform.rotation.eulerAngles.y switch {
+                0f => 1f,
+                180f => -1f,
+                _ => 0f
+            };
+        }
 
-        private void Flip() {
-            var localScale = transform.localScale;
-            transform.localScale = new Vector3(localScale.x * -1, localScale.y, localScale.z);
+        public void Flip() {
+            var currRot = transform.rotation.eulerAngles.y;
+            transform.rotation = Quaternion.Euler(0f, currRot.Equals(0) ? 180f : 0f, 0f);
+        }
+
+        public void DestroyEnemy() {
+            Destroy(gameObject);
         }
 
         private void AnimationFinishTrigger() => StateMachine.CurrentState.AnimationFinishTrigger();
@@ -116,11 +160,14 @@ namespace Enemy {
 
         #region Debug section
         private void OnDrawGizmos() {
+            var pos = transform.position;
+            var followX = GetFacingDirection().Equals(1) ? pos.x + enemyData.FollowDistance : pos.x - enemyData.FollowDistance;
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(transform.position, transform.position + Vector3.right * enemyData.FollowDistance);
+            Gizmos.DrawLine(pos, new Vector3(followX, pos.y, pos.z));
 
+            var attackX = GetFacingDirection().Equals(1) ? pos.x + enemyData.AttackDistance : pos.x - enemyData.AttackDistance;
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position, transform.position + Vector3.right * enemyData.AttackDistance);
+            Gizmos.DrawLine(pos, new Vector3(attackX, pos.y, pos.z));
         }
         #endregion
     }
