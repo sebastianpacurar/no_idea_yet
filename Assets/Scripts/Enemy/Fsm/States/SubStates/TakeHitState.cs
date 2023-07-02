@@ -26,9 +26,5 @@ namespace Enemy.Fsm.States.SubStates {
                 }
             }
         }
-
-        protected internal override void Exit() {
-            base.Exit();
-        }
     }
 }

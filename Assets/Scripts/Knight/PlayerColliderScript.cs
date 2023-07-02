@@ -1,4 +1,4 @@
-using Chest;
+using Prop.Interactables.Chest;
 using UnityEngine;
 
 namespace Knight {
@@ -24,8 +24,8 @@ namespace Knight {
 
 
         private void OnTriggerEnter2D(Collider2D other) {
-            if (other.gameObject.CompareTag("Chest")) {
-                _targetObject = other.gameObject;
+            if (other.transform.parent.CompareTag("Chest")) {
+                _targetObject = other.transform.parent.gameObject;
                 _chestAnimScript = _targetObject.GetComponentInChildren<ChestAnimationScript>();
             }
         }

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Chest {
+namespace Prop.Interactables.Chest {
     public class ChestGemSpawnerScript : MonoBehaviour {
         [SerializeField] private GameObject gemType;
         [SerializeField] private GameObject spriteObj;

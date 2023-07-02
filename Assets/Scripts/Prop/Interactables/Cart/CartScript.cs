@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Prop {
+namespace Prop.Interactables.Cart {
     public class CartScript : MonoBehaviour {
         private Rigidbody2D _rb;
         private BoxCollider2D _box;

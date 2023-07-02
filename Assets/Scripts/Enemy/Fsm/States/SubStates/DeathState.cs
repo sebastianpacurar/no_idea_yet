@@ -10,10 +10,12 @@ namespace Enemy.Fsm.States.SubStates {
             enemyScript.SetVelocityX(0f);
         }
 
+        protected internal override void LogicUpdate() {
+            base.LogicUpdate();
 
-        protected internal override void Exit() {
-            base.Exit();
-            enemyScript.DestroyEnemy();
+            if (isAnimationFinished) {
+                enemyScript.DestroyEnemy();
+            }
         }
     }
 }

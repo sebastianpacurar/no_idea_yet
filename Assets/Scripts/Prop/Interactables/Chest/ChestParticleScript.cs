@@ -1,7 +1,7 @@
 using ScriptableObjects;
 using UnityEngine;
 
-namespace Chest {
+namespace Prop.Interactables.Chest {
     public class ChestParticleScript : MonoBehaviour {
         [SerializeField] private ChestParticleDataSo data;
         [SerializeField] private ChestAnimationScript animScript;

@@ -14,11 +14,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1665361230466993699, guid: bb0ba91a9b975521a992452b6615c9d5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 18.91
+      value: -22.17
       objectReference: {fileID: 0}
     - target: {fileID: 1665361230466993699, guid: bb0ba91a9b975521a992452b6615c9d5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 9.72
       objectReference: {fileID: 0}
     - target: {fileID: 1665361230466993699, guid: bb0ba91a9b975521a992452b6615c9d5, type: 3}
       propertyPath: m_LocalPosition.z
@@ -52,14 +52,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1722343852396949389, guid: bb0ba91a9b975521a992452b6615c9d5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.238
+      objectReference: {fileID: 0}
     - target: {fileID: 2182805967463528561, guid: bb0ba91a9b975521a992452b6615c9d5, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -1925096917, guid: 5e526de5753884e20b6b11f65fd07061, type: 3}
+      objectReference: {fileID: 731253654, guid: 2b11fb267655148b7940289574c37c0e, type: 3}
     - target: {fileID: 3367943584338413192, guid: bb0ba91a9b975521a992452b6615c9d5, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 22100000, guid: 4b22ebd78834621358773953c165fbd1, type: 2}
+    - target: {fileID: 6971689598826860242, guid: bb0ba91a9b975521a992452b6615c9d5, type: 3}
+      propertyPath: m_Size.x
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7528817663299886316, guid: bb0ba91a9b975521a992452b6615c9d5, type: 3}
       propertyPath: m_Name
       value: GoblinEnemy

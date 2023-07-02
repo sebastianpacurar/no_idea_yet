@@ -31,6 +31,7 @@ namespace Enemy.Fsm.States.SubStates {
 
         protected override void DoChecks() {
             base.DoChecks();
+            enemyScript.CheckIfShouldFlip();
         }
     }
 }

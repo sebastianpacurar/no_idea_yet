@@ -1,15 +1,13 @@
 using UnityEngine;
 
-namespace Chest {
+namespace Prop.Interactables.Chest {
     public class ChestAnimationScript : MonoBehaviour {
         [SerializeField] private GameObject notificationObj;
         private Animator _animator;
-        private BoxCollider2D _box;
         public bool isOpen;
 
         private void Awake() {
             _animator = GetComponent<Animator>();
-            _box = transform.parent.GetComponent<BoxCollider2D>();
         }
 
         public void OpenChest() {
@@ -20,9 +18,8 @@ namespace Chest {
         // destroy the gameObject along with the xLight and xDark images
         // called at the end of Open chest animation
         public void CleanUp() {
-            // destroy notification object and set collider to false
+            // destroy notification object
             Destroy(notificationObj);
-            _box.enabled = false;
         }
     }
 }

@@ -16,8 +16,8 @@ MonoBehaviour:
   followSpeed: 5
   damage: 1
   lives: 1
-  knockBackForce: {x: 5, y: 0}
-  attackDistance: 3
-  followDistance: 40
+  knockBackForce: {x: 15, y: 0}
+  attackDistance: 1.75
+  followDistance: 15
   minMaxIdleTime: {x: 2, y: 3}
   minMaxWalkTime: {x: 1, y: 2}

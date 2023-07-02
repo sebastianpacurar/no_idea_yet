@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1665361230466993699, guid: bb0ba91a9b975521a992452b6615c9d5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.769679
+      value: -22.05
       objectReference: {fileID: 0}
     - target: {fileID: 1665361230466993699, guid: bb0ba91a9b975521a992452b6615c9d5, type: 3}
       propertyPath: m_LocalPosition.y
@@ -52,14 +52,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1722343852396949389, guid: bb0ba91a9b975521a992452b6615c9d5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.05
+      objectReference: {fileID: 0}
     - target: {fileID: 2182805967463528561, guid: bb0ba91a9b975521a992452b6615c9d5, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -985003144, guid: 74cdc202a66e31535ae0487b9844163e, type: 3}
+      objectReference: {fileID: 61918986, guid: a805ad8073c77844f9c10b21513161fe, type: 3}
     - target: {fileID: 3367943584338413192, guid: bb0ba91a9b975521a992452b6615c9d5, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 22100000, guid: ea5b1c50088626d5d9db230397cd84a2, type: 2}
+    - target: {fileID: 6971689598826860242, guid: bb0ba91a9b975521a992452b6615c9d5, type: 3}
+      propertyPath: m_Size.x
+      value: 1.75
+      objectReference: {fileID: 0}
     - target: {fileID: 7528817663299886316, guid: bb0ba91a9b975521a992452b6615c9d5, type: 3}
       propertyPath: m_Name
       value: MushroomEnemy

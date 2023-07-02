@@ -100,6 +100,9 @@ namespace Knight {
                 case InputActionPhase.Performed:
                     isInteractPressed = true;
                     break;
+                case InputActionPhase.Canceled:
+                    isInteractPressed = false;
+                    break;
             }
         }
         #endregion
@@ -175,6 +178,7 @@ namespace Knight {
             _jumpAction.canceled += Jump;
             _attackAction.performed += Attack;
             _interactAction.performed += Interact;
+            _interactAction.canceled += Interact;
         }
 
 
@@ -186,6 +190,7 @@ namespace Knight {
             _sprintAction.canceled -= Sprint;
             _jumpAction.performed -= Jump;
             _jumpAction.canceled -= Jump;
+            _interactAction.performed -= Interact;
             _interactAction.canceled -= Interact;
 
             _runAction.Disable();
