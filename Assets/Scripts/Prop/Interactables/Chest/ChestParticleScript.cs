@@ -1,6 +1,7 @@
 using ScriptableObjects;
 using UnityEngine;
 
+
 namespace Prop.Interactables.Chest {
     public class ChestParticleScript : MonoBehaviour {
         [SerializeField] private ChestParticleDataSo data;
@@ -14,10 +15,12 @@ namespace Prop.Interactables.Chest {
         private ParticleSystem.SizeOverLifetimeModule _sizeOverLife;
         private ParticleSystem.SizeBySpeedModule _sizeBySpeed;
 
+        
         // initialize the ParticleSystem component
         private void Awake() {
             _ps = GetComponent<ParticleSystem>();
         }
+        
 
         // initialize the ParticleSystem modules
         private void Start() {
@@ -28,6 +31,7 @@ namespace Prop.Interactables.Chest {
             _sizeBySpeed = _ps.sizeBySpeed;
         }
 
+        
         private void Update() {
             // stop the emission module (stop spawning particles)
             //  else perform data setup
@@ -37,6 +41,7 @@ namespace Prop.Interactables.Chest {
                 SetData();
             }
         }
+        
 
         // Populate the needed values with the info from data
         // contents of data is of form Vector2(Min, Max) where X is Min and Y is Max

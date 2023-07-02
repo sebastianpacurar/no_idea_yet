@@ -1,8 +1,6 @@
-using System;
-using Prop.Interactables.Crate;
 using UnityEngine;
 
-namespace Prop {
+namespace Prop.Interactables.Crate {
     public class CrateScript : MonoBehaviour {
         [Header("Player Detection")]
         [SerializeField] private PhysicsMaterial2D lowFriction;
@@ -14,27 +12,32 @@ namespace Prop {
 
         public bool isOnCart;
 
+        
         private void Awake() {
             _rb = GetComponent<Rigidbody2D>();
             _ray = GetComponent<CrateRayCasts>();
             _initialMass = 4;
         }
 
+        
         private void Update() {
             // if player is in range, horizontally, then cause crate to have low friction, else place 20f friction
             SetPhysicsMaterial(IsPlayerDetected() ? lowFriction : highFriction);
         }
 
+        
         private void FixedUpdate() {
             SetGravityWhenFalling();
             SetStackedCrateMass();
         }
 
+        
         // Set the PhysicsMaterial2D with the provided version
         private void SetPhysicsMaterial(PhysicsMaterial2D material) {
             _rb.sharedMaterial = material;
         }
 
+        
         private bool IsPlayerDetected() {
             var isLeftInRange = _ray.HitPlayerLeft.collider;
             var isRightInRange = _ray.HitPlayerRight.collider;
@@ -42,6 +45,7 @@ namespace Prop {
             return isLeftInRange || isRightInRange;
         }
 
+        
         // initial mass unit (for the crate which touches the ground layer) is 3f
         // decrease every vertical stacked unit with 0.25f from initial position
         private void SetStackedCrateMass() {
@@ -60,17 +64,20 @@ namespace Prop {
             }
         }
 
+        
         // cause the crate to drop quickly, until it collides with the first bottom object
         private void SetGravityWhenFalling() {
             _rb.gravityScale = _rb.velocity.y < -0.1f ? 10 : 1;
         }
 
+        
         private void OnCollisionEnter2D(Collision2D other) {
             if (other.gameObject.name.Equals("Cart")) {
                 isOnCart = true;
             }
         }
 
+        
         private void OnCollisionExit2D(Collision2D other) {
             if (other.gameObject.name.Equals("Cart")) {
                 isOnCart = false;

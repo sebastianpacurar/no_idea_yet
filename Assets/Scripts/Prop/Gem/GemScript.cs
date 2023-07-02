@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-namespace Gem {
+namespace Prop.Gem {
     public class GemScript : MonoBehaviour {
         [SerializeField] private float ttlInSeconds;
         [SerializeField] private float upSpeed;

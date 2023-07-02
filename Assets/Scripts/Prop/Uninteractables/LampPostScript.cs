@@ -43,10 +43,11 @@ namespace Prop.Uninteractables {
             }
         }
 
+        //TODO: tweak this some more (remember the enemy and mist are also using minIntensity!!!!
         private void HandleLampTurnOnOff() {
             // cause lamp to turn off after the swinging is over, and z rotation of swingObj equals to 0
-            lightOnObj.SetActive(_globalLight.intensity < minIntensity + 0.05f);
-            lightOffObj.SetActive(_globalLight.intensity > minIntensity + 0.05f);
+            lightOnObj.SetActive(_globalLight.intensity <= minIntensity + 0.05f);
+            lightOffObj.SetActive(_globalLight.intensity >= minIntensity + 0.05f);
         }
     }
 }

@@ -13,6 +13,8 @@ public class DayNightManager : MonoBehaviour {
     private void Start() {
         _globalLight = GameObject.FindGameObjectWithTag("GlobalLight").GetComponent<Light2D>();
         _globalLight.intensity = maxIntensity;
+        currentTime = cycleDuration / 2; // start from mid of day
+
         StartCoroutine(StartCycle());
     }
 

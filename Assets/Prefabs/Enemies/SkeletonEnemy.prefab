@@ -190,6 +190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: 8ba3e4cfc71b0df36b5fd9ef2c86a675, type: 2}
   currentVelocity: {x: 0, y: 0}
+  minIntensity: 0.4
   livesLeft: 0
   isHit: 0
   dirToPlayer: {x: 0, y: 0, z: 0}

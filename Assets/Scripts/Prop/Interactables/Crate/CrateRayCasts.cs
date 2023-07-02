@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 namespace Prop.Interactables.Crate {
     public class CrateRayCasts : MonoBehaviour {
         [Header("Layers")]
@@ -18,11 +19,13 @@ namespace Prop.Interactables.Crate {
         public RaycastHit2D HitPlayerRight { get; private set; }
         public RaycastHit2D HitGroundBottom { get; private set; }
 
+        
         private void Awake() {
             _boxCollider = GetComponent<BoxCollider2D>();
             _crateScript = GetComponent<CrateScript>();
         }
 
+        
         private void Update() {
             if (_crateScript.isOnCart) {
                 //HACK: find dynamic value to make crate on cart smooth when pushed
@@ -34,6 +37,7 @@ namespace Prop.Interactables.Crate {
             CastRays();
         }
 
+        
         private void CastRays() {
             var cratePos = transform.position;
 
@@ -42,6 +46,7 @@ namespace Prop.Interactables.Crate {
             HitGroundBottom = Physics2D.Raycast(cratePos, Vector2.down, distFromGround, groundLayer);
         }
 
+        
         // NOTE: For Debugging
         private void OnDrawGizmos() {
             var pos = transform.position;

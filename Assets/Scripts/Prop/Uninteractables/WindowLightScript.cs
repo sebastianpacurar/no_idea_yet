@@ -17,15 +17,18 @@ namespace Prop.Uninteractables {
             _localLight = GetComponent<Light2D>();
         }
 
+        
         private void Start() {
             _globalLight = GameObject.FindGameObjectWithTag("GlobalLight").GetComponent<Light2D>();
             _selectedSprite = lightOnSprite;
         }
 
+        
         private void Update() {
             ToggleLights();
         }
 
+        
         private void ToggleLights() {
             var intensity = _globalLight.intensity;
 

@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 namespace Prop.Interactables.Cart {
     public class CartScript : MonoBehaviour {
         private Rigidbody2D _rb;

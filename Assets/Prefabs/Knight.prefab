@@ -30,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1258598615208435579}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20.02, y: -3.29, z: 0}
+  m_LocalPosition: {x: -43.1, y: 11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -219,6 +219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71917aab35c5b6dd88cf46d20ae84c6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  doorTransitionTime: 0
 --- !u!1 &1631637436152618320
 GameObject:
   m_ObjectHideFlags: 0
@@ -510,7 +511,7 @@ Transform:
   - {fileID: 4502534939346416652}
   - {fileID: 3378787516103571141}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5313146839781889830
 MonoBehaviour:

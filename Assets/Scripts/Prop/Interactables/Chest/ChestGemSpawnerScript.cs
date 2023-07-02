@@ -1,21 +1,25 @@
 using System.Collections;
 using UnityEngine;
 
+
 namespace Prop.Interactables.Chest {
     public class ChestGemSpawnerScript : MonoBehaviour {
         [SerializeField] private GameObject gemType;
         [SerializeField] private GameObject spriteObj;
         private ChestAnimationScript _chestAnimaScript;
 
+        
         private void Awake() {
             var spriteObjSibling = transform.parent.transform;
             _chestAnimaScript = spriteObjSibling.Find("Sprite").GetComponent<ChestAnimationScript>();
         }
 
+        
         private void Start() {
             StartCoroutine(nameof(GemInstantiation));
         }
 
+        
         private IEnumerator GemInstantiation() {
             // hibernate until condition is met
             yield return new WaitUntil(() => _chestAnimaScript.isOpen);

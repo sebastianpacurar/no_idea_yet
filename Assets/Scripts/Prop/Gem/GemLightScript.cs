@@ -2,7 +2,7 @@ using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-namespace Gem {
+namespace Prop.Gem {
     public class GemLightScript : MonoBehaviour {
         [SerializeField] private GemLightDataSo data;
         private Light2D _light2D;

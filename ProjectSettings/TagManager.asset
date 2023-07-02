@@ -49,7 +49,7 @@ TagManager:
   - name: Background
     uniqueID: 152930895
     locked: 0
-  - name: Particles
+  - name: ParticlesBeforeEnv
     uniqueID: 3223983149
     locked: 0
   - name: PropsBeforePlayer
@@ -72,6 +72,9 @@ TagManager:
     locked: 0
   - name: Enemy
     uniqueID: 729556721
+    locked: 0
+  - name: ParticlesAfterPlayer
+    uniqueID: 626944251
     locked: 0
   - name: InteractionUI
     uniqueID: 160814615

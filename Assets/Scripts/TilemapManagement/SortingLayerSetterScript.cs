@@ -2,6 +2,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+
+// TODO: not working in case the objects are nested and have different sprite renderers
+// TODO: should increment the order in layer recursively
 namespace TilemapManagement {
     public class SortingLayerSetterScript : MonoBehaviour {
         [Header("The 2 tilemaps used for props")]
@@ -16,6 +19,7 @@ namespace TilemapManagement {
         private SpriteRenderer[] _beforePlayerSrs;
         private SpriteRenderer[] _afterPlayerSrs;
 
+
         private void Start() {
             // grab the tilemap renderers of the 2 tilemap objects
             _beforePlayerTilemap = propsBeforePlayer.GetComponent<TilemapRenderer>();
@@ -28,6 +32,7 @@ namespace TilemapManagement {
             // start the coroutine to fix the sorting layers in an asynchronous way
             StartCoroutine(nameof(FixSortingLayerAndOrder));
         }
+
 
         // set all sprite renderer sorting layers and order in layer properly
         // since tilemap sorting layer cannot override sprite renderer sorting layer, set them manually

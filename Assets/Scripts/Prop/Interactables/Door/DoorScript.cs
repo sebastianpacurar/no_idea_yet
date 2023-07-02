@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+
 namespace Prop.Interactables.Door {
     public class DoorScript : MonoBehaviour {
         [SerializeField] private GameObject linkedDoor;
         private Tilemap _doorMap;
+
 
         private void Awake() {
             _doorMap = transform.parent.GetComponent<Tilemap>();

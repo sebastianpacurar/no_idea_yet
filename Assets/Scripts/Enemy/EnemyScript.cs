@@ -2,6 +2,8 @@ using Enemy.Fsm;
 using Enemy.Fsm.States.SubStates;
 using ScriptableObjects;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
+
 
 namespace Enemy {
     public class EnemyScript : MonoBehaviour {
@@ -25,6 +27,8 @@ namespace Enemy {
 
         #region Misc Vars
         public Vector2 currentVelocity;
+        [SerializeField] private float minIntensity;
+
         [Header("For Debugging")]
         [SerializeField] private int livesLeft;
         [SerializeField] private bool isHit;
@@ -35,13 +39,17 @@ namespace Enemy {
         private RaycastHit2D _detectPlayerFollowHit;
         private Transform _playerPos;
         private LayerMask _playerLayer;
+
+        private Light2D _globalLight;
         #endregion
 
 
         #region Unity Callback Functions
         private void Awake() {
+            // instantiate state machine
             StateMachine = new EnemyStateMachine();
 
+            // initiate states
             IdleState = new IdleState(this, StateMachine, enemyData, "idle");
             WalkState = new WalkState(this, StateMachine, enemyData, "walk");
             FollowPlayerState = new FollowPlayerState(this, StateMachine, enemyData, "follow");
@@ -49,6 +57,7 @@ namespace Enemy {
             TakeHitState = new TakeHitState(this, StateMachine, enemyData, "takeHit");
             DeathState = new DeathState(this, StateMachine, enemyData, "death");
 
+            // get components
             _rb = GetComponent<Rigidbody2D>();
             Anim = GetComponent<Animator>();
             _playerLayer = LayerMask.GetMask("Character");
@@ -56,17 +65,21 @@ namespace Enemy {
 
         private void Start() {
             _playerPos = GameObject.FindGameObjectWithTag("Player").transform;
+            _globalLight = GameObject.FindGameObjectWithTag("GlobalLight").GetComponent<Light2D>();
             livesLeft = enemyData.Lives;
 
+            // start in Idle State
             StateMachine.Initialize(IdleState);
         }
 
         private void Update() {
+            // will be used globally
             currentVelocity = _rb.velocity;
 
             var pos = transform.position;
             dirToPlayer = (_playerPos.position - pos).normalized;
 
+            // cast rays for player detection and attack
             _detectPlayerFollowHit = Physics2D.Raycast(pos, dirToPlayer, enemyData.FollowDistance, _playerLayer);
             _detectPlayerAttackHit = Physics2D.Raycast(pos, dirToPlayer, enemyData.AttackDistance, _playerLayer);
 
@@ -78,6 +91,9 @@ namespace Enemy {
         }
 
         private void OnTriggerEnter2D(Collider2D other) {
+            // prevent re-triggering hit state if dead
+            if (CheckIfDead()) return;
+
             if (other.gameObject.CompareTag("PlayerHitPoint")) {
                 isHit = true;
             }
@@ -86,6 +102,7 @@ namespace Enemy {
 
 
         #region Set Functions
+        // stop movement
         public void SetVelocityX(float velocity) {
             _rb.velocity = new Vector2(velocity, currentVelocity.y);
             currentVelocity = _rb.velocity;
@@ -95,12 +112,14 @@ namespace Enemy {
             isHit = false;
         }
 
+        // gets pushed after hit by Player HitPoint object
         public void ApplyKnockBackForce() {
             var xForce = enemyData.KnockBackForce.x * -GetFacingDirection();
             var yForce = enemyData.KnockBackForce.y;
             _rb.AddForce(new Vector2(xForce, yForce), ForceMode2D.Impulse);
         }
 
+        // decrease life
         public void DecrementLife() {
             livesLeft -= 1;
         }
@@ -124,6 +143,10 @@ namespace Enemy {
 
         public bool CheckIfCanFollowPlayer() {
             return _detectPlayerFollowHit;
+        }
+
+        public bool CheckIfLateNightInterval() {
+            return _globalLight.intensity <= minIntensity;
         }
 
         public bool CheckIfDead() {
