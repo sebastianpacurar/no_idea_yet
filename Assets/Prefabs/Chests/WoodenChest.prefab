@@ -4919,8 +4919,8 @@ Transform:
   m_Children:
   - {fileID: 1855984584624659480}
   - {fileID: 6810844318076147922}
-  - {fileID: 2092445295806229105}
   - {fileID: 7133748386436891498}
+  - {fileID: 2092445295806229105}
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5067,7 +5067,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2170996511191778127, guid: 0d3c9058ce10ba109963c3e62f19e781, type: 3}
       propertyPath: m_Offset.y
-      value: 0.75
+      value: -0.75
       objectReference: {fileID: 0}
     - target: {fileID: 2170996511191778127, guid: 0d3c9058ce10ba109963c3e62f19e781, type: 3}
       propertyPath: m_IsTrigger
@@ -5087,7 +5087,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7900229054903671524, guid: 0d3c9058ce10ba109963c3e62f19e781, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.75
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 7900229054903671524, guid: 0d3c9058ce10ba109963c3e62f19e781, type: 3}
       propertyPath: m_LocalPosition.z

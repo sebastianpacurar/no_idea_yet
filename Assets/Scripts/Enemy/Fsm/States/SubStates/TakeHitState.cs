@@ -8,21 +8,21 @@ namespace Enemy.Fsm.States.SubStates {
         protected internal override void Enter() {
             base.Enter();
 
-            enemyScript.DecrementLife();
+            EnemyScript.DecrementLife();
 
-            if (!isDead) {
-                enemyScript.ApplyKnockBackForce();
+            if (!IsDead) {
+                EnemyScript.ApplyKnockBackForce();
             }
         }
 
         protected internal override void LogicUpdate() {
             base.LogicUpdate();
 
-            if (isAnimationFinished) {
-                if (isDead) {
-                    stateMachine.ChangeState(enemyScript.DeathState);
+            if (IsAnimationFinished) {
+                if (IsDead) {
+                    StateMachine.ChangeState(EnemyScript.DeathState);
                 } else {
-                    stateMachine.ChangeState(enemyScript.IdleState);
+                    StateMachine.ChangeState(EnemyScript.IdleState);
                 }
             }
         }

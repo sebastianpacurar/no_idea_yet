@@ -11,6 +11,7 @@ TagManager:
   - GlobalLight
   - PlayerHitPoint
   - EnemyHitPoint
+  - Door
   layers:
   - Default
   - TransparentFX

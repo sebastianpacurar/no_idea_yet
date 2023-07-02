@@ -7,14 +7,14 @@ namespace Enemy.Fsm.States.SubStates {
 
         protected internal override void Enter() {
             base.Enter();
-            enemyScript.SetVelocityX(0f);
+            EnemyScript.SetVelocityX(0f);
         }
 
         protected internal override void LogicUpdate() {
             base.LogicUpdate();
 
-            if (isAnimationFinished) {
-                enemyScript.DestroyEnemy();
+            if (IsAnimationFinished) {
+                EnemyScript.DestroyEnemy();
             }
         }
     }

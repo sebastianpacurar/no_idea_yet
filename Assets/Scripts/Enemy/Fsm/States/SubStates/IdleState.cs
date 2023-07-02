@@ -11,26 +11,26 @@ namespace Enemy.Fsm.States.SubStates {
         protected internal override void Enter() {
             base.Enter();
 
-            var minIdleSeconds = enemyData.MinMaxIdleTime.x;
-            var maxIdleSeconds = enemyData.MinMaxIdleTime.y;
+            var minIdleSeconds = EnemyData.MinMaxIdleTime.x;
+            var maxIdleSeconds = EnemyData.MinMaxIdleTime.y;
             _idleTime = Random.Range(minInclusive: minIdleSeconds, maxInclusive: maxIdleSeconds);
 
-            enemyScript.SetVelocityX(0f);
+            EnemyScript.SetVelocityX(0f);
         }
 
         protected internal override void LogicUpdate() {
             base.LogicUpdate();
 
-            if (Time.time >= startTime + _idleTime) {
-                stateMachine.ChangeState(enemyScript.WalkState);
+            if (Time.time >= StartTime + _idleTime) {
+                StateMachine.ChangeState(EnemyScript.WalkState);
             }
 
-            if (canFollowPlayer) {
-                stateMachine.ChangeState(enemyScript.FollowPlayerState);
+            if (CanFollowPlayer) {
+                StateMachine.ChangeState(EnemyScript.FollowPlayerState);
             }
 
-            if (canAttackPlayer) {
-                stateMachine.ChangeState(enemyScript.AttackState);
+            if (CanAttackPlayer) {
+                StateMachine.ChangeState(EnemyScript.AttackState);
             }
         }
     }

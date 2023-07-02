@@ -3,30 +3,30 @@ using UnityEngine;
 
 namespace Enemy.Fsm.States {
     public abstract class EnemyState {
-        protected readonly EnemyScript enemyScript;
-        protected readonly EnemyStateMachine stateMachine;
-        protected readonly EnemyDataSo enemyData;
-        protected bool isAnimationFinished;
+        protected readonly EnemyScript EnemyScript;
+        protected readonly EnemyStateMachine StateMachine;
+        protected readonly EnemyDataSo EnemyData;
+        protected bool IsAnimationFinished;
 
-        protected float startTime;
+        protected float StartTime;
         private readonly string _animBoolName;
 
         protected EnemyState(EnemyScript enemy, EnemyStateMachine stateMachine, EnemyDataSo enemyData, string animBoolName) {
-            enemyScript = enemy;
-            this.stateMachine = stateMachine;
-            this.enemyData = enemyData;
+            EnemyScript = enemy;
+            StateMachine = stateMachine;
+            EnemyData = enemyData;
             _animBoolName = animBoolName;
         }
 
         protected internal virtual void Enter() {
             DoChecks();
-            enemyScript.Anim.SetBool(_animBoolName, true);
-            startTime = Time.time;
-            isAnimationFinished = false;
+            EnemyScript.Anim.SetBool(_animBoolName, true);
+            StartTime = Time.time;
+            IsAnimationFinished = false;
         }
 
         protected internal virtual void Exit() {
-            enemyScript.Anim.SetBool(_animBoolName, false);
+            EnemyScript.Anim.SetBool(_animBoolName, false);
         }
 
         protected internal virtual void LogicUpdate() { }
@@ -37,6 +37,6 @@ namespace Enemy.Fsm.States {
 
         protected virtual void DoChecks() { }
 
-        public virtual void AnimationFinishTrigger() => isAnimationFinished = true;
+        public virtual void AnimationFinishTrigger() => IsAnimationFinished = true;
     }
 }

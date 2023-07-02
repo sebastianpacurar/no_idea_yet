@@ -7,31 +7,31 @@ namespace Enemy.Fsm.States.SubStates {
 
         protected internal override void Enter() {
             base.Enter();
-            enemyScript.CheckIfShouldFlip();
+            EnemyScript.CheckIfShouldFlip();
         }
 
 
         protected internal override void LogicUpdate() {
             base.LogicUpdate();
 
-            if (!canFollowPlayer) {
-                stateMachine.ChangeState(enemyScript.IdleState);
+            if (!CanFollowPlayer) {
+                StateMachine.ChangeState(EnemyScript.IdleState);
             }
 
-            if (canAttackPlayer) {
-                stateMachine.ChangeState(enemyScript.AttackState);
+            if (CanAttackPlayer) {
+                StateMachine.ChangeState(EnemyScript.AttackState);
             }
         }
 
         protected internal override void PhysicsUpdate() {
             base.PhysicsUpdate();
 
-            enemyScript.SetVelocityX(enemyData.FollowSpeed * enemyScript.GetFacingDirection());
+            EnemyScript.SetVelocityX(EnemyData.FollowSpeed * EnemyScript.GetFacingDirection());
         }
 
         protected override void DoChecks() {
             base.DoChecks();
-            enemyScript.CheckIfShouldFlip();
+            EnemyScript.CheckIfShouldFlip();
         }
     }
 }

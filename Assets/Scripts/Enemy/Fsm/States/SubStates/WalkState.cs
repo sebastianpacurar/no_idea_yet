@@ -12,8 +12,8 @@ namespace Enemy.Fsm.States.SubStates {
         protected internal override void Enter() {
             base.Enter();
 
-            var minWalkSeconds = enemyData.MinMaxWalkTime.x;
-            var maxWalkSeconds = enemyData.MinMaxWalkTime.y;
+            var minWalkSeconds = EnemyData.MinMaxWalkTime.x;
+            var maxWalkSeconds = EnemyData.MinMaxWalkTime.y;
             _walkTime = Random.Range(minInclusive: minWalkSeconds, maxInclusive: maxWalkSeconds);
 
             var randDir = Random.Range(0, 2) switch {
@@ -22,31 +22,31 @@ namespace Enemy.Fsm.States.SubStates {
                 _ => 1,
             };
 
-            if (!randDir.Equals(enemyScript.GetFacingDirection())) {
-                enemyScript.Flip();
+            if (!randDir.Equals(EnemyScript.GetFacingDirection())) {
+                EnemyScript.Flip();
             }
         }
 
         protected internal override void LogicUpdate() {
             base.LogicUpdate();
 
-            if (Time.time >= startTime + _walkTime) {
-                stateMachine.ChangeState(enemyScript.IdleState);
+            if (Time.time >= StartTime + _walkTime) {
+                StateMachine.ChangeState(EnemyScript.IdleState);
             }
 
-            if (canFollowPlayer) {
-                stateMachine.ChangeState(enemyScript.FollowPlayerState);
+            if (CanFollowPlayer) {
+                StateMachine.ChangeState(EnemyScript.FollowPlayerState);
             }
 
-            if (canAttackPlayer) {
-                stateMachine.ChangeState(enemyScript.AttackState);
+            if (CanAttackPlayer) {
+                StateMachine.ChangeState(EnemyScript.AttackState);
             }
         }
 
         protected internal override void PhysicsUpdate() {
             base.PhysicsUpdate();
 
-            enemyScript.SetVelocityX(enemyData.MoveSpeed * _direction);
+            EnemyScript.SetVelocityX(EnemyData.MoveSpeed * _direction);
         }
 
         protected override void DoChecks() {
