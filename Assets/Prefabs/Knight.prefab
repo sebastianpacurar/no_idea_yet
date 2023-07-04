@@ -190,7 +190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runSpeed: 5
   sprintSpeed: 10
-  jumpForce: 12.5
+  jumpForce: 10
   moveInputVal: 0
   isGrounded: 0
   isSprinting: 0

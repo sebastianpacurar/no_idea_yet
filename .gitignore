@@ -76,3 +76,5 @@ crashlytics-build.properties
 # editor crashes logs
 /mono_*.blob
 /.attach_pid*
+
+/[Aa]ssets/Sprites/Characters/Companions

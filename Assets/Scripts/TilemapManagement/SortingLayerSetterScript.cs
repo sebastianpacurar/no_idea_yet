@@ -3,13 +3,10 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 
-// TODO: not working in case the objects are nested and have different sprite renderers
-// TODO: should increment the order in layer recursively
 namespace TilemapManagement {
     public class SortingLayerSetterScript : MonoBehaviour {
         [Header("The 2 tilemaps used for props")]
-        [SerializeField] private GameObject propsBeforePlayer;
-        [SerializeField] private GameObject propsAfterPlayer;
+        [SerializeField] private GameObject[] targetTilemaps;
 
         // used to grab the sprite layer and renderer, for dynamic allocation
         private TilemapRenderer _beforePlayerTilemap;
@@ -21,14 +18,6 @@ namespace TilemapManagement {
 
 
         private void Start() {
-            // grab the tilemap renderers of the 2 tilemap objects
-            _beforePlayerTilemap = propsBeforePlayer.GetComponent<TilemapRenderer>();
-            _afterPlayerTilemap = propsAfterPlayer.GetComponent<TilemapRenderer>();
-
-            // grab all the sprite renderer components from both tilemap parent objects
-            _beforePlayerSrs = propsBeforePlayer.GetComponentsInChildren<SpriteRenderer>();
-            _afterPlayerSrs = propsAfterPlayer.GetComponentsInChildren<SpriteRenderer>();
-
             // start the coroutine to fix the sorting layers in an asynchronous way
             StartCoroutine(nameof(FixSortingLayerAndOrder));
         }
@@ -37,19 +26,23 @@ namespace TilemapManagement {
         // set all sprite renderer sorting layers and order in layer properly
         // since tilemap sorting layer cannot override sprite renderer sorting layer, set them manually
         private IEnumerator FixSortingLayerAndOrder() {
+            foreach (var obj in targetTilemaps) {
+                var tilemap = obj.GetComponent<TilemapRenderer>();
+
+                var sprites = obj.GetComponentsInChildren<SpriteRenderer>();
+
+                // for every spriteRenderer in children, set the layer name and order to the values of TileMapRenderer
+                foreach (var sprite in sprites) {
+                    // prevent InteractionNotification to get overridden
+                    if (sprite.material.name.Contains("Sprite-Unlit")) continue;
+
+                    // set the layer name and order to the values of TileMapRenderer
+                    sprite.sortingLayerName = tilemap.sortingLayerName;
+                    sprite.sortingOrder = tilemap.sortingOrder;
+                }
+            }
+
             yield return new WaitForEndOfFrame();
-
-            // set all beforeSprite objects to their relevant sorting layer and order in layer
-            foreach (var sprite in _beforePlayerSrs) {
-                sprite.sortingLayerName = _beforePlayerTilemap.sortingLayerName;
-                sprite.sortingOrder = _beforePlayerTilemap.sortingOrder;
-            }
-
-            // set all afterSprite objects to their relevant sorting layer and order in layer
-            foreach (var sprite in _afterPlayerSrs) {
-                sprite.sortingLayerName = _afterPlayerTilemap.sortingLayerName;
-                sprite.sortingOrder = _afterPlayerTilemap.sortingOrder;
-            }
         }
     }
 }

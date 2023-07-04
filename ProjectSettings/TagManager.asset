@@ -52,11 +52,59 @@ TagManager:
   - name: ParticlesBeforeEnv
     uniqueID: 3223983149
     locked: 0
-  - name: PropsBeforePlayer
-    uniqueID: 3148516983
+  - name: Trees Back
+    uniqueID: 4274923595
     locked: 0
   - name: Terrain
     uniqueID: 1590033707
+    locked: 0
+  - name: HouseRoof
+    uniqueID: 1430327979
+    locked: 0
+  - name: HouseWall
+    uniqueID: 3010261153
+    locked: 0
+  - name: HouseCollider
+    uniqueID: 3953040469
+    locked: 0
+  - name: HouseWindowLight
+    uniqueID: 1886363359
+    locked: 0
+  - name: HouseBackProps
+    uniqueID: 1989439033
+    locked: 0
+  - name: HouseFrontProps
+    uniqueID: 2521730499
+    locked: 0
+  - name: TunnelWall
+    uniqueID: 1005875495
+    locked: 0
+  - name: TunnelBackProps
+    uniqueID: 3501438755
+    locked: 0
+  - name: TunnelFrontProps
+    uniqueID: 967143433
+    locked: 0
+  - name: TunnelFence
+    uniqueID: 1780618037
+    locked: 0
+  - name: Chests
+    uniqueID: 2891844715
+    locked: 0
+  - name: LampBack
+    uniqueID: 502602683
+    locked: 0
+  - name: Crate
+    uniqueID: 3995808709
+    locked: 0
+  - name: Cart
+    uniqueID: 3941131729
+    locked: 0
+  - name: CartWheel
+    uniqueID: 4288365729
+    locked: 0
+  - name: PropsBeforePlayer
+    uniqueID: 4250387397
     locked: 0
   - name: Npc
     uniqueID: 149175443
@@ -64,17 +112,26 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: PropsAfterPlayer
-    uniqueID: 3091377915
-    locked: 0
-  - name: Collectables
-    uniqueID: 1512909411
-    locked: 0
   - name: Enemy
     uniqueID: 729556721
     locked: 0
-  - name: ParticlesAfterPlayer
+  - name: HouseBalconyFence
+    uniqueID: 4289467975
+    locked: 0
+  - name: PropsAfterPlayer
+    uniqueID: 166212093
+    locked: 0
+  - name: LampFront
+    uniqueID: 711547369
+    locked: 0
+  - name: TreesFront
+    uniqueID: 4101215435
+    locked: 0
+  - name: ParticlesAfterEnv
     uniqueID: 626944251
+    locked: 0
+  - name: Collectables
+    uniqueID: 1512909411
     locked: 0
   - name: InteractionUI
     uniqueID: 160814615
