@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 
@@ -13,11 +14,11 @@ namespace Prop.Interactables.Cart {
         [SerializeField] private PhysicsMaterial2D lowFriction;
         [SerializeField] private PhysicsMaterial2D highFriction;
 
-        [Header("For Debugging purposes")]
+        [Header("For Debugging")]
         [SerializeField] private float speed;
         [SerializeField] private float direction;
         [SerializeField] private Vector2 localVelocity;
-        [SerializeField] private bool isPlayerCollision;
+        public bool isPlayerCollision;
 
         private void Awake() {
             _rb = GetComponent<Rigidbody2D>();
@@ -27,7 +28,7 @@ namespace Prop.Interactables.Cart {
         private void Update() {
             SetSpeedAndDirection();
 
-            // in Update() because changing the friction of box not rigidbody
+            // set the friction to low if player collision
             SetPhysicsMaterial(isPlayerCollision ? lowFriction : highFriction);
 
             // rotate wheels
@@ -57,11 +58,18 @@ namespace Prop.Interactables.Cart {
             direction = -Mathf.Sign(localVelocity.x);
         }
 
+
         private void OnCollisionEnter2D(Collision2D other) {
             if (other.gameObject.CompareTag("Player")) {
-                isPlayerCollision = true;
+                var average = CalculateAverageContactNormal(other);
+
+                // if player is on the left or right of the cart, then return true
+                if (IsCollisionSideways(average)) {
+                    isPlayerCollision = true;
+                }
             }
         }
+
 
         private void OnCollisionExit2D(Collision2D other) {
             if (other.gameObject.CompareTag("Player")) {
@@ -69,13 +77,33 @@ namespace Prop.Interactables.Cart {
             }
         }
 
+        // set high mass for cart when not collided
         private void HaltCartWhenNoPlayerCollision() {
             _rb.mass = isPlayerCollision ? 2 : 20;
         }
 
+
         // Set the PhysicsMaterial2D with the provided version
         private void SetPhysicsMaterial(PhysicsMaterial2D material) {
             _box.sharedMaterial = material;
+        }
+
+
+        // get the average of Collision ContactPoint2D normal values  
+        private Vector2 CalculateAverageContactNormal(Collision2D collision) {
+            // get the sum of all contact.normal values from contacts
+            var average = collision.contacts.Aggregate(Vector2.zero, (current, contact) => current + contact.normal);
+
+            // divide sum to the length to get the average
+            average /= collision.contacts.Length;
+            return average.normalized;
+        }
+
+        private bool IsCollisionSideways(Vector2 v) {
+            var collisionLeft = v.x > 0f;
+            var collisionRight = v.x < 0f;
+
+            return collisionLeft || collisionRight;
         }
     }
 }

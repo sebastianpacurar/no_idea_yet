@@ -12,51 +12,67 @@ namespace Prop.Interactables.Crate {
         [SerializeField] private float distFromPlayerFactorX;
         [SerializeField] private float distFromGround = 10f;
 
+        private Transform _playerTransform;
         private BoxCollider2D _boxCollider;
-        private CrateScript _crateScript;
 
         public RaycastHit2D HitPlayerLeft { get; private set; }
         public RaycastHit2D HitPlayerRight { get; private set; }
         public RaycastHit2D HitGroundBottom { get; private set; }
 
-        
+
         private void Awake() {
             _boxCollider = GetComponent<BoxCollider2D>();
-            _crateScript = GetComponent<CrateScript>();
         }
 
-        
-        private void Update() {
-            if (_crateScript.isOnCart) {
-                //HACK: find dynamic value to make crate on cart smooth when pushed
-                distFromPlayerX = _boxCollider.size.x * 2.5f + 0.1f;
-            } else {
-                distFromPlayerX = _boxCollider.size.x * distFromPlayerFactorX;
-            }
 
+        private void Start() {
+            _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        }
+
+
+        private void Update() {
             CastRays();
         }
 
-        
-        private void CastRays() {
+        // get a dynamic origin Y based on the crate sprite's size
+        private Vector2 GetRayOriginVector() {
             var cratePos = transform.position;
+            var playerPos = _playerTransform.position;
+            var maxPointY = _boxCollider.bounds.extents.y;
+            var offset = 0.1f;
 
-            HitPlayerLeft = Physics2D.Raycast(cratePos, Vector2.left, distFromPlayerX, playerLayer);
-            HitPlayerRight = Physics2D.Raycast(cratePos, Vector2.right, distFromPlayerX, playerLayer);
-            HitGroundBottom = Physics2D.Raycast(cratePos, Vector2.down, distFromGround, groundLayer);
+            // set origin Y dynamic to move after the player until it reaches the top or bottom of the box +/- 0.1f 
+            var originY = Mathf.Clamp(playerPos.y, (cratePos.y - maxPointY) + offset, (cratePos.y + maxPointY) - offset);
+
+            // keep origin X fixed
+            var originX = cratePos.x;
+
+            return new Vector2(originX, originY);
         }
 
-        
+
+        private void CastRays() {
+            var origin = GetRayOriginVector();
+
+            distFromPlayerX = _boxCollider.size.x * distFromPlayerFactorX;
+
+            HitPlayerLeft = Physics2D.Raycast(origin, Vector2.left, distFromPlayerX, playerLayer);
+            HitPlayerRight = Physics2D.Raycast(origin, Vector2.right, distFromPlayerX, playerLayer);
+            HitGroundBottom = Physics2D.Raycast(transform.position, Vector2.down, distFromGround, groundLayer);
+        }
+
+
         // NOTE: For Debugging
         private void OnDrawGizmos() {
             var pos = transform.position;
+            var origin = GetRayOriginVector();
 
             Gizmos.color = Color.blue;
-            Gizmos.DrawLine(pos, new Vector3(pos.x - distFromPlayerX, pos.y, pos.z));
+            Gizmos.DrawLine(origin, new Vector3(pos.x - distFromPlayerX, origin.y, pos.z));
 
             // right player detection
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(pos, new Vector3((pos.x + distFromPlayerX), pos.y, pos.z));
+            Gizmos.DrawLine(origin, new Vector3((pos.x + distFromPlayerX), origin.y, pos.z));
 
             // bottom ground detection
             Gizmos.color = Color.gray;

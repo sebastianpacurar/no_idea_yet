@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -299158587
-  m_SortingLayer: -4
+  m_SortingLayer: -3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 7810966f0f690954c87305933cabf2b0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 3208663552983643118}
   m_Layer: 6
   m_Name: SmallCrate
-  m_TagString: Pushable
+  m_TagString: Crate
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -204,9 +204,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feb8b26d5eb1329688e1330fbdae711d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedPm2D: {fileID: 0}
+  cartScript: {fileID: 0}
   lowFriction: {fileID: 6200000, guid: 3a03210f5a5b5ac77ae90be63309798f, type: 2}
   highFriction: {fileID: 6200000, guid: f8de3bd95d900c20097391549bebec3f, type: 2}
-  isOnCart: 0
+  isBeingCarried: 0
 --- !u!114 &3208663552983643118
 MonoBehaviour:
   m_ObjectHideFlags: 0

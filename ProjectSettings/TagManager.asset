@@ -12,6 +12,8 @@ TagManager:
   - PlayerHitPoint
   - EnemyHitPoint
   - Door
+  - Crate
+  - Cart
   layers:
   - Default
   - TransparentFX
@@ -97,12 +99,6 @@ TagManager:
   - name: Crate
     uniqueID: 3995808709
     locked: 0
-  - name: Cart
-    uniqueID: 3941131729
-    locked: 0
-  - name: CartWheel
-    uniqueID: 4288365729
-    locked: 0
   - name: PropsBeforePlayer
     uniqueID: 4250387397
     locked: 0
@@ -111,6 +107,12 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Cart
+    uniqueID: 3941131729
+    locked: 0
+  - name: CartWheel
+    uniqueID: 4288365729
     locked: 0
   - name: Enemy
     uniqueID: 729556721
