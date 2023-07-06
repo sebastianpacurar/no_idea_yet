@@ -63,20 +63,20 @@ namespace Prop.Interactables.Crate {
 
 
         // NOTE: For Debugging
-        private void OnDrawGizmos() {
-            var pos = transform.position;
-            var origin = GetRayOriginVector();
-
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(origin, new Vector3(pos.x - distFromPlayerX, origin.y, pos.z));
-
-            // right player detection
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(origin, new Vector3((pos.x + distFromPlayerX), origin.y, pos.z));
-
-            // bottom ground detection
-            Gizmos.color = Color.gray;
-            Gizmos.DrawLine(pos, new Vector3(pos.x, -distFromGround, pos.z));
-        }
+        // private void OnDrawGizmos() {
+        //     var pos = transform.position;
+        //     var origin = GetRayOriginVector();
+        //
+        //     Gizmos.color = Color.blue;
+        //     Gizmos.DrawLine(origin, new Vector3(pos.x - distFromPlayerX, origin.y, pos.z));
+        //
+        //     // right player detection
+        //     Gizmos.color = Color.red;
+        //     Gizmos.DrawLine(origin, new Vector3((pos.x + distFromPlayerX), origin.y, pos.z));
+        //
+        //     // bottom ground detection
+        //     Gizmos.color = Color.gray;
+        //     Gizmos.DrawLine(pos, new Vector3(pos.x, -distFromGround, pos.z));
+        // }
     }
 }

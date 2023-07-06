@@ -1,3 +1,4 @@
+using Input;
 using Prop.Interactables.Chest;
 using Prop.Interactables.Door;
 using UnityEngine;
@@ -7,7 +8,6 @@ namespace Knight {
     public class PlayerColliderScript : MonoBehaviour {
         [SerializeField] private float doorTransitionTime;
 
-        private PlayerControllerScript _script;
         private SpriteRenderer _sr;
         private Rigidbody2D _rb;
 
@@ -15,11 +15,16 @@ namespace Knight {
         private ChestAnimationScript _chestAnimScript;
         private DoorScript _doorScript;
 
+        private InputManager _input;
+
 
         private void Awake() {
-            _script = GetComponent<PlayerControllerScript>();
             _sr = GetComponentInChildren<SpriteRenderer>();
             _rb = GetComponent<Rigidbody2D>();
+        }
+
+        private void Start() {
+            _input = InputManager.Instance;
         }
 
 
@@ -28,7 +33,7 @@ namespace Knight {
             if (!_targetObject) return;
 
             // if x key is not pressed, then return
-            if (!_script.isInteractPressed) return;
+            if (!_input.IsInteractPressed) return;
 
             // if overlap target is a chest
             if (_targetObject.CompareTag("Chest")) {
@@ -42,8 +47,8 @@ namespace Knight {
                 RevealPlayer();
             }
 
-            // set isInteractPressed to false immediately
-            _script.isInteractPressed = false;
+            // set IsInteractPressed to false immediately
+            _input.IsInteractPressed = false;
         }
 
 

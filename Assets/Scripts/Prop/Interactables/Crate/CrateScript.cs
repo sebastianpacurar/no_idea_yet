@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Prop.Interactables.Cart;
 using UnityEngine;
@@ -39,6 +40,11 @@ namespace Prop.Interactables.Crate {
             SetGravityWhenFalling();
             SetStackedCrateMass();
         }
+
+
+        // private void MoveWhileCarried() {
+        //     if 
+        // }
 
 
         // Set the PhysicsMaterial2D to provide friction or no friction
