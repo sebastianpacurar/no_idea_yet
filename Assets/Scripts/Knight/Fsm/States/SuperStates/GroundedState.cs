@@ -5,6 +5,8 @@ namespace Knight.Fsm.States.SuperStates {
         protected int XInput;
         protected bool SprintInput;
         protected bool JumpInput;
+        protected bool CrouchInput;
+        protected bool PickCrateInput;
         private bool _isGrounded;
 
         protected GroundedState(PlayerScript player, PlayerStateMachine stateMachine, PlayerDataSo playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName) { }
@@ -12,12 +14,14 @@ namespace Knight.Fsm.States.SuperStates {
         protected internal override void LogicUpdate() {
             base.LogicUpdate();
 
+
             XInput = PlayerScript.Input.MoveVal;
             SprintInput = PlayerScript.Input.IsSprintPressed;
             JumpInput = PlayerScript.Input.IsJumpPressed;
-
-
-            if (JumpInput) {
+            CrouchInput = PlayerScript.Input.IsCrouching;
+            PickCrateInput = PlayerScript.Input.IsPickCratePressed;
+            
+            if (JumpInput && !CrouchInput) {
                 PlayerScript.SetJumpFalse();
 
                 if (_isGrounded) {

@@ -47,6 +47,9 @@ namespace Knight.Fsm.States {
         // used to do specific checks regularly. Such vars are declared in Super States
         protected virtual void DoChecks() { }
 
+        // // used as a unity animation event, to trigger an animation
+        // public virtual void AnimationTrigger() { }
+
         // used as a unity animation event, to set IsAnimationFinished when the animation ends
         public virtual void AnimationFinishTrigger() => IsAnimationFinished = true;
     }

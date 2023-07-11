@@ -4,7 +4,6 @@ namespace Knight.Fsm.States.SubStates {
     public class InAirState : PlayerState {
         private int _xInput;
         private bool _isGrounded;
-        private float _speed;
         public InAirState(PlayerScript player, PlayerStateMachine stateMachine, PlayerDataSo playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName) { }
 
         protected internal override void LogicUpdate() {
@@ -12,24 +11,24 @@ namespace Knight.Fsm.States.SubStates {
 
             _xInput = PlayerScript.Input.MoveVal;
 
+            PlayerScript.CheckIfShouldFlip(_xInput);
+
             if (_isGrounded) {
                 StateMachine.ChangeState(PlayerScript.IdleState);
             }
 
-            PlayerScript.Anim.SetFloat("yVelocity", PlayerScript.currentVelocity.y);
+            PlayerScript.Anim.SetFloat("yVelocity", PlayerScript.CurrentVelocity.y);
         }
 
         protected override void DoChecks() {
             base.DoChecks();
-
             _isGrounded = PlayerScript.CheckIfGrounded();
         }
 
         protected internal override void PhysicsUpdate() {
             base.PhysicsUpdate();
 
-            PlayerScript.SetVelocityX(PlayerData.RunSpeed * _xInput);
-            PlayerScript.CheckIfShouldFlip(_xInput);
+            PlayerScript.SetVelocityX(PlayerScript.CurrentSpeed * _xInput);
         }
     }
 }

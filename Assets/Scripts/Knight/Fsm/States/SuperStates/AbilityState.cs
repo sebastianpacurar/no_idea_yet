@@ -15,7 +15,7 @@ namespace Knight.Fsm.States.SuperStates {
             base.LogicUpdate();
 
             if (IsAbilityDone) {
-                if (_isGrounded && PlayerScript.currentVelocity.y < 0.01f) {
+                if (_isGrounded && PlayerScript.CurrentVelocity.y < 0.01f) {
                     StateMachine.ChangeState(PlayerScript.IdleState);
                 } else {
                     StateMachine.ChangeState(PlayerScript.InAirState);

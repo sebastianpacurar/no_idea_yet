@@ -26,7 +26,7 @@ namespace NPC.Enemy {
         #endregion
 
         #region Misc Vars
-        public Vector2 currentVelocity;
+        public Vector2 CurrentVelocity;
         [SerializeField] private float minIntensity;
 
         [Header("For Debugging")]
@@ -74,7 +74,7 @@ namespace NPC.Enemy {
 
         private void Update() {
             // will be used globally
-            currentVelocity = _rb.velocity;
+            CurrentVelocity = _rb.velocity;
 
             var pos = transform.position;
             dirToPlayer = (_playerPos.position - pos).normalized;
@@ -104,8 +104,8 @@ namespace NPC.Enemy {
         #region Set Functions
         // stop movement
         public void SetVelocityX(float velocity) {
-            _rb.velocity = new Vector2(velocity, currentVelocity.y);
-            currentVelocity = _rb.velocity;
+            _rb.velocity = new Vector2(velocity, CurrentVelocity.y);
+            CurrentVelocity = _rb.velocity;
         }
 
         public void SetHitFalse() {

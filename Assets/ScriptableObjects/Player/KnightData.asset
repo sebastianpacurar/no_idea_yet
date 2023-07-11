@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b82928f0a9ec48199220b9091112adba, type: 3}
   m_Name: KnightData
   m_EditorClassIdentifier: 
-  runSpeed: 5
+  runSpeed: 6
   sprintSpeed: 10
-  jumpForce: 10
+  crouchSpeed: 5
+  carrySpeed: 4
+  jumpForce: 12

@@ -3,10 +3,10 @@ using UnityEngine;
 
 
 namespace Prop.Interactables {
-    public class InteractionNotificationScript : MonoBehaviour {
+    public class LabelScript : MonoBehaviour {
         [SerializeField] private SpriteRenderer wrapper;
-        [SerializeField] private SpriteRenderer xLightImg;
-        [SerializeField] private SpriteRenderer xDarkImg;
+        [SerializeField] private SpriteRenderer lightImg;
+        [SerializeField] private SpriteRenderer darkImg;
 
         
         private void Start() {
@@ -14,14 +14,13 @@ namespace Prop.Interactables {
             SetSpriteVisibilityTo(false);
         }
 
-        
         private IEnumerator ToggleBtnImg() {
             while (true) {
                 // execute what's below yield, every half a second
                 yield return new WaitForSeconds(0.5f);
 
                 // swap the order in the Sorting Layer between the images
-                (xLightImg.sortingOrder, xDarkImg.sortingOrder) = (xDarkImg.sortingOrder, xLightImg.sortingOrder);
+                (lightImg.sortingOrder, darkImg.sortingOrder) = (darkImg.sortingOrder, lightImg.sortingOrder);
             }
         }
 
@@ -47,8 +46,8 @@ namespace Prop.Interactables {
 
         private void SetSpriteVisibilityTo(bool value) {
             wrapper.enabled = value;
-            xDarkImg.enabled = value;
-            xLightImg.enabled = value;
+            darkImg.enabled = value;
+            lightImg.enabled = value;
         }
     }
 }

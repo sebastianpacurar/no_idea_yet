@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4633757393484130812}
   - component: {fileID: 2034254139204117883}
   m_Layer: 0
-  m_Name: xImgLight
+  m_Name: ImgLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 160814615
-  m_SortingLayer: 8
+  m_SortingLayer: 10
   m_SortingOrder: 2
   m_Sprite: {fileID: -1533720040, guid: 4b0e2e760b6d17f10bf570338baa72bb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -94,9 +94,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7900229054903671524}
   - component: {fileID: 2170996511191778127}
-  - component: {fileID: 6460116232841819595}
+  - component: {fileID: 5796483992629119118}
   m_Layer: 0
-  m_Name: InteractionNotification
+  m_Name: XLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -116,7 +116,7 @@ Transform:
   m_Children:
   - {fileID: 1252534755167375919}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &2170996511191778127
 BoxCollider2D:
@@ -163,7 +163,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &6460116232841819595
+--- !u!114 &5796483992629119118
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -176,8 +176,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wrapper: {fileID: 3552536255049561989}
-  xLightImg: {fileID: 2034254139204117883}
-  xDarkImg: {fileID: 1628121772839748117}
+  lightImg: {fileID: 2034254139204117883}
+  darkImg: {fileID: 1628121772839748117}
 --- !u!1 &6948936702798799615
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,7 +251,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 160814615
-  m_SortingLayer: 8
+  m_SortingLayer: 10
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d9525f90d583c4f718134011c6ee3f80, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -275,7 +275,7 @@ GameObject:
   - component: {fileID: 2319409654364348829}
   - component: {fileID: 1628121772839748117}
   m_Layer: 0
-  m_Name: xImgDark
+  m_Name: ImgDark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -335,7 +335,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 160814615
-  m_SortingLayer: 8
+  m_SortingLayer: 10
   m_SortingOrder: 1
   m_Sprite: {fileID: -1927798344, guid: 4b0e2e760b6d17f10bf570338baa72bb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

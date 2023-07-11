@@ -1,15 +1,15 @@
 using Knight.Fsm.States.SuperStates;
 using ScriptableObjects;
 
-
 namespace Knight.Fsm.States.SubStates {
-    public class SprintState : GroundedState {
-        public SprintState(PlayerScript player, PlayerStateMachine stateMachine, PlayerDataSo playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName) { }
+    public class CrouchWalkState : GroundedState {
+        public CrouchWalkState(PlayerScript player, PlayerStateMachine stateMachine, PlayerDataSo playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName) { }
 
         protected internal override void Enter() {
             base.Enter();
 
-            PlayerScript.CurrentSpeed = PlayerData.SprintSpeed;
+            PlayerScript.CurrentSpeed = PlayerData.CarrySpeed;
+            PlayerScript.SetPickUpFalse();
         }
 
         protected internal override void LogicUpdate() {
@@ -18,15 +18,15 @@ namespace Knight.Fsm.States.SubStates {
             PlayerScript.CheckIfShouldFlip(XInput);
 
             if (XInput == 0) {
-                StateMachine.ChangeState(PlayerScript.IdleState);
+                StateMachine.ChangeState(PlayerScript.CrouchIdleState);
             }
 
-            if (!SprintInput) {
+            if (!CrouchInput) {
                 StateMachine.ChangeState(PlayerScript.RunState);
             }
 
-            if (CrouchInput) {
-                StateMachine.ChangeState(PlayerScript.CrouchWalkState);
+            if (PickCrateInput) {
+                StateMachine.ChangeState(PlayerScript.CarryIdleState);
             }
         }
 

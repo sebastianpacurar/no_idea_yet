@@ -1,9 +1,10 @@
 using Input;
 using Knight.Fsm;
 using Knight.Fsm.States.SubStates;
+using Prop.Interactables.Crate;
 using ScriptableObjects;
 using UnityEngine;
-using IdleState = Knight.Fsm.States.SubStates.IdleState;
+using UnityEngine.Tilemaps;
 
 namespace Knight {
     public class PlayerScript : MonoBehaviour {
@@ -14,11 +15,10 @@ namespace Knight {
         public SprintState SprintState { get; private set; }
         public InAirState InAirState { get; private set; }
         public JumpState JumpState { get; private set; }
-        // public WalkState WalkState { get; private set; }
-        // public AttackState AttackState { get; private set; }
-        // public DeathState DeathState { get; private set; }
-        // public FollowPlayerState FollowPlayerState { get; private set; }
-        // public TakeHitState TakeHitState { get; private set; }
+        public CrouchIdleState CrouchIdleState { get; private set; }
+        public CrouchWalkState CrouchWalkState { get; private set; }
+        public CarryIdleState CarryIdleState { get; private set; }
+        public CarryWalkState CarryWalkState { get; private set; }
 
         public PlayerDataSo playerData;
         #endregion
@@ -29,7 +29,6 @@ namespace Knight {
         [SerializeField] private LayerMask pushableLayer;
         #endregion
 
-
         #region Components
         public InputManager Input { get; private set; }
         public Animator Anim { get; private set; }
@@ -37,8 +36,15 @@ namespace Knight {
         private CapsuleCollider2D _capsule;
         #endregion
 
+        #region Crate Components
+        public Transform crateTransform;
+        public CrateScript crateScript;
+        public Rigidbody2D crateRb;
+        #endregion
+
         #region Misc Vars
-        public Vector2 currentVelocity;
+        public float CurrentSpeed { get; set; }
+        public Vector2 CurrentVelocity { get; set; }
         private Vector2 _vectorHolder;
         #endregion
 
@@ -54,12 +60,10 @@ namespace Knight {
             SprintState = new SprintState(this, StateMachine, playerData, "sprint");
             InAirState = new InAirState(this, StateMachine, playerData, "inAir");
             JumpState = new JumpState(this, StateMachine, playerData, "inAir");
-
-            // WalkState = new WalkState(this, StateMachine, enemyData, "walk");
-            // FollowPlayerState = new FollowPlayerState(this, StateMachine, enemyData, "follow");
-            // AttackState = new AttackState(this, StateMachine, enemyData, "attack");
-            // TakeHitState = new TakeHitState(this, StateMachine, enemyData, "takeHit");
-            // DeathState = new DeathState(this, StateMachine, enemyData, "death");
+            CrouchIdleState = new CrouchIdleState(this, StateMachine, playerData, "crouchIdle");
+            CrouchWalkState = new CrouchWalkState(this, StateMachine, playerData, "crouchWalk");
+            CarryIdleState = new CarryIdleState(this, StateMachine, playerData, "carryIdle");
+            CarryWalkState = new CarryWalkState(this, StateMachine, playerData, "carryWalk");
 
             // get components
             _rb = GetComponent<Rigidbody2D>();
@@ -74,7 +78,12 @@ namespace Knight {
         }
 
         private void Update() {
-            currentVelocity = _rb.velocity;
+            CurrentVelocity = _rb.velocity;
+
+            if (Input.IsPickCratePressed && !CheckIfCanGrabCrate()) {
+                Input.IsPickCratePressed = false;
+            }
+
             StateMachine.CurrentState.LogicUpdate();
         }
 
@@ -83,7 +92,26 @@ namespace Knight {
         }
 
         private void OnTriggerEnter2D(Collider2D other) {
-            // prevent re-triggering hit state if dead
+            // grab the target obj, and the crate script
+            if (other.transform.parent.CompareTag("Crate")) {
+                var targetObject = other.transform.parent.gameObject;
+                crateTransform = targetObject.transform;
+                crateScript = targetObject.GetComponentInChildren<CrateScript>();
+                crateRb = targetObject.GetComponentInChildren<Rigidbody2D>();
+            }
+        }
+
+        private void OnTriggerExit2D(Collider2D other) {
+            // grab the target obj, and the crate script
+            if (other.transform.parent.CompareTag("Crate")) {
+                var targetObject = other.transform.parent.gameObject;
+
+                if (targetObject.GetComponentInChildren<CrateScript>().Equals(crateScript)) {
+                    crateTransform = null;
+                    crateScript = null;
+                    crateRb = null;
+                }
+            }
         }
         #endregion
 
@@ -91,25 +119,34 @@ namespace Knight {
         #region Set Functions
         // stop movement
         public void SetVelocityX(float velocity) {
-            _vectorHolder.Set(velocity, currentVelocity.y);
+            _vectorHolder.Set(velocity, CurrentVelocity.y);
             _rb.velocity = _vectorHolder;
-            currentVelocity = _vectorHolder;
-        }
-
-        public void SetVelocityY(float velocity) {
-            _vectorHolder.Set(currentVelocity.x, velocity);
-            _rb.velocity = _vectorHolder;
-            currentVelocity = _vectorHolder;
+            CurrentVelocity = _vectorHolder;
         }
 
         public void AddJumpForce(float force) {
             _vectorHolder.Set(0f, force);
             _rb.AddForce(_vectorHolder, ForceMode2D.Impulse);
-            currentVelocity = _rb.velocity;
+            CurrentVelocity = _rb.velocity;
         }
 
         public void SetJumpFalse() {
             Input.IsJumpPressed = false;
+        }
+
+        public void SetPickUpFalse() {
+            if (Input.IsPickCratePressed) {
+                Input.IsPickCratePressed = false;
+            }
+        }
+
+        public void SetCrateIsCarried(bool value) {
+            crateScript.isBeingCarried = value;
+        }
+
+        public void SetCratePosition() {
+            var pos = transform.position;
+            crateTransform.position = new Vector3(pos.x, pos.y + 1f, pos.z);
         }
         #endregion
 
@@ -135,6 +172,10 @@ namespace Knight {
         public bool CheckIfFacingInputDirection(int xInput) {
             return xInput == GetFacingDirection();
         }
+
+        public bool CheckIfCanGrabCrate() {
+            return crateScript;
+        }
         #endregion
 
 
@@ -152,6 +193,16 @@ namespace Knight {
             var currRot = transform.rotation.eulerAngles.y;
             transform.rotation = Quaternion.Euler(0f, currRot.Equals(0) ? 180f : 0f, 0f);
         }
+
+        public void ThrowCrate() {
+            SetCrateIsCarried(false);
+
+            _vectorHolder.Set(GetFacingDirection() * 50f, 75f);
+            crateRb.AddForce(_vectorHolder, ForceMode2D.Impulse);
+        }
+
+
+        // public virtual void AnimationTrigger() => StateMachine.CurrentState.AnimationTrigger();
 
 
         private void AnimationFinishTrigger() => StateMachine.CurrentState.AnimationFinishTrigger();

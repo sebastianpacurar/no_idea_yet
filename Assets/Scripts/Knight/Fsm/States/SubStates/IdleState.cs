@@ -13,8 +13,12 @@ namespace Knight.Fsm.States.SubStates {
         protected internal override void LogicUpdate() {
             base.LogicUpdate();
 
-            if (XInput != 0f) {
+            if (XInput != 0) {
                 StateMachine.ChangeState(PlayerScript.RunState);
+            }
+
+            if (CrouchInput) {
+                StateMachine.ChangeState(PlayerScript.CrouchIdleState);
             }
         }
     }

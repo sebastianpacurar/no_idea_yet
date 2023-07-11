@@ -569,7 +569,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Keyboard Letters and Symbols_20
+      name: e_key_light
       rect:
         serializedVersion: 2
         x: 65
@@ -1703,7 +1703,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Keyboard Letters and Symbols_74
+      name: e_key_dark
       rect:
         serializedVersion: 2
         x: 65
@@ -2448,7 +2448,6 @@ TextureImporter:
       Keyboard Letters and Symbols_18: 591981197
       Keyboard Letters and Symbols_19: 749217523
       Keyboard Letters and Symbols_2: 1872325510
-      Keyboard Letters and Symbols_20: 1259793663
       Keyboard Letters and Symbols_21: -1450242826
       Keyboard Letters and Symbols_22: -2140953287
       Keyboard Letters and Symbols_23: 1520848719
@@ -2506,7 +2505,6 @@ TextureImporter:
       Keyboard Letters and Symbols_71: -170862483
       Keyboard Letters and Symbols_72: -99264505
       Keyboard Letters and Symbols_73: -1856467977
-      Keyboard Letters and Symbols_74: 88725393
       Keyboard Letters and Symbols_75: -1719734846
       Keyboard Letters and Symbols_76: 1950981394
       Keyboard Letters and Symbols_77: -583667259
@@ -2533,6 +2531,8 @@ TextureImporter:
       Keyboard Letters and Symbols_97: -1351337974
       Keyboard Letters and Symbols_98: -1496365063
       Keyboard Letters and Symbols_99: 52560949
+      e_key_dark: 88725393
+      e_key_light: 1259793663
       x_key_dark: -1927798344
       x_key_light: -1533720040
   mipmapLimitGroupName: 

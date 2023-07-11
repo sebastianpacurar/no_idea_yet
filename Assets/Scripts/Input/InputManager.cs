@@ -10,10 +10,9 @@ namespace Input {
         public bool IsSprintPressed { get; set; }
         public bool IsJumpPressed { get; set; }
         public bool IsAttacking { get; set; }
+        public bool IsCrouching { get; set; }
         public bool IsInteractPressed { get; set; }
         public bool IsPickCratePressed { get; set; }
-        public bool isHit;
-        public bool isDead;
 
         private InputControls _controls;
         private Rigidbody2D _rb;
@@ -23,6 +22,7 @@ namespace Input {
         private InputAction _sprintAction;
         private InputAction _jumpAction;
         private InputAction _attackAction;
+        private InputAction _crouchAction;
         private InputAction _interactAction;
         private InputAction _pickCrateAction;
         #endregion
@@ -80,6 +80,13 @@ namespace Input {
             };
         }
 
+        private void OnCrouch(InputAction.CallbackContext ctx) {
+            IsCrouching = ctx.phase switch {
+                PhaseStarted or PhasePerformed => !IsCrouching,
+                _ => IsCrouching
+            };
+        }
+
 
         private void OnInteract(InputAction.CallbackContext ctx) {
             IsInteractPressed = ctx.phase switch {
@@ -93,7 +100,6 @@ namespace Input {
         private void OnPickCrate(InputAction.CallbackContext ctx) {
             IsPickCratePressed = ctx.phase switch {
                 PhaseStarted or PhasePerformed => true,
-                PhaseCanceled => false,
                 _ => IsPickCratePressed
             };
         }
@@ -105,6 +111,7 @@ namespace Input {
             _runAction = _controls.Player.Run;
             _sprintAction = _controls.Player.Sprint;
             _jumpAction = _controls.Player.Jump;
+            _crouchAction = _controls.Player.Crouch;
             _attackAction = _controls.Player.Attack;
             _interactAction = _controls.Player.Interact;
             _pickCrateAction = _controls.Player.PickCrate;
@@ -117,6 +124,7 @@ namespace Input {
             _sprintAction.Enable();
             _jumpAction.Enable();
             _attackAction.Enable();
+            _crouchAction.Enable();
             _interactAction.Enable();
             _pickCrateAction.Enable();
 
@@ -128,10 +136,10 @@ namespace Input {
             _jumpAction.performed += OnJump;
             _jumpAction.canceled += OnJump;
             _attackAction.performed += OnAttack;
+            _crouchAction.performed += OnCrouch;
             _interactAction.performed += OnInteract;
             _interactAction.canceled += OnInteract;
             _pickCrateAction.performed += OnPickCrate;
-            _pickCrateAction.canceled += OnPickCrate;
         }
 
 
@@ -143,15 +151,17 @@ namespace Input {
             _sprintAction.canceled -= OnSprint;
             _jumpAction.performed -= OnJump;
             _jumpAction.canceled -= OnJump;
+            _attackAction.performed -= OnAttack;
+            _crouchAction.performed -= OnCrouch;
             _interactAction.performed -= OnInteract;
             _interactAction.canceled -= OnInteract;
             _pickCrateAction.performed -= OnPickCrate;
-            _pickCrateAction.canceled -= OnPickCrate;
 
             _runAction.Disable();
             _sprintAction.Disable();
             _jumpAction.Disable();
             _attackAction.Disable();
+            _crouchAction.Disable();
             _interactAction.Disable();
             _pickCrateAction.Disable();
         }
