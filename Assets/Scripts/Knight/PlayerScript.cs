@@ -1,10 +1,11 @@
+using System;
 using Input;
 using Knight.Fsm;
 using Knight.Fsm.States.SubStates;
 using Prop.Interactables.Crate;
 using ScriptableObjects;
 using UnityEngine;
-using UnityEngine.Tilemaps;
+
 
 namespace Knight {
     public class PlayerScript : MonoBehaviour {
@@ -37,9 +38,10 @@ namespace Knight {
         #endregion
 
         #region Crate Components
-        public Transform crateTransform;
-        public CrateScript crateScript;
-        public Rigidbody2D crateRb;
+        [SerializeField] private CrateScript crateScript;
+        private Transform _crateTransform;
+        private Rigidbody2D _crateRb;
+        public bool isCarryingCrate;
         #endregion
 
         #region Misc Vars
@@ -47,6 +49,17 @@ namespace Knight {
         public Vector2 CurrentVelocity { get; set; }
         private Vector2 _vectorHolder;
         #endregion
+
+        [SerializeField] private Vector2 throwForce;
+
+        [Header("Aim Trajectory")]
+        [SerializeField] private LineRenderer predictionLineRenderer;
+        [SerializeField] private int lineSegmentCount;
+        [SerializeField] private float lineSegmentSpacing;
+        [SerializeField] private float lineGravity;
+
+        [SerializeField] private float aimChangeSpeed;
+        [SerializeField] private Vector2 thresholdY;
 
 
         #region Unity Callback Functions
@@ -95,9 +108,9 @@ namespace Knight {
             // grab the target obj, and the crate script
             if (other.transform.parent.CompareTag("Crate")) {
                 var targetObject = other.transform.parent.gameObject;
-                crateTransform = targetObject.transform;
+                _crateTransform = targetObject.transform;
                 crateScript = targetObject.GetComponentInChildren<CrateScript>();
-                crateRb = targetObject.GetComponentInChildren<Rigidbody2D>();
+                _crateRb = targetObject.GetComponentInChildren<Rigidbody2D>();
             }
         }
 
@@ -107,9 +120,9 @@ namespace Knight {
                 var targetObject = other.transform.parent.gameObject;
 
                 if (targetObject.GetComponentInChildren<CrateScript>().Equals(crateScript)) {
-                    crateTransform = null;
+                    _crateTransform = null;
                     crateScript = null;
-                    crateRb = null;
+                    _crateRb = null;
                 }
             }
         }
@@ -122,6 +135,15 @@ namespace Knight {
             _vectorHolder.Set(velocity, CurrentVelocity.y);
             _rb.velocity = _vectorHolder;
             CurrentVelocity = _vectorHolder;
+        }
+
+        // increase/decrease throw force vector => x = y /2
+        public void SetAimTrajectory() {
+            throwForce.x += Input.AimVal * aimChangeSpeed / 2 * Time.deltaTime;
+            throwForce.x = Mathf.Clamp(throwForce.x, thresholdY.x / 2, thresholdY.y / 2);
+
+            throwForce.y += Input.AimVal * aimChangeSpeed * Time.deltaTime;
+            throwForce.y = Mathf.Clamp(throwForce.y, thresholdY.x, thresholdY.y);
         }
 
         public void AddJumpForce(float force) {
@@ -140,13 +162,32 @@ namespace Knight {
             }
         }
 
+        public void SetCrateIsThrown(bool value) {
+            crateScript.isBeingThrown = value;
+        }
+
         public void SetCrateIsCarried(bool value) {
             crateScript.isBeingCarried = value;
         }
 
+
+        public void SetIsCarryingCrate(bool value) {
+            isCarryingCrate = value;
+        }
+
+
         public void SetCratePosition() {
             var pos = transform.position;
-            crateTransform.position = new Vector3(pos.x, pos.y + 1f, pos.z);
+            _crateTransform.position = new Vector3(pos.x, pos.y + 1.25f, pos.z);
+        }
+
+        public void SetCrateVelocityToZero() {
+            _vectorHolder.Set(0f, 0f);
+            _crateRb.velocity = _vectorHolder;
+        }
+
+        public void SetLineRendererActive(bool value) {
+            predictionLineRenderer.enabled = value;
         }
         #endregion
 
@@ -173,6 +214,7 @@ namespace Knight {
             return xInput == GetFacingDirection();
         }
 
+
         public bool CheckIfCanGrabCrate() {
             return crateScript;
         }
@@ -194,15 +236,46 @@ namespace Knight {
             transform.rotation = Quaternion.Euler(0f, currRot.Equals(0) ? 180f : 0f, 0f);
         }
 
-        public void ThrowCrate() {
-            SetCrateIsCarried(false);
 
-            _vectorHolder.Set(GetFacingDirection() * 50f, 75f);
-            crateRb.AddForce(_vectorHolder, ForceMode2D.Impulse);
+        public void ThrowCrate() {
+            SetCrateIsThrown(true);
+            SetCrateIsCarried(false);
+            SetIsCarryingCrate(false);
+
+            _vectorHolder.Set(GetFacingDirection() * throwForce.x, throwForce.y);
+            _crateRb.AddForce(_vectorHolder, ForceMode2D.Impulse);
         }
 
 
-        // public virtual void AnimationTrigger() => StateMachine.CurrentState.AnimationTrigger();
+        //TODO: needs more tweak
+        public void GeneratePredictionLine() {
+            var startPos = _crateRb.position;
+            _vectorHolder.Set(GetFacingDirection() * throwForce.x, throwForce.y);
+
+            SetLineRendererActive(true);
+            predictionLineRenderer.positionCount = lineSegmentCount;
+            predictionLineRenderer.SetPositions(CalculatePredictionLinePoints(startPos, _vectorHolder));
+        }
+
+        // TODO: isolate in helpers
+        private Vector3[] CalculatePredictionLinePoints(Vector2 startPos, Vector2 force) {
+            var linePoints = new Vector3[lineSegmentCount];
+
+            var currentPos = startPos;
+            var currentVelocity = force;
+            var gravity = _crateRb.gravityScale;
+            var mass = _crateRb.mass;
+
+            for (int i = 0; i < lineSegmentCount; i++) {
+                linePoints[i] = currentPos;
+
+                // NOTE: formula to blend in gravity with mass is:   gravity * (Mathf.Pow(mass, 2))
+                currentVelocity += Vector2.down * (lineGravity * gravity * (Mathf.Pow(mass, 2)) * lineSegmentSpacing);
+                currentPos += currentVelocity * lineSegmentSpacing;
+            }
+
+            return linePoints;
+        }
 
 
         private void AnimationFinishTrigger() => StateMachine.CurrentState.AnimationFinishTrigger();

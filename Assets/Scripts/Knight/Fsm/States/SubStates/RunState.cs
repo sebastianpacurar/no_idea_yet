@@ -28,6 +28,10 @@ namespace Knight.Fsm.States.SubStates {
             if (CrouchInput) {
                 StateMachine.ChangeState(PlayerScript.CrouchWalkState);
             }
+
+            if (PickCrateInput) {
+                StateMachine.ChangeState(PlayerScript.CarryIdleState);
+            }
         }
 
         protected internal override void PhysicsUpdate() {

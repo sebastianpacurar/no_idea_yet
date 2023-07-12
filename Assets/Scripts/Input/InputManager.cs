@@ -7,6 +7,7 @@ namespace Input {
         public static InputManager Instance { get; private set; }
 
         public int MoveVal { get; set; }
+        public int AimVal { get; set; }
         public bool IsSprintPressed { get; set; }
         public bool IsJumpPressed { get; set; }
         public bool IsAttacking { get; set; }
@@ -19,6 +20,7 @@ namespace Input {
 
         #region input actions
         private InputAction _runAction;
+        private InputAction _aimAction;
         private InputAction _sprintAction;
         private InputAction _jumpAction;
         private InputAction _attackAction;
@@ -51,6 +53,14 @@ namespace Input {
                 PhaseStarted or PhasePerformed => (int)_runAction.ReadValue<float>(),
                 PhaseCanceled => 0,
                 _ => MoveVal
+            };
+        }
+
+        private void OnAim(InputAction.CallbackContext ctx) {
+            AimVal = ctx.phase switch {
+                PhaseStarted or PhasePerformed => (int)_aimAction.ReadValue<float>(),
+                PhaseCanceled => 0,
+                _ => AimVal
             };
         }
 
@@ -109,6 +119,7 @@ namespace Input {
         private void InitializeInputControls() {
             _controls = new InputControls();
             _runAction = _controls.Player.Run;
+            _aimAction = _controls.Player.Aim;
             _sprintAction = _controls.Player.Sprint;
             _jumpAction = _controls.Player.Jump;
             _crouchAction = _controls.Player.Crouch;
@@ -121,6 +132,7 @@ namespace Input {
         #region Subscribe/Unsubscribe methods as callbacks for events
         private void OnEnable() {
             _runAction.Enable();
+            _aimAction.Enable();
             _sprintAction.Enable();
             _jumpAction.Enable();
             _attackAction.Enable();
@@ -131,6 +143,8 @@ namespace Input {
             //Unsubscribe the Move, Jump and Attack methods (call relevant methods when actions are performed) 
             _runAction.performed += OnMove;
             _runAction.canceled += OnMove;
+            _aimAction.performed += OnAim;
+            _aimAction.canceled += OnAim;
             _sprintAction.performed += OnSprint;
             _sprintAction.canceled += OnSprint;
             _jumpAction.performed += OnJump;
@@ -147,6 +161,8 @@ namespace Input {
             //Unsubscribe the Move, Jump and Attack methods
             _runAction.performed -= OnMove;
             _runAction.canceled -= OnMove;
+            _aimAction.performed -= OnAim;
+            _aimAction.canceled -= OnAim;
             _sprintAction.performed -= OnSprint;
             _sprintAction.canceled -= OnSprint;
             _jumpAction.performed -= OnJump;
@@ -158,6 +174,7 @@ namespace Input {
             _pickCrateAction.performed -= OnPickCrate;
 
             _runAction.Disable();
+            _aimAction.Disable();
             _sprintAction.Disable();
             _jumpAction.Disable();
             _attackAction.Disable();

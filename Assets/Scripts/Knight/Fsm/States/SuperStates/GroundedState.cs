@@ -21,7 +21,7 @@ namespace Knight.Fsm.States.SuperStates {
             CrouchInput = PlayerScript.Input.IsCrouching;
             PickCrateInput = PlayerScript.Input.IsPickCratePressed;
             
-            if (JumpInput && !CrouchInput) {
+            if (JumpInput && !PlayerScript.isCarryingCrate) {
                 PlayerScript.SetJumpFalse();
 
                 if (_isGrounded) {

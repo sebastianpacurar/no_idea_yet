@@ -1,4 +1,3 @@
-using System.Linq;
 using Prop.Interactables.Cart;
 using UnityEngine;
 
@@ -14,8 +13,9 @@ namespace Prop.Interactables.Crate {
         [SerializeField] private PhysicsMaterial2D lowFriction;
         [SerializeField] private PhysicsMaterial2D highFriction;
 
-        [Header("For Debugging")]
+        [Header("Debug")]
         public bool isBeingCarried;
+        public bool isBeingThrown;
 
         private CrateRayCasts _ray;
         private Rigidbody2D _rb;
@@ -28,7 +28,10 @@ namespace Prop.Interactables.Crate {
             _initialMass = 4;
         }
 
+
         private void Update() {
+            HandleThrow();
+
             // if player is in range, horizontally, then cause crate to have low friction, else place 20f friction
             SetPhysicsMaterial();
             selectedPm2D = _rb.sharedMaterial;
@@ -36,8 +39,14 @@ namespace Prop.Interactables.Crate {
 
 
         private void FixedUpdate() {
-            SetGravityWhenFalling();
             SetStackedCrateMass();
+        }
+
+        // if throw in progress and crate touches any other colliders (ground, pushable), set isBeingThrown to false
+        private void HandleThrow() {
+            if (isBeingThrown && _rb.IsTouchingLayers()) {
+                isBeingThrown = false;
+            }
         }
 
 
@@ -46,7 +55,7 @@ namespace Prop.Interactables.Crate {
             // start with high friction
             var frictionMat = highFriction;
 
-            if (!isBeingCarried) {
+            if (!isBeingCarried && !isBeingThrown) {
                 if (IsPlayerDetected()) {
                     // set to lowFriction if player detected
                     frictionMat = lowFriction;
@@ -58,10 +67,9 @@ namespace Prop.Interactables.Crate {
                         frictionMat = cartScript.isPlayerCollision ? highFriction : lowFriction;
                     }
                 }
+
+                _rb.sharedMaterial = frictionMat;
             }
-
-
-            _rb.sharedMaterial = frictionMat;
         }
 
 
@@ -73,12 +81,11 @@ namespace Prop.Interactables.Crate {
         }
 
 
-        // initial mass unit (for the crate which touches the ground layer) is 3f
         // decrease every vertical stacked unit with 0.25f from initial position
         private void SetStackedCrateMass() {
-            if (isBeingCarried) {
-                _rb.mass = 5f;
-                _rb.gravityScale = 1f;
+            // if carried or thrown set initial mass to initial mass
+            if (isBeingCarried || isBeingThrown) {
+                _rb.mass = _initialMass;
             } else {
                 var bottomRayHit = _ray.HitGroundBottom;
 
@@ -97,41 +104,18 @@ namespace Prop.Interactables.Crate {
         }
 
 
-        // cause the crate to drop quickly, until it collides with the first bottom object
-        private void SetGravityWhenFalling() {
-            _rb.gravityScale = _rb.velocity.y < -0.1f ? 10 : 1;
-        }
-
-
         private void OnCollisionEnter2D(Collision2D other) {
             if (other.gameObject.CompareTag("Cart")) {
-                var average = CalculateAverageContactNormal(other);
-
-                // if crate sits on cart, then assign the CartScript component to cartScript variable
-                if (IsCollisionBottom(average)) {
+                if (CollisionData.IsCollisionBottom(other)) {
                     cartScript = other.gameObject.GetComponent<CartScript>();
                 }
             }
         }
-
 
         private void OnCollisionExit2D(Collision2D other) {
             if (other.gameObject.CompareTag("Cart")) {
                 cartScript = null;
             }
         }
-
-
-        // get the average of Collision ContactPoint2D normal values  
-        private Vector2 CalculateAverageContactNormal(Collision2D collision) {
-            // get the sum of all contact.normal values from contacts
-            var average = collision.contacts.Aggregate(Vector2.zero, (current, contact) => current + contact.normal);
-
-            // divide sum to the length to get the average
-            average /= collision.contacts.Length;
-            return average.normalized;
-        }
-
-        private bool IsCollisionBottom(Vector2 v) => v.y > 0;
     }
 }

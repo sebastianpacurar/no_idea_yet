@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 
 
@@ -60,13 +59,11 @@ namespace Prop.Interactables.Cart {
 
 
         private void OnCollisionEnter2D(Collision2D other) {
-            if (other.gameObject.CompareTag("Player")) {
-                var average = CalculateAverageContactNormal(other);
+            if (!other.gameObject.CompareTag("Player")) return;
 
-                // if player is on the left or right of the cart, then return true
-                if (IsCollisionSideways(average)) {
-                    isPlayerCollision = true;
-                }
+            // if player is on the left or right of the cart, then return true
+            if (CollisionData.IsCollisionSideways(other)) {
+                isPlayerCollision = true;
             }
         }
 
@@ -86,24 +83,6 @@ namespace Prop.Interactables.Cart {
         // Set the PhysicsMaterial2D with the provided version
         private void SetPhysicsMaterial(PhysicsMaterial2D material) {
             _box.sharedMaterial = material;
-        }
-
-
-        // get the average of Collision ContactPoint2D normal values  
-        private Vector2 CalculateAverageContactNormal(Collision2D collision) {
-            // get the sum of all contact.normal values from contacts
-            var average = collision.contacts.Aggregate(Vector2.zero, (current, contact) => current + contact.normal);
-
-            // divide sum to the length to get the average
-            average /= collision.contacts.Length;
-            return average.normalized;
-        }
-
-        private bool IsCollisionSideways(Vector2 v) {
-            var collisionLeft = v.x > 0f;
-            var collisionRight = v.x < 0f;
-
-            return collisionLeft || collisionRight;
         }
     }
 }

@@ -7,15 +7,22 @@ namespace Knight.Fsm.States.SubStates {
 
         protected internal override void Enter() {
             base.Enter();
+
+            PlayerScript.SetVelocityX(0f);
             PlayerScript.SetPickUpFalse();
             PlayerScript.SetCrateIsCarried(true);
-            PlayerScript.SetVelocityX(0f);
+            PlayerScript.SetIsCarryingCrate(true);
             PlayerScript.SetCratePosition();
+            PlayerScript.SetCrateVelocityToZero();
         }
 
         protected internal override void LogicUpdate() {
             base.LogicUpdate();
-            
+
+            PlayerScript.GeneratePredictionLine();
+            PlayerScript.SetAimTrajectory();
+
+
             if (XInput != 0) {
                 StateMachine.ChangeState(PlayerScript.CarryWalkState);
             }
@@ -25,6 +32,12 @@ namespace Knight.Fsm.States.SubStates {
                 PlayerScript.ThrowCrate();
                 StateMachine.ChangeState(PlayerScript.IdleState);
             }
+        }
+
+        protected internal override void Exit() {
+            base.Exit();
+
+            PlayerScript.SetLineRendererActive(false);
         }
     }
 }

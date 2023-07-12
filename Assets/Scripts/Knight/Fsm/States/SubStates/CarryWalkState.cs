@@ -16,6 +16,7 @@ namespace Knight.Fsm.States.SubStates {
             PlayerScript.CheckIfShouldFlip(XInput);
             PlayerScript.SetCratePosition();
 
+
             if (XInput == 0) {
                 StateMachine.ChangeState(PlayerScript.CarryIdleState);
             }

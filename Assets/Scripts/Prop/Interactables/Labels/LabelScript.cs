@@ -1,8 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-
-namespace Prop.Interactables {
+namespace Prop.Interactables.Labels {
     public class LabelScript : MonoBehaviour {
         [SerializeField] private SpriteRenderer wrapper;
         [SerializeField] private SpriteRenderer lightImg;
