@@ -5,23 +5,21 @@ namespace Knight.Fsm.States.SubStates {
     public class CarryIdleState : GroundedState {
         public CarryIdleState(PlayerScript player, PlayerStateMachine stateMachine, PlayerDataSo playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName) { }
 
+        
         protected internal override void Enter() {
             base.Enter();
 
-            PlayerScript.SetVelocityX(0f);
             PlayerScript.SetPickUpFalse();
-            PlayerScript.SetCrateIsCarried(true);
-            PlayerScript.SetIsCarryingCrate(true);
-            PlayerScript.SetCratePosition();
-            PlayerScript.SetCrateVelocityToZero();
+            PlayerScript.SetCrateCarryVars(true);
+            PlayerScript.SetCrateOnPlayer();
         }
 
+        
         protected internal override void LogicUpdate() {
             base.LogicUpdate();
 
             PlayerScript.GeneratePredictionLine();
             PlayerScript.SetAimTrajectory();
-
 
             if (XInput != 0) {
                 StateMachine.ChangeState(PlayerScript.CarryWalkState);
@@ -33,6 +31,15 @@ namespace Knight.Fsm.States.SubStates {
                 StateMachine.ChangeState(PlayerScript.IdleState);
             }
         }
+
+        
+        protected internal override void PhysicsUpdate() {
+            base.PhysicsUpdate();
+
+            PlayerScript.SetVelocityX(0f);
+            PlayerScript.SetCrateVelToZero();
+        }
+
 
         protected internal override void Exit() {
             base.Exit();

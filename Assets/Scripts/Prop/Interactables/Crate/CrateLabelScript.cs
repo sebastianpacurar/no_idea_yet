@@ -26,8 +26,8 @@ namespace Prop.Interactables.Crate {
             HandleLabelDisplay();
         }
 
-
-        private void OnCollisionEnter2D(Collision2D other) {
+        
+        private void OnCollisionStay2D(Collision2D other) {
             if (!other.gameObject.CompareTag("Crate")) return;
 
             if (CollisionData.IsCollisionTop(other)) {
@@ -35,6 +35,7 @@ namespace Prop.Interactables.Crate {
             }
         }
 
+        
         private void OnCollisionExit2D(Collision2D other) {
             if (!other.gameObject.CompareTag("Crate")) return;
 
@@ -51,7 +52,7 @@ namespace Prop.Interactables.Crate {
         private void HandleLabelDisplay() {
             var isDisplayed = false;
 
-            // display label if the crate is it's top of stack and player is not carrying any other crate
+            // display label if the crate is at the top of the stack and the player is not carrying any other crate
             if (!_playerScript.isCarryingCrate) {
                 if (!crateAbove) {
                     isDisplayed = true;

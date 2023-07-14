@@ -31,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1258598615208435579}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.99, y: -1.48, z: 0}
+  m_LocalPosition: {x: 83.27, y: -32.82, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -228,13 +228,13 @@ MonoBehaviour:
     m_Bits: 64
   crateScript: {fileID: 0}
   isCarryingCrate: 0
-  throwForce: {x: 10, y: 10}
+  throwForce: {x: 12, y: 24}
   predictionLineRenderer: {fileID: 2957742040052436221}
   lineSegmentCount: 300
   lineSegmentSpacing: 0.01
   lineGravity: 9.8
-  aimChangeSpeed: 12.5
-  thresholdY: {x: 0, y: 80}
+  aimChangeSpeed: 16
+  thresholdY: {x: 24, y: 100}
 --- !u!114 &1667972314069250478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -436,7 +436,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -583,8 +583,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.00000006186989, y: -0.5190023}
-  m_Size: {x: 2.5000005, y: 1.3599954}
+  m_Offset: {x: 0.094587274, y: -0.51900226}
+  m_Size: {x: 2.2842648, y: 1.3599955}
   m_Direction: 1
 --- !u!1 &5519859093111188052
 GameObject:

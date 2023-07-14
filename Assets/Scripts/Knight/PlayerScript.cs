@@ -1,4 +1,3 @@
-using System;
 using Input;
 using Knight.Fsm;
 using Knight.Fsm.States.SubStates;
@@ -47,7 +46,8 @@ namespace Knight {
         #region Misc Vars
         public float CurrentSpeed { get; set; }
         public Vector2 CurrentVelocity { get; set; }
-        private Vector2 _vectorHolder;
+        private Vector2 _vector2Holder;
+        private Vector3 _vector3Holder;
         #endregion
 
         [SerializeField] private Vector2 throwForce;
@@ -60,6 +60,8 @@ namespace Knight {
 
         [SerializeField] private float aimChangeSpeed;
         [SerializeField] private Vector2 thresholdY;
+
+        [SerializeField] private bool isIntersection;
 
 
         #region Unity Callback Functions
@@ -105,8 +107,9 @@ namespace Knight {
         }
 
         private void OnTriggerEnter2D(Collider2D other) {
-            // grab the target obj, and the crate script
+            // if parent of Label is Crate
             if (other.transform.parent.CompareTag("Crate")) {
+                // save crate's script, transform and rigidbody
                 var targetObject = other.transform.parent.gameObject;
                 _crateTransform = targetObject.transform;
                 crateScript = targetObject.GetComponentInChildren<CrateScript>();
@@ -115,10 +118,11 @@ namespace Knight {
         }
 
         private void OnTriggerExit2D(Collider2D other) {
-            // grab the target obj, and the crate script
+            // if parent of Label is Crate
             if (other.transform.parent.CompareTag("Crate")) {
                 var targetObject = other.transform.parent.gameObject;
 
+                // if the collision object is the same with the assigned script then perform cleanup
                 if (targetObject.GetComponentInChildren<CrateScript>().Equals(crateScript)) {
                     _crateTransform = null;
                     crateScript = null;
@@ -132,10 +136,11 @@ namespace Knight {
         #region Set Functions
         // stop movement
         public void SetVelocityX(float velocity) {
-            _vectorHolder.Set(velocity, CurrentVelocity.y);
-            _rb.velocity = _vectorHolder;
-            CurrentVelocity = _vectorHolder;
+            _vector2Holder.Set(velocity, CurrentVelocity.y);
+            _rb.velocity = _vector2Holder;
+            CurrentVelocity = _vector2Holder;
         }
+
 
         // increase/decrease throw force vector => x = y /2
         public void SetAimTrajectory() {
@@ -146,44 +151,57 @@ namespace Knight {
             throwForce.y = Mathf.Clamp(throwForce.y, thresholdY.x, thresholdY.y);
         }
 
+
+        // perform jump
         public void AddJumpForce(float force) {
-            _vectorHolder.Set(0f, force);
-            _rb.AddForce(_vectorHolder, ForceMode2D.Impulse);
+            _vector2Holder.Set(0f, force);
+            _rb.AddForce(_vector2Holder, ForceMode2D.Impulse);
             CurrentVelocity = _rb.velocity;
         }
 
+
+        // set jump input to false
         public void SetJumpFalse() {
             Input.IsJumpPressed = false;
         }
 
+
+        // if Pick Crate input is true, then set to false 
         public void SetPickUpFalse() {
             if (Input.IsPickCratePressed) {
                 Input.IsPickCratePressed = false;
             }
         }
 
-        public void SetCrateIsThrown(bool value) {
-            crateScript.isBeingThrown = value;
-        }
-
-        public void SetCrateIsCarried(bool value) {
+        // set isBeingCarried and isCarryingCrate
+        public void SetCrateCarryVars(bool value) {
             crateScript.isBeingCarried = value;
-        }
-
-
-        public void SetIsCarryingCrate(bool value) {
             isCarryingCrate = value;
         }
 
 
-        public void SetCratePosition() {
+        public void SetCrateOnPlayer() {
+            // set crate velocity to 0
+            _vector2Holder.Set(0f, 0f);
+            _crateRb.velocity = _vector2Holder;
+
+            // set crate position on top of the player
             var pos = transform.position;
-            _crateTransform.position = new Vector3(pos.x, pos.y + 1.25f, pos.z);
+            var offset = 1.25f;
+            _vector3Holder.Set(pos.x, pos.y + offset, pos.z);
+            _crateTransform.position = _vector3Holder;
         }
 
-        public void SetCrateVelocityToZero() {
-            _vectorHolder.Set(0f, 0f);
-            _crateRb.velocity = _vectorHolder;
+        public void SetCrateVelToPlayerVel() {
+            if (crateScript) {
+                _crateRb.velocity = CurrentVelocity;
+            }
+        }
+
+        public void SetCrateVelToZero() {
+            if (crateScript) {
+                _crateRb.velocity = Vector2.zero;
+            }
         }
 
         public void SetLineRendererActive(bool value) {
@@ -209,20 +227,64 @@ namespace Knight {
             }
         }
 
+        public bool CheckIfCarryingCrate() {
+            return isCarryingCrate;
+        }
 
-        public bool CheckIfFacingInputDirection(int xInput) {
+
+        private bool CheckIfFacingInputDirection(int xInput) {
             return xInput == GetFacingDirection();
         }
 
 
-        public bool CheckIfCanGrabCrate() {
+        private bool CheckIfCanGrabCrate() {
             return crateScript;
         }
         #endregion
 
 
         #region Misc Functions
-        public int GetFacingDirection() {
+        public void ThrowCrate() {
+            crateScript.isBeingThrown = true;
+            SetCrateCarryVars(false);
+
+            _vector2Holder.Set(GetFacingDirection() * throwForce.x, throwForce.y);
+            _crateRb.AddForce(_vector2Holder, ForceMode2D.Impulse);
+        }
+
+
+        public void GeneratePredictionLine() {
+            if (!crateScript) return;
+            var startPos = _crateRb.position;
+            _vector2Holder.Set(GetFacingDirection() * throwForce.x, throwForce.y);
+
+            SetLineRendererActive(true);
+            predictionLineRenderer.positionCount = lineSegmentCount;
+            predictionLineRenderer.SetPositions(CalculatePredictionLinePoints(startPos, _vector2Holder));
+        }
+        
+        
+        private Vector3[] CalculatePredictionLinePoints(Vector2 startPos, Vector2 force) {
+            var linePoints = new Vector3[lineSegmentCount];
+        
+            var currentPos = startPos;
+            var currentVelocity = force;
+            var gravity = _crateRb.gravityScale;
+            var mass = _crateRb.mass;
+        
+            for (int i = 0; i < lineSegmentCount; i++) {
+                linePoints[i] = currentPos;
+        
+                // NOTE: formula to blend in gravity with mass is: gravity * (Mathf.Pow(mass, 2))
+                currentVelocity += Vector2.down * (lineGravity * gravity * Mathf.Pow(mass, 2) * lineSegmentSpacing);
+                currentPos += currentVelocity * lineSegmentSpacing;
+            }
+        
+            return linePoints;
+        }
+
+
+        private int GetFacingDirection() {
             return transform.rotation.eulerAngles.y switch {
                 0f => 1,
                 180f => -1,
@@ -231,50 +293,9 @@ namespace Knight {
         }
 
 
-        public void Flip() {
+        private void Flip() {
             var currRot = transform.rotation.eulerAngles.y;
             transform.rotation = Quaternion.Euler(0f, currRot.Equals(0) ? 180f : 0f, 0f);
-        }
-
-
-        public void ThrowCrate() {
-            SetCrateIsThrown(true);
-            SetCrateIsCarried(false);
-            SetIsCarryingCrate(false);
-
-            _vectorHolder.Set(GetFacingDirection() * throwForce.x, throwForce.y);
-            _crateRb.AddForce(_vectorHolder, ForceMode2D.Impulse);
-        }
-
-
-        //TODO: needs more tweak
-        public void GeneratePredictionLine() {
-            var startPos = _crateRb.position;
-            _vectorHolder.Set(GetFacingDirection() * throwForce.x, throwForce.y);
-
-            SetLineRendererActive(true);
-            predictionLineRenderer.positionCount = lineSegmentCount;
-            predictionLineRenderer.SetPositions(CalculatePredictionLinePoints(startPos, _vectorHolder));
-        }
-
-        // TODO: isolate in helpers
-        private Vector3[] CalculatePredictionLinePoints(Vector2 startPos, Vector2 force) {
-            var linePoints = new Vector3[lineSegmentCount];
-
-            var currentPos = startPos;
-            var currentVelocity = force;
-            var gravity = _crateRb.gravityScale;
-            var mass = _crateRb.mass;
-
-            for (int i = 0; i < lineSegmentCount; i++) {
-                linePoints[i] = currentPos;
-
-                // NOTE: formula to blend in gravity with mass is:   gravity * (Mathf.Pow(mass, 2))
-                currentVelocity += Vector2.down * (lineGravity * gravity * (Mathf.Pow(mass, 2)) * lineSegmentSpacing);
-                currentPos += currentVelocity * lineSegmentSpacing;
-            }
-
-            return linePoints;
         }
 
 

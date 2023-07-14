@@ -4,11 +4,7 @@ using ScriptableObjects;
 namespace Knight.Fsm.States.SubStates {
     public class IdleState : GroundedState {
         public IdleState(PlayerScript player, PlayerStateMachine stateMachine, PlayerDataSo playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName) { }
-
-        protected internal override void Enter() {
-            base.Enter();
-            PlayerScript.SetVelocityX(0f);
-        }
+        
 
         protected internal override void LogicUpdate() {
             base.LogicUpdate();
@@ -24,6 +20,12 @@ namespace Knight.Fsm.States.SubStates {
             if (PickCrateInput) {
                 StateMachine.ChangeState(PlayerScript.CarryIdleState);
             }
+        }
+
+        
+        protected internal override void PhysicsUpdate() {
+            base.PhysicsUpdate();
+            PlayerScript.SetVelocityX(0);
         }
     }
 }

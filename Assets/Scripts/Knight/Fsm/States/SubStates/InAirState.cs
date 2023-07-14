@@ -9,15 +9,16 @@ namespace Knight.Fsm.States.SubStates {
 
         protected internal override void Enter() {
             base.Enter();
-            
+
             if (PlayerScript.isCarryingCrate) {
-                PlayerScript.SetCrateIsCarried(false);
-                PlayerScript.SetIsCarryingCrate(false);
+                PlayerScript.SetCrateCarryVars(false);
             }
         }
 
         protected internal override void LogicUpdate() {
             base.LogicUpdate();
+
+            PlayerScript.SetLineRendererActive(false);
 
             _xInput = PlayerScript.Input.MoveVal;
             PlayerScript.CheckIfShouldFlip(_xInput);
