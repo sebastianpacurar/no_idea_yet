@@ -129,6 +129,9 @@ TagManager:
   - name: TreesFront
     uniqueID: 4101215435
     locked: 0
+  - name: AimTrajectory
+    uniqueID: 4134967647
+    locked: 0
   - name: ParticlesAfterEnv
     uniqueID: 626944251
     locked: 0

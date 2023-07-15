@@ -208,10 +208,12 @@ MonoBehaviour:
   wheels:
   - {fileID: 3313681418081349414}
   - {fileID: 120093871111082445}
-  speedThreshold: 3
+  speedThreshold: 10
   rotationFactor: 100
   lowFriction: {fileID: 6200000, guid: 3a03210f5a5b5ac77ae90be63309798f, type: 2}
   highFriction: {fileID: 6200000, guid: f1c7fdea5fc0da5689fe3efb88fe230d, type: 2}
+  massWhenStationary: 20
+  massWhenPushed: 1
   speed: 0
   direction: 0
   localVelocity: {x: 0, y: 0}

@@ -53,7 +53,7 @@ namespace Prop.Interactables.Crate {
             var isDisplayed = false;
 
             // display label if the crate is at the top of the stack and the player is not carrying any other crate
-            if (!_playerScript.isCarryingCrate) {
+            if (!_playerScript.CheckIfCarryingCrate()) {
                 if (!crateAbove) {
                     isDisplayed = true;
                 }

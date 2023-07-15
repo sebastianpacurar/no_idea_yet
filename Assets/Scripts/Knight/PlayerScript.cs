@@ -38,9 +38,10 @@ namespace Knight {
 
         #region Crate Components
         [SerializeField] private CrateScript crateScript;
+        [SerializeField] private bool isCarryingCrate;
+        [SerializeField] private bool _isGroundedDebug;
         private Transform _crateTransform;
         private Rigidbody2D _crateRb;
-        public bool isCarryingCrate;
         #endregion
 
         #region Misc Vars
@@ -58,10 +59,9 @@ namespace Knight {
         [SerializeField] private float lineSegmentSpacing;
         [SerializeField] private float lineGravity;
 
+        [SerializeField] private float crateVelocityAimFactor;
         [SerializeField] private float aimChangeSpeed;
         [SerializeField] private Vector2 thresholdY;
-
-        [SerializeField] private bool isIntersection;
 
 
         #region Unity Callback Functions
@@ -95,6 +95,8 @@ namespace Knight {
         private void Update() {
             CurrentVelocity = _rb.velocity;
 
+            _isGroundedDebug = CheckIfGrounded();
+
             if (Input.IsPickCratePressed && !CheckIfCanGrabCrate()) {
                 Input.IsPickCratePressed = false;
             }
@@ -106,7 +108,7 @@ namespace Knight {
             StateMachine.CurrentState.PhysicsUpdate();
         }
 
-        private void OnTriggerEnter2D(Collider2D other) {
+        private void OnTriggerStay2D(Collider2D other) {
             // if parent of Label is Crate
             if (other.transform.parent.CompareTag("Crate")) {
                 // save crate's script, transform and rigidbody
@@ -173,9 +175,13 @@ namespace Knight {
             }
         }
 
-        // set isBeingCarried and isCarryingCrate
-        public void SetCrateCarryVars(bool value) {
+
+        public void SetCrateIsBeingCarried(bool value) {
             crateScript.isBeingCarried = value;
+        }
+
+
+        public void SetIsCarrying(bool value) {
             isCarryingCrate = value;
         }
 
@@ -213,7 +219,7 @@ namespace Knight {
         #region Check Functions
         public bool CheckIfGrounded() {
             var pos = groundChecker.position;
-            var size = new Vector2(1.1f, 0.2f);
+            var size = new Vector2(1.1f, 0.8f);
             var direction = CapsuleDirection2D.Horizontal;
             var angle = 0f;
 
@@ -231,6 +237,16 @@ namespace Knight {
             return isCarryingCrate;
         }
 
+        public bool CheckIfCrateIsBeingCarried() {
+            var isCrateCarried = false;
+
+            if (crateScript) {
+                isCrateCarried = crateScript.isBeingCarried;
+            }
+
+            return isCrateCarried;
+        }
+
 
         private bool CheckIfFacingInputDirection(int xInput) {
             return xInput == GetFacingDirection();
@@ -246,7 +262,8 @@ namespace Knight {
         #region Misc Functions
         public void ThrowCrate() {
             crateScript.isBeingThrown = true;
-            SetCrateCarryVars(false);
+            SetCrateIsBeingCarried(false);
+            SetIsCarrying(false);
 
             _vector2Holder.Set(GetFacingDirection() * throwForce.x, throwForce.y);
             _crateRb.AddForce(_vector2Holder, ForceMode2D.Impulse);
@@ -255,31 +272,34 @@ namespace Knight {
 
         public void GeneratePredictionLine() {
             if (!crateScript) return;
+
             var startPos = _crateRb.position;
             _vector2Holder.Set(GetFacingDirection() * throwForce.x, throwForce.y);
 
             SetLineRendererActive(true);
             predictionLineRenderer.positionCount = lineSegmentCount;
             predictionLineRenderer.SetPositions(CalculatePredictionLinePoints(startPos, _vector2Holder));
+
+            SetAimTrajectory();
         }
-        
-        
+
+
         private Vector3[] CalculatePredictionLinePoints(Vector2 startPos, Vector2 force) {
             var linePoints = new Vector3[lineSegmentCount];
-        
+
             var currentPos = startPos;
-            var currentVelocity = force;
+            var currentVelocity = force + (_crateRb.velocity * crateVelocityAimFactor);
             var gravity = _crateRb.gravityScale;
             var mass = _crateRb.mass;
-        
+
             for (int i = 0; i < lineSegmentCount; i++) {
                 linePoints[i] = currentPos;
-        
+
                 // NOTE: formula to blend in gravity with mass is: gravity * (Mathf.Pow(mass, 2))
                 currentVelocity += Vector2.down * (lineGravity * gravity * Mathf.Pow(mass, 2) * lineSegmentSpacing);
                 currentPos += currentVelocity * lineSegmentSpacing;
             }
-        
+
             return linePoints;
         }
 

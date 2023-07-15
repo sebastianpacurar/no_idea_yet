@@ -4,28 +4,30 @@ namespace Knight.Fsm.States.SubStates {
     public class InAirState : PlayerState {
         private int _xInput;
         private bool _isGrounded;
+        private bool _isCrateBeingCarried;
         public InAirState(PlayerScript player, PlayerStateMachine stateMachine, PlayerDataSo playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName) { }
 
-
-        protected internal override void Enter() {
-            base.Enter();
-
-            if (PlayerScript.isCarryingCrate) {
-                PlayerScript.SetCrateCarryVars(false);
-            }
-        }
 
         protected internal override void LogicUpdate() {
             base.LogicUpdate();
 
-            PlayerScript.SetLineRendererActive(false);
-
             _xInput = PlayerScript.Input.MoveVal;
+
+            PlayerScript.SetLineRendererActive(false);
             PlayerScript.CheckIfShouldFlip(_xInput);
 
             if (_isGrounded) {
-                StateMachine.ChangeState(PlayerScript.IdleState);
+                if (_isCrateBeingCarried) {
+                    if (_xInput == 0) {
+                        StateMachine.ChangeState(PlayerScript.CarryIdleState);
+                    } else {
+                        StateMachine.ChangeState(PlayerScript.CarryWalkState);
+                    }
+                } else {
+                    StateMachine.ChangeState(PlayerScript.IdleState);
+                }
             }
+
 
             PlayerScript.Anim.SetFloat("yVelocity", PlayerScript.CurrentVelocity.y);
         }
@@ -34,6 +36,7 @@ namespace Knight.Fsm.States.SubStates {
         protected override void DoChecks() {
             base.DoChecks();
             _isGrounded = PlayerScript.CheckIfGrounded();
+            _isCrateBeingCarried = PlayerScript.CheckIfCrateIsBeingCarried();
         }
 
 
@@ -41,6 +44,10 @@ namespace Knight.Fsm.States.SubStates {
             base.PhysicsUpdate();
 
             PlayerScript.SetVelocityX(PlayerScript.CurrentSpeed * _xInput);
+
+            if (_isCrateBeingCarried) {
+                PlayerScript.SetCrateVelToPlayerVel();
+            }
         }
     }
 }

@@ -5069,12 +5069,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feb8b26d5eb1329688e1330fbdae711d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedPm2D: {fileID: 0}
-  cartScript: {fileID: 0}
   lowFriction: {fileID: 6200000, guid: 3a03210f5a5b5ac77ae90be63309798f, type: 2}
   highFriction: {fileID: 6200000, guid: f8de3bd95d900c20097391549bebec3f, type: 2}
+  groundFriction: {fileID: 6200000, guid: 3c152d50065809b1fbd519f7ca921392, type: 2}
+  defaultMass: 4
+  defaultGravity: 2
+  freeFallGravity: 5.25
+  carryThrowGravity: 3
+  selectedPm2D: {fileID: 0}
+  cartScript: {fileID: 0}
+  nearbyCrate: {fileID: 0}
   isBeingCarried: 0
   isBeingThrown: 0
+  isGrounded: 0
 --- !u!114 &7323950766747802923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5178,6 +5185,22 @@ PrefabInstance:
     - target: {fileID: 3665127760606033187, guid: b46133cbe3fc02f70b1ae759c3a7ab83, type: 3}
       propertyPath: m_Name
       value: ELabel
+      objectReference: {fileID: 0}
+    - target: {fileID: 9128959339530318987, guid: b46133cbe3fc02f70b1ae759c3a7ab83, type: 3}
+      propertyPath: m_Size.x
+      value: 2.3836608
+      objectReference: {fileID: 0}
+    - target: {fileID: 9128959339530318987, guid: b46133cbe3fc02f70b1ae759c3a7ab83, type: 3}
+      propertyPath: m_Size.y
+      value: 2.0412953
+      objectReference: {fileID: 0}
+    - target: {fileID: 9128959339530318987, guid: b46133cbe3fc02f70b1ae759c3a7ab83, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.026702404
+      objectReference: {fileID: 0}
+    - target: {fileID: 9128959339530318987, guid: b46133cbe3fc02f70b1ae759c3a7ab83, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.35632113
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -16,4 +16,4 @@ MonoBehaviour:
   sprintSpeed: 10
   crouchSpeed: 5
   carrySpeed: 4
-  jumpForce: 25
+  jumpForce: 20
