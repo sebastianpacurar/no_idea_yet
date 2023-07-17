@@ -4999,7 +4999,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 2
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 1.5
   m_GravityScale: 2
   m_Material: {fileID: 6200000, guid: 3a03210f5a5b5ac77ae90be63309798f, type: 2}
   m_IncludeLayers:

@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1989439033
-  m_SortingLayer: -13
+  m_SortingLayer: -11
   m_SortingOrder: 0
   m_Sprite: {fileID: 244755737, guid: 60f93f4abb60765b09710f9e83ac7618, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -155,7 +155,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1989439033
-  m_SortingLayer: -13
+  m_SortingLayer: -11
   m_SortingOrder: 0
   m_Sprite: {fileID: 29937843, guid: 60f93f4abb60765b09710f9e83ac7618, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 213656351538868914}
   m_Layer: 0
   m_Name: HouseDoorOne
-  m_TagString: Door
+  m_TagString: HouseDoor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -242,7 +242,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5930501504184795879, guid: 0d3c9058ce10ba109963c3e62f19e781, type: 3}
       propertyPath: m_Name
-      value: InteractionNotification
+      value: XLabel
       objectReference: {fileID: 0}
     - target: {fileID: 7900229054903671524, guid: 0d3c9058ce10ba109963c3e62f19e781, type: 3}
       propertyPath: m_RootOrder

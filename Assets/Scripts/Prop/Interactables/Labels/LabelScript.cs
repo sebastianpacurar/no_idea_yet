@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Cinemachine;
 using UnityEngine;
 
 namespace Prop.Interactables.Labels {
@@ -7,11 +9,26 @@ namespace Prop.Interactables.Labels {
         [SerializeField] private SpriteRenderer lightImg;
         [SerializeField] private SpriteRenderer darkImg;
 
+
+        [Header("Debug")]
+        [SerializeField] private bool isExitDoor;
+        [SerializeField] private PlatformScript platform;
         
+
+        private void Awake() {
+            isExitDoor = transform.parent.CompareTag("ExitDoor");
+        }
+
+
         private void Start() {
+            if (isExitDoor) {
+                platform = GameObject.FindGameObjectWithTag("ExitPlatform").GetComponent<PlatformScript>();
+            }
+
             // false since no contact with the player when script gets started
             SetSpriteVisibilityTo(false);
         }
+
 
         private IEnumerator ToggleBtnImg() {
             while (true) {
@@ -23,13 +40,13 @@ namespace Prop.Interactables.Labels {
             }
         }
 
-        
+
         private void OnTriggerEnter2D(Collider2D other) {
             if (other.gameObject.CompareTag("Player")) {
-                // reveal notification and start the ToggleBtnImg Coroutine
-
-                SetSpriteVisibilityTo(true);
-                StartCoroutine(nameof(ToggleBtnImg));
+                if ((isExitDoor && platform.targetReached) || transform.parent.CompareTag("Crate")) {
+                    SetSpriteVisibilityTo(true);
+                    StartCoroutine(nameof(ToggleBtnImg));
+                }
             }
         }
 

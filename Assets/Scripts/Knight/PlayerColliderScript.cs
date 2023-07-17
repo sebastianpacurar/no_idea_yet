@@ -1,3 +1,4 @@
+using Cinemachine;
 using Input;
 using Prop.Interactables.Chest;
 using Prop.Interactables.Door;
@@ -6,14 +7,13 @@ using UnityEngine;
 
 namespace Knight {
     public class PlayerColliderScript : MonoBehaviour {
-        [SerializeField] private float doorTransitionTime;
-
         private SpriteRenderer _sr;
         private Rigidbody2D _rb;
 
         private GameObject _targetObject;
         private ChestAnimationScript _chestAnimScript;
         private DoorScript _doorScript;
+        private ChangeLevel _changeLevel;
 
         private InputManager _input;
 
@@ -40,10 +40,18 @@ namespace Knight {
                 _chestAnimScript.OpenChest();
             }
 
-            // if overlap target is a door
-            if (_targetObject.CompareTag("Door")) {
+            // if overlap target is a house door
+            if (_targetObject.CompareTag("HouseDoor")) {
                 HidePlayer();
                 transform.position = _doorScript.GetLinkedDoorCellPos();
+                RevealPlayer();
+            }
+
+            // if overlapped target is an exit door, then go to next level
+            if (_targetObject.CompareTag("ExitDoor")) {
+                HidePlayer();
+                transform.position = _changeLevel.GetLinkedDoorCellPos();
+                _changeLevel.GoToNextLevel();
                 RevealPlayer();
             }
 
@@ -60,9 +68,15 @@ namespace Knight {
             }
 
             // grab the target obj, and the Door script
-            if (other.transform.parent.CompareTag("Door")) {
+            if (other.transform.parent.CompareTag("HouseDoor")) {
                 _targetObject = other.transform.parent.gameObject;
                 _doorScript = _targetObject.GetComponentInChildren<DoorScript>();
+            }
+
+            // grab the target obj, and the Door script
+            if (other.transform.parent.CompareTag("ExitDoor")) {
+                _targetObject = other.transform.parent.gameObject;
+                _changeLevel = _targetObject.GetComponentInChildren<ChangeLevel>();
             }
         }
 
@@ -72,7 +86,8 @@ namespace Knight {
             _targetObject = null;
 
             if (other.transform.parent.CompareTag("Chest")) _chestAnimScript = null;
-            if (other.transform.parent.CompareTag("Door")) _doorScript = null;
+            if (other.transform.parent.CompareTag("HouseDoor")) _doorScript = null;
+            if (other.transform.parent.CompareTag("ExitDoor")) _changeLevel = null;
         }
 
 

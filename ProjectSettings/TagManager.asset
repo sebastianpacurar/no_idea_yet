@@ -14,6 +14,10 @@ TagManager:
   - Door
   - Crate
   - Cart
+  - HouseDoor
+  - ExitDoor
+  - ExitPlatform
+  - LevelManager
   layers:
   - Default
   - TransparentFX
@@ -57,7 +61,10 @@ TagManager:
   - name: Trees Back
     uniqueID: 4274923595
     locked: 0
-  - name: Terrain
+  - name: TerrainBack
+    uniqueID: 1210168417
+    locked: 0
+  - name: TerrainFront
     uniqueID: 1590033707
     locked: 0
   - name: HouseRoof
