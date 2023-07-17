@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2469152507171066918}
   - component: {fileID: 1900780560356156802}
   m_Layer: 0
-  m_Name: platform
+  m_Name: ExitPlatform
   m_TagString: ExitPlatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,8 +121,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.0010499954, y: -0.50445, z: 0}
-    m_Extent: {x: 2.03935, y: 0.63945, z: 0}
+    m_Center: {x: -0.00084996223, y: -0.49440002, z: 0}
+    m_Extent: {x: 2.03945, y: 0.6409, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -194,4 +194,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c30b3fceb8b80de5fa7349739917641f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cratesInRange: []
   targetReached: 0
+  requiredCrateNo: 1

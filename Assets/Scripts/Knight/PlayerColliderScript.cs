@@ -1,8 +1,10 @@
-using Cinemachine;
 using Input;
 using Prop.Interactables.Chest;
-using Prop.Interactables.Door;
+using Prop.Interactables.Door.ExitDoor;
+using Prop.Interactables.Door.HouseDoor;
 using UnityEngine;
+using UnityEngine.Tilemaps;
+using Utils;
 
 
 namespace Knight {
@@ -12,8 +14,10 @@ namespace Knight {
 
         private GameObject _targetObject;
         private ChestAnimationScript _chestAnimScript;
-        private DoorScript _doorScript;
-        private ChangeLevel _changeLevel;
+        private HouseDoorScript houseDoorScript;
+        private ExitDoorScript exitDoorScript;
+        private Tilemap _exitDoors;
+        private Tilemap _houseDoors;
 
         private InputManager _input;
 
@@ -24,6 +28,7 @@ namespace Knight {
         }
 
         private void Start() {
+            _exitDoors = GameObject.FindGameObjectWithTag("ExitDoorsTilemap").GetComponent<Tilemap>();
             _input = InputManager.Instance;
         }
 
@@ -43,15 +48,15 @@ namespace Knight {
             // if overlap target is a house door
             if (_targetObject.CompareTag("HouseDoor")) {
                 HidePlayer();
-                transform.position = _doorScript.GetLinkedDoorCellPos();
+                transform.position = TileMapUtils.GetWorldToCell(_houseDoors, houseDoorScript.linkedDoor.transform.position);
                 RevealPlayer();
             }
 
             // if overlapped target is an exit door, then go to next level
             if (_targetObject.CompareTag("ExitDoor")) {
                 HidePlayer();
-                transform.position = _changeLevel.GetLinkedDoorCellPos();
-                _changeLevel.GoToNextLevel();
+                transform.position = TileMapUtils.GetWorldToCell(_exitDoors, exitDoorScript.linkedDoor.transform.position);
+                exitDoorScript.GoToNextLevel();
                 RevealPlayer();
             }
 
@@ -70,13 +75,13 @@ namespace Knight {
             // grab the target obj, and the Door script
             if (other.transform.parent.CompareTag("HouseDoor")) {
                 _targetObject = other.transform.parent.gameObject;
-                _doorScript = _targetObject.GetComponentInChildren<DoorScript>();
+                houseDoorScript = _targetObject.GetComponentInChildren<HouseDoorScript>();
             }
 
             // grab the target obj, and the Door script
             if (other.transform.parent.CompareTag("ExitDoor")) {
                 _targetObject = other.transform.parent.gameObject;
-                _changeLevel = _targetObject.GetComponentInChildren<ChangeLevel>();
+                exitDoorScript = _targetObject.GetComponentInChildren<ExitDoorScript>();
             }
         }
 
@@ -86,8 +91,8 @@ namespace Knight {
             _targetObject = null;
 
             if (other.transform.parent.CompareTag("Chest")) _chestAnimScript = null;
-            if (other.transform.parent.CompareTag("HouseDoor")) _doorScript = null;
-            if (other.transform.parent.CompareTag("ExitDoor")) _changeLevel = null;
+            if (other.transform.parent.CompareTag("HouseDoor")) houseDoorScript = null;
+            if (other.transform.parent.CompareTag("ExitDoor")) exitDoorScript = null;
         }
 
 

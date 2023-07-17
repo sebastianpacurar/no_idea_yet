@@ -1,5 +1,6 @@
 using Prop.Interactables.Cart;
 using UnityEngine;
+using Utils;
 
 
 namespace Prop.Interactables.Crate {
@@ -21,6 +22,7 @@ namespace Prop.Interactables.Crate {
 
         // south, west or east contact. used to check if isBeingThrown can be set to false
         [SerializeField] private CrateScript nearbyCrate;
+        public CrateScript crateAbove;
         public bool isBeingCarried;
         public bool isBeingThrown;
         public bool isGrounded;
@@ -133,14 +135,18 @@ namespace Prop.Interactables.Crate {
 
         private void OnCollisionStay2D(Collision2D other) {
             if (other.gameObject.CompareTag("Cart")) {
-                if (CollisionData.IsCollisionBottom(other)) {
+                if (CollisionUtils.IsCollisionBottom(other)) {
                     cartScript = other.gameObject.GetComponent<CartScript>();
                 }
             }
 
             if (other.gameObject.CompareTag("Crate")) {
-                if (CollisionData.IsCollisionBottom(other) || CollisionData.IsCollisionSideways(other)) {
+                if (CollisionUtils.IsCollisionBottom(other) || CollisionUtils.IsCollisionSideways(other)) {
                     nearbyCrate = other.gameObject.GetComponent<CrateScript>();
+                }
+
+                if (CollisionUtils.IsCollisionTop(other)) {
+                    crateAbove = other.gameObject.GetComponent<CrateScript>();
                 }
             }
 
@@ -158,11 +164,17 @@ namespace Prop.Interactables.Crate {
                 isGrounded = false;
             }
 
-            if (other.gameObject.CompareTag("Crate") && nearbyCrate) {
+            if (other.gameObject.CompareTag("Crate")) {
                 var otherCrate = other.gameObject;
 
-                if (otherCrate.Equals(nearbyCrate.gameObject)) {
-                    nearbyCrate = null;
+                if (nearbyCrate) {
+                    if (otherCrate.Equals(nearbyCrate.gameObject)) {
+                        nearbyCrate = null;
+                    }
+                } else if (crateAbove) {
+                    if (otherCrate.Equals(crateAbove.gameObject)) {
+                        crateAbove = null;
+                    }
                 }
             }
         }

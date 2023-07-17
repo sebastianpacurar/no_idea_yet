@@ -9,8 +9,8 @@ namespace Knight.Fsm.States.SubStates {
         protected internal override void Enter() {
             base.Enter();
             PlayerScript.CurrentSpeed = PlayerData.CrouchSpeed;
-
-            PlayerScript.SetCrateOnPlayer();
+            
+            // PlayerScript.SetCrateOnPlayer();
         }
 
 

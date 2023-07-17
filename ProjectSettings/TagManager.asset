@@ -18,6 +18,8 @@ TagManager:
   - ExitDoor
   - ExitPlatform
   - LevelManager
+  - ExitDoorsTilemap
+  - HouseDoorsTilemap
   layers:
   - Default
   - TransparentFX

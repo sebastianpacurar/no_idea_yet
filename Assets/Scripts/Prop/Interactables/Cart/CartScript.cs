@@ -1,4 +1,5 @@
 using UnityEngine;
+using Utils;
 
 
 namespace Prop.Interactables.Cart {
@@ -74,7 +75,7 @@ namespace Prop.Interactables.Cart {
             if (!other.gameObject.CompareTag("Player")) return;
 
             // if player is on the left or right of the cart, then return true
-            if (CollisionData.IsCollisionSideways(other)) {
+            if (CollisionUtils.IsCollisionSideways(other)) {
                 isPlayerCollision = true;
             }
         }

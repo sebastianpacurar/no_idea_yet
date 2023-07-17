@@ -198,9 +198,13 @@ namespace Knight {
             _crateTransform.position = _vector3Holder;
         }
 
+
         public void SetCrateVelToPlayerVel() {
             if (crateScript) {
-                _crateRb.velocity = CurrentVelocity;
+                var xVal = CurrentVelocity.x > 0 ? -0.1f : 0.1f;
+
+                _vector2Holder.Set(CurrentVelocity.x + xVal, CurrentVelocity.y);
+                _crateRb.velocity = _vector2Holder;
             }
         }
 
