@@ -55,8 +55,8 @@ namespace Knight {
             // if overlapped target is an exit door, then go to next level
             if (_targetObject.CompareTag("ExitDoor")) {
                 HidePlayer();
-                transform.position = TileMapUtils.GetWorldToCell(_exitDoors, exitDoorScript.linkedDoor.transform.position);
-                exitDoorScript.GoToNextLevel();
+                var targetDoorPos = TileMapUtils.GetWorldToCell(_exitDoors, exitDoorScript.linkedDoor.transform.position);
+                exitDoorScript.GoToNextLevel(targetDoorPos);
                 RevealPlayer();
             }
 

@@ -39,7 +39,6 @@ namespace Knight {
         #region Crate Components
         [SerializeField] private CrateScript crateScript;
         [SerializeField] private bool isCarryingCrate;
-        [SerializeField] private bool _isGroundedDebug;
         private Transform _crateTransform;
         private Rigidbody2D _crateRb;
         #endregion
@@ -51,7 +50,6 @@ namespace Knight {
         private Vector3 _vector3Holder;
         #endregion
 
-        [SerializeField] private Vector2 throwForce;
 
         [Header("Aim Trajectory")]
         [SerializeField] private LineRenderer predictionLineRenderer;
@@ -59,9 +57,8 @@ namespace Knight {
         [SerializeField] private float lineSegmentSpacing;
         [SerializeField] private float lineGravity;
 
-        [SerializeField] private float crateVelocityAimFactor;
-        [SerializeField] private float aimChangeSpeed;
-        [SerializeField] private Vector2 thresholdY;
+        [Header("Debug")]
+        [SerializeField] private Vector2 throwForce;
 
 
         #region Unity Callback Functions
@@ -94,8 +91,6 @@ namespace Knight {
 
         private void Update() {
             CurrentVelocity = _rb.velocity;
-
-            _isGroundedDebug = CheckIfGrounded();
 
             if (Input.IsPickCratePressed && !CheckIfCanGrabCrate()) {
                 Input.IsPickCratePressed = false;
@@ -144,13 +139,16 @@ namespace Knight {
         }
 
 
-        // increase/decrease throw force vector => x = y /2
-        public void SetAimTrajectory() {
-            throwForce.x += Input.AimVal * aimChangeSpeed / 2 * Time.deltaTime;
-            throwForce.x = Mathf.Clamp(throwForce.x, thresholdY.x / 2, thresholdY.y / 2);
+        // increase/decrease throw force vector => x = y /2, therefore Vector2(y/2, y)
+        private void SetAimTrajectory() {
+            var threshold = playerData.MinMaxAimRange;
+            var aimSpeed = playerData.AimSpeed;
 
-            throwForce.y += Input.AimVal * aimChangeSpeed * Time.deltaTime;
-            throwForce.y = Mathf.Clamp(throwForce.y, thresholdY.x, thresholdY.y);
+            throwForce.x += Input.AimVal * aimSpeed / 2 * Time.deltaTime;
+            throwForce.x = Mathf.Clamp(throwForce.x, threshold.x / 2, threshold.y / 2);
+
+            throwForce.y += Input.AimVal * aimSpeed * Time.deltaTime;
+            throwForce.y = Mathf.Clamp(throwForce.y, threshold.x, threshold.y);
         }
 
 
@@ -270,6 +268,7 @@ namespace Knight {
             SetIsCarrying(false);
 
             _vector2Holder.Set(GetFacingDirection() * throwForce.x, throwForce.y);
+            SetCrateVelToZero();
             _crateRb.AddForce(_vector2Holder, ForceMode2D.Impulse);
         }
 
@@ -292,15 +291,15 @@ namespace Knight {
             var linePoints = new Vector3[lineSegmentCount];
 
             var currentPos = startPos;
-            var currentVelocity = force + (_crateRb.velocity * crateVelocityAimFactor);
-            var gravity = _crateRb.gravityScale;
+            var currentVelocity = force;
+            var gravityScale = _crateRb.gravityScale;
             var mass = _crateRb.mass;
 
             for (int i = 0; i < lineSegmentCount; i++) {
                 linePoints[i] = currentPos;
 
-                // NOTE: formula to blend in gravity with mass is: gravity * (Mathf.Pow(mass, 2))
-                currentVelocity += Vector2.down * (lineGravity * gravity * Mathf.Pow(mass, 2) * lineSegmentSpacing);
+                // NOTE: formula to blend in gravity with mass is: (lineGravity * gravityScale) * (Mathf.Pow(mass, 2))
+                currentVelocity += Vector2.down * (lineGravity * gravityScale * Mathf.Pow(mass, 2) * lineSegmentSpacing);
                 currentPos += currentVelocity * lineSegmentSpacing;
             }
 

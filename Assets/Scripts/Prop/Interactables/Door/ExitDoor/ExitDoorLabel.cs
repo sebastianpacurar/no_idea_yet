@@ -1,5 +1,4 @@
 using System.Collections;
-using Prop.Interactables.Platform;
 using UnityEngine;
 using Utils;
 
@@ -9,9 +8,7 @@ namespace Prop.Interactables.Door.ExitDoor {
         [SerializeField] private SpriteRenderer lightImg;
         [SerializeField] private SpriteRenderer darkImg;
 
-        [Header("Debug")]
-        [SerializeField] private PlatformScript platform;
-
+        private ExitDoorScript _exitDoor;
         private BoxCollider2D _box;
 
 
@@ -21,7 +18,7 @@ namespace Prop.Interactables.Door.ExitDoor {
 
 
         private void Start() {
-            platform = transform.parent.gameObject.GetComponent<ExitDoorScript>().platform;
+            _exitDoor = transform.parent.gameObject.GetComponent<ExitDoorScript>();
             LabelUtils.SetSprites(gameObject, false);
         }
 
@@ -32,11 +29,11 @@ namespace Prop.Interactables.Door.ExitDoor {
 
         private void ToggleBoxCollider() {
             // if target reached and box is disabled, then enable box
-            if (platform.targetReached && !_box.enabled) {
+            if (_exitDoor.IsTargetReached() && !_box.enabled) {
                 _box.enabled = true;
             }
             // if target not reached and box is enabled, then disable box
-            else if (!platform.targetReached && _box.enabled) {
+            else if (!_exitDoor.IsTargetReached() && _box.enabled) {
                 _box.enabled = false;
             }
         }
@@ -49,7 +46,7 @@ namespace Prop.Interactables.Door.ExitDoor {
 
         private void OnTriggerEnter2D(Collider2D other) {
             if (!other.gameObject.CompareTag("Player")) return;
-            if (!platform.targetReached) return;
+            if (!_exitDoor.IsTargetReached()) return;
 
             LabelUtils.SetSprites(gameObject, value: true);
             StartCoroutine(nameof(ToggleBtnImgCoroutine));
