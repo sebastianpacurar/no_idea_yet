@@ -10,5 +10,13 @@ namespace Utils {
 
             return overlappingObjects;
         }
+
+        public static GameObject FindObjectWithTagInArea(string tag, PolygonCollider2D areaCollider) {
+            var allObjects = GameObject.FindGameObjectsWithTag(tag);
+            // grab the first object whose position overlaps the provided areaCollider polygon
+            var overlappingObject = allObjects.First(obj => areaCollider.OverlapPoint(obj.transform.position));
+
+            return overlappingObject;
+        }
     }
 }

@@ -2,20 +2,19 @@ using System.Collections;
 using AYellowpaper.SerializedCollections;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using Utils;
 
 
 public class LevelManager : MonoBehaviour {
-    [SerializeField] private float _fadeDuration;
+    [SerializeField] private float fadeDuration;
     [Space(5)]
-    [SerializedDictionary("Level", "Polygon Collider")]
+    public int currentLevel;
+    [SerializedDictionary("Level", "Polygon yCollider")]
     public SerializedDictionary<int, PolygonCollider2D> levels;
 
-    [Space(5)]
-    [Header("Debug")]
-    [SerializeField] private int currentLevel;
-
-
+    private Tilemap _exitDoors;
     private CinemachineConfiner2D _currentConfiner;
     private Transform _playerTransform;
     private Image _fadeImage;
@@ -24,11 +23,13 @@ public class LevelManager : MonoBehaviour {
 
 
     private void Awake() {
+        // TODO: change to get dynamically from level selection menu
         currentLevel = 1;
     }
 
 
     private void Start() {
+        _exitDoors = GameObject.FindGameObjectWithTag("ExitDoorsTilemap").GetComponent<Tilemap>();
         _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         _fadeImage = GameObject.FindGameObjectWithTag("FadeImage").GetComponent<Image>();
         _currentConfiner = GameObject.FindGameObjectWithTag("VirtualCam").GetComponent<CinemachineConfiner2D>();
@@ -40,36 +41,35 @@ public class LevelManager : MonoBehaviour {
     }
 
 
-    public void MoveToLevel(int i, Vector3 targetDoor) {
-        currentLevel = i;
-        StartCoroutine(PerformLevelTransition(i, targetDoor));
+    public void MoveToNextLevel(Vector3 targetDoor) {
+        currentLevel += 1;
+        StartCoroutine(PerformLevelTransition(targetDoor));
     }
 
-
-    private IEnumerator PerformLevelTransition(int i, Vector3 targetDoor) {
+    private IEnumerator PerformLevelTransition(Vector3 targetDoor) {
         // fade out section
         var fadeTimer = 0f;
 
         // perform increase of alpha key
-        while (fadeTimer < _fadeDuration) {
+        while (fadeTimer < fadeDuration) {
             fadeTimer += Time.deltaTime;
-            var alpha = Mathf.Clamp01(fadeTimer / _fadeDuration);
+            var alpha = Mathf.Clamp01(fadeTimer / fadeDuration);
             SetFadeImageAlpha(alpha);
             yield return null;
         }
 
         // Change Polygon Collider
-        _currentConfiner.m_BoundingShape2D = levels[i];
+        _currentConfiner.m_BoundingShape2D = levels[currentLevel];
         // set the player position
-        _playerTransform.position = targetDoor;
+        _playerTransform.position = TileMapUtils.GetWorldToCell(_exitDoors, targetDoor);
 
         // fade in section
         fadeTimer = -0.1f; // HACK reset timer to -0.1f to avoid glitches when moving camera to new level polygon
 
         // perform decrease of alpha key
-        while (fadeTimer < _fadeDuration) {
+        while (fadeTimer < fadeDuration) {
             fadeTimer += Time.deltaTime;
-            var alpha = 1f - Mathf.Clamp01(fadeTimer / _fadeDuration);
+            var alpha = 1f - Mathf.Clamp01(fadeTimer / fadeDuration);
             SetFadeImageAlpha(alpha);
             yield return null;
         }

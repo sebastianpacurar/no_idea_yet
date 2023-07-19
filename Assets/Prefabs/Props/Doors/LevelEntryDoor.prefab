@@ -98,11 +98,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4793505740877059477, guid: d3c4b2a942280a9aea578d0d8b2d3167, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: EntryDoor
       objectReference: {fileID: 0}
     - target: {fileID: 5117180566695282824, guid: d3c4b2a942280a9aea578d0d8b2d3167, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5117180566695282824, guid: d3c4b2a942280a9aea578d0d8b2d3167, type: 3}
       propertyPath: m_LocalPosition.x

@@ -21,6 +21,7 @@ TagManager:
   - ExitDoorsTilemap
   - HouseDoorsTilemap
   - FadeImage
+  - EntryDoor
   layers:
   - Default
   - TransparentFX

@@ -16,7 +16,6 @@ namespace Knight {
         private ChestAnimationScript _chestAnimScript;
         private HouseDoorScript houseDoorScript;
         private ExitDoorScript exitDoorScript;
-        private Tilemap _exitDoors;
         private Tilemap _houseDoors;
 
         private InputManager _input;
@@ -28,7 +27,6 @@ namespace Knight {
         }
 
         private void Start() {
-            _exitDoors = GameObject.FindGameObjectWithTag("ExitDoorsTilemap").GetComponent<Tilemap>();
             _input = InputManager.Instance;
         }
 
@@ -55,8 +53,7 @@ namespace Knight {
             // if overlapped target is an exit door, then go to next level
             if (_targetObject.CompareTag("ExitDoor")) {
                 HidePlayer();
-                var targetDoorPos = TileMapUtils.GetWorldToCell(_exitDoors, exitDoorScript.linkedDoor.transform.position);
-                exitDoorScript.GoToNextLevel(targetDoorPos);
+                exitDoorScript.GoToNextLevel();
                 RevealPlayer();
             }
 
