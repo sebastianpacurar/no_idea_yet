@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 728e43a782734fe1b60f215605019709, type: 3}
+  m_Name: CratePhysics
+  m_EditorClassIdentifier: 
+  defaultMass: 4
+  defaultGravity: 2
+  freeFallGravity: 5.25
+  carryThrowGravity: 5
+  lowFriction: {fileID: 6200000, guid: 51658da45135f8c06960e317040ea876, type: 2}
+  highFriction: {fileID: 6200000, guid: f8de3bd95d900c20097391549bebec3f, type: 2}
+  groundFriction: {fileID: 6200000, guid: 3c152d50065809b1fbd519f7ca921392, type: 2}

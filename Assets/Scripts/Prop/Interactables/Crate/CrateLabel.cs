@@ -1,6 +1,7 @@
 using System.Collections;
 using Knight;
 using UnityEngine;
+using UnityEngine.Android;
 using Utils;
 
 namespace Prop.Interactables.Crate {
@@ -55,8 +56,11 @@ namespace Prop.Interactables.Crate {
         }
 
 
+        //TODO: issue here with label
         private void HandleLabelDisplay() {
             var isDisplayed = false;
+
+            //TODO: Weird issues happening here
 
             // display label if the crate is at the top of the stack and the player is not carrying any other crate
             if (!_playerScript.CheckIfCarryingCrate()) {

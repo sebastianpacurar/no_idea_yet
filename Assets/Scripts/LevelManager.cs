@@ -21,11 +21,11 @@ public class LevelManager : MonoBehaviour {
 
     private bool _isFading;
 
-
-    private void Awake() {
-        // TODO: change to get dynamically from level selection menu
-        currentLevel = 1;
-    }
+    //
+    // private void Awake() {
+    //     // TODO: change to get dynamically from level selection menu
+    //     currentLevel = 1;
+    // }
 
 
     private void Start() {

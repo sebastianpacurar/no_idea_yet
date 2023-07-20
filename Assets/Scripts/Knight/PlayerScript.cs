@@ -120,7 +120,8 @@ namespace Knight {
                 var targetObject = other.transform.parent.gameObject;
 
                 // if the collision object is the same with the assigned script then perform cleanup
-                if (targetObject.GetComponentInChildren<CrateScript>().Equals(crateScript)) {
+                //   set null only if crate is not carried
+                if (targetObject.GetComponentInChildren<CrateScript>().Equals(crateScript) && !isCarryingCrate) {
                     _crateTransform = null;
                     crateScript = null;
                     _crateRb = null;

@@ -1,20 +1,12 @@
 using Prop.Interactables.Cart;
+using ScriptableObjects;
 using UnityEngine;
 using Utils;
 
 
 namespace Prop.Interactables.Crate {
     public class CrateScript : MonoBehaviour {
-        [Header("Player Interaction")]
-        [SerializeField] private PhysicsMaterial2D lowFriction;
-        [SerializeField] private PhysicsMaterial2D highFriction;
-        [SerializeField] private PhysicsMaterial2D groundFriction;
-
-        [Header("Physics")]
-        [SerializeField] private float defaultMass;
-        [SerializeField] private float defaultGravity;
-        [SerializeField] private float freeFallGravity;
-        [SerializeField] private float carryThrowGravity;
+        [SerializeField] private CratePhysicsDataSo data;
 
         [Header("Debug")]
         [SerializeField] private PhysicsMaterial2D selectedPm2D;
@@ -43,6 +35,8 @@ namespace Prop.Interactables.Crate {
             // if player is in range, horizontally, then cause crate to have low friction, else place 20f friction
             SetPhysicsMaterial();
             selectedPm2D = _rb.sharedMaterial;
+
+            SetCrateAbove();
         }
 
 
@@ -58,28 +52,38 @@ namespace Prop.Interactables.Crate {
             }
         }
 
+        // HACK: needed since collision doesn't detect when the player is picked up, since it's based on set transform of crate on player
+        // NOTE: Check SetCrateOnPlayer() in PlayerScript.cs
+        private void SetCrateAbove() {
+            if (crateAbove) {
+                if (crateAbove.isBeingCarried) {
+                    crateAbove = null;
+                }
+            }
+        }
+
 
         // Set the PhysicsMaterial2D to provide friction or no friction
         private void SetPhysicsMaterial() {
             // start with high friction
-            var frictionMat = highFriction;
+            var frictionMat = data.HighFriction;
 
             // if grounded, prevent player from pushing at same speed as cart
             if (isGrounded) {
-                frictionMat = groundFriction;
+                frictionMat = data.GroundFriction;
             }
 
             // if crate is not being carried and not in air from being thrown
             else if (!isBeingCarried && !isBeingThrown) {
                 if (IsPlayerDetected()) {
                     // set to lowFriction if player detected
-                    frictionMat = lowFriction;
+                    frictionMat = data.LowFriction;
 
                     // if the crate is on a cart 
                     if (cartScript) {
                         // NOTE: this allows for crates to be pushed first if the crate is not entirely on the cart (stands in the way of player collider and cart collider)
                         //   if player is pushing the cart from left or right set high friction to crate, else set low friction to crate.
-                        frictionMat = cartScript.isPlayerCollision ? highFriction : lowFriction;
+                        frictionMat = cartScript.isPlayerCollision ? data.HighFriction : data.LowFriction;
                     }
                 }
             }
@@ -100,7 +104,7 @@ namespace Prop.Interactables.Crate {
         private void SetStackedCrateMass() {
             // if carried or thrown set initial mass to initial mass
             if (isBeingCarried || isBeingThrown) {
-                _rb.mass = defaultMass;
+                _rb.mass = data.DefaultMass;
             }
 
             // if crate is in stack (either grounded or on cart, or on another crate)
@@ -112,10 +116,10 @@ namespace Prop.Interactables.Crate {
 
                     // calculate the distance between the own position and the position of the raycast hit point
                     _rb.mass = Vector2.Distance(transform.position, hitPos) switch {
-                        > 1 and <= 2 => defaultMass - 0.25f, // if 2nd level from ground
-                        > 2 and <= 3 => defaultMass - 0.5f, // if 3rd level from ground
+                        > 1 and <= 2 => data.DefaultMass - 0.25f, // if 2nd level from ground
+                        > 2 and <= 3 => data.DefaultMass - 0.5f, // if 3rd level from ground
                         > 3 => 1f, // if 4th level and above from ground
-                        _ => defaultMass // if 1st level from ground (the lobby area)
+                        _ => data.DefaultMass // if 1st level from ground (the lobby area)
                     };
                 }
             }
@@ -124,11 +128,11 @@ namespace Prop.Interactables.Crate {
         private void SetGravity() {
             // when crate is falling 
             if (_rb.velocity.y < -1f && !isBeingThrown && !isBeingCarried) {
-                _rb.gravityScale = freeFallGravity;
+                _rb.gravityScale = data.FreeFallGravity;
             } else if (isBeingCarried || isBeingThrown) {
-                _rb.gravityScale = carryThrowGravity;
+                _rb.gravityScale = data.CarryThrowGravity;
             } else {
-                _rb.gravityScale = defaultGravity;
+                _rb.gravityScale = data.DefaultGravity;
             }
         }
 

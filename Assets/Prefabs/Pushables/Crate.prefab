@@ -5068,13 +5068,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feb8b26d5eb1329688e1330fbdae711d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lowFriction: {fileID: 6200000, guid: 3a03210f5a5b5ac77ae90be63309798f, type: 2}
-  highFriction: {fileID: 6200000, guid: f8de3bd95d900c20097391549bebec3f, type: 2}
-  groundFriction: {fileID: 6200000, guid: 3c152d50065809b1fbd519f7ca921392, type: 2}
-  defaultMass: 4
-  defaultGravity: 2
-  freeFallGravity: 5.25
-  carryThrowGravity: 3
+  data: {fileID: 11400000, guid: 62d5b5f3443b75bed8ddff236927e2ea, type: 2}
   selectedPm2D: {fileID: 0}
   cartScript: {fileID: 0}
   nearbyCrate: {fileID: 0}
@@ -5171,6 +5165,18 @@ PrefabInstance:
     - target: {fileID: 7977869976619731221, guid: 02eba9ed48e42df9195708b5ef2ed3cf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8086995009938742841, guid: 02eba9ed48e42df9195708b5ef2ed3cf, type: 3}
+      propertyPath: m_Size.y
+      value: 1.8981158
+      objectReference: {fileID: 0}
+    - target: {fileID: 8086995009938742841, guid: 02eba9ed48e42df9195708b5ef2ed3cf, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.010752678
+      objectReference: {fileID: 0}
+    - target: {fileID: 8086995009938742841, guid: 02eba9ed48e42df9195708b5ef2ed3cf, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.28473133
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
