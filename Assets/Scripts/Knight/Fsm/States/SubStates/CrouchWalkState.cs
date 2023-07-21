@@ -17,14 +17,17 @@ namespace Knight.Fsm.States.SubStates {
 
             PlayerScript.CheckIfShouldFlip(XInput);
 
+            // if no movement - change to CrouchIdle State
             if (XInput == 0) {
                 StateMachine.ChangeState(PlayerScript.CrouchIdleState);
             }
 
+            // if Crouch btn pressed - change to Run State
             if (!CrouchInput) {
                 StateMachine.ChangeState(PlayerScript.RunState);
             }
 
+            // if crate has been thrown, change to CarryIdle State
             if (PickCrateInput) {
                 StateMachine.ChangeState(PlayerScript.CarryIdleState);
             }

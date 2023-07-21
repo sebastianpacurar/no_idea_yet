@@ -15,7 +15,7 @@ namespace Prop.Interactables.Crate {
         // south, west or east contact. used to check if isBeingThrown can be set to false
         [SerializeField] private CrateScript nearbyCrate;
         public CrateScript crateAbove;
-        public bool isBeingCarried;
+        public bool isCarried;
         public bool isBeingThrown;
         public bool isGrounded;
 
@@ -56,7 +56,7 @@ namespace Prop.Interactables.Crate {
         // NOTE: Check SetCrateOnPlayer() in PlayerScript.cs
         private void SetCrateAbove() {
             if (crateAbove) {
-                if (crateAbove.isBeingCarried) {
+                if (crateAbove.isCarried) {
                     crateAbove = null;
                 }
             }
@@ -74,7 +74,7 @@ namespace Prop.Interactables.Crate {
             }
 
             // if crate is not being carried and not in air from being thrown
-            else if (!isBeingCarried && !isBeingThrown) {
+            else if (!isCarried && !isBeingThrown) {
                 if (IsPlayerDetected()) {
                     // set to lowFriction if player detected
                     frictionMat = data.LowFriction;
@@ -103,7 +103,7 @@ namespace Prop.Interactables.Crate {
         // decrease every vertical stacked unit with 0.25f from initial position
         private void SetStackedCrateMass() {
             // if carried or thrown set initial mass to initial mass
-            if (isBeingCarried || isBeingThrown) {
+            if (isCarried || isBeingThrown) {
                 _rb.mass = data.DefaultMass;
             }
 
@@ -127,9 +127,9 @@ namespace Prop.Interactables.Crate {
 
         private void SetGravity() {
             // when crate is falling 
-            if (_rb.velocity.y < -1f && !isBeingThrown && !isBeingCarried) {
+            if (_rb.velocity.y < -1f && !isBeingThrown && !isCarried) {
                 _rb.gravityScale = data.FreeFallGravity;
-            } else if (isBeingCarried || isBeingThrown) {
+            } else if (isCarried || isBeingThrown) {
                 _rb.gravityScale = data.CarryThrowGravity;
             } else {
                 _rb.gravityScale = data.DefaultGravity;

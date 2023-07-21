@@ -4,9 +4,9 @@ using UnityEngine;
 namespace Utils {
     public static class LabelUtils {
         // set all sprite renderers of a specific label to value
-        public static void SetSprites(GameObject obj, bool value) {
-            foreach (var sr in obj.GetComponentsInChildren<SpriteRenderer>()) {
-                sr.enabled = value;
+        public static void SetSprites(SpriteRenderer[] sr, bool value) {
+            foreach (var t in sr) {
+                t.enabled = value;
             }
         }
 

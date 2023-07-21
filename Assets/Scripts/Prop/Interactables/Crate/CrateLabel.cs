@@ -1,7 +1,6 @@
 using System.Collections;
 using Knight;
 using UnityEngine;
-using UnityEngine.Android;
 using Utils;
 
 namespace Prop.Interactables.Crate {
@@ -9,9 +8,12 @@ namespace Prop.Interactables.Crate {
         [SerializeField] private SpriteRenderer wrapper;
         [SerializeField] private SpriteRenderer lightImg;
         [SerializeField] private SpriteRenderer darkImg;
+        [SerializeField] private SpriteRenderer[] listedSrs;
 
         [Header("Debug")]
         [SerializeField] private CrateScript crateScript;
+        [SerializeField] private bool isWrapperObjDisplayed;
+        [SerializeField] private bool isSpriteEnableOn;
 
         private PlayerScript _playerScript;
         private BoxCollider2D _box;
@@ -19,6 +21,8 @@ namespace Prop.Interactables.Crate {
 
         private void Awake() {
             _box = GetComponent<BoxCollider2D>();
+            listedSrs = new[] { wrapper, lightImg, darkImg };
+            isSpriteEnableOn = false;
         }
 
 
@@ -26,12 +30,12 @@ namespace Prop.Interactables.Crate {
             crateScript = transform.parent.GetComponent<CrateScript>();
             _playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerScript>();
 
-            LabelUtils.SetSprites(gameObject, false);
+            LabelUtils.SetSprites(listedSrs, false);
         }
 
 
         private void Update() {
-            HandleLabelDisplay();
+            ToggleCollider();
         }
 
 
@@ -42,39 +46,39 @@ namespace Prop.Interactables.Crate {
 
         private void OnTriggerEnter2D(Collider2D other) {
             if (!other.gameObject.CompareTag("Player")) return;
+            isSpriteEnableOn = true;
 
-            LabelUtils.SetSprites(gameObject, value: true);
+            LabelUtils.SetSprites(listedSrs, value: true);
             StartCoroutine(nameof(ToggleBtnImgCoroutine));
         }
 
 
         private void OnTriggerExit2D(Collider2D other) {
             if (!other.gameObject.CompareTag("Player")) return;
+            isSpriteEnableOn = false;
 
-            LabelUtils.SetSprites(gameObject, value: false);
+            LabelUtils.SetSprites(listedSrs, value: false);
             StopCoroutine(nameof(ToggleBtnImgCoroutine));
         }
 
 
         //TODO: issue here with label
-        private void HandleLabelDisplay() {
-            var isDisplayed = false;
-
-            //TODO: Weird issues happening here
-
+        private void ToggleCollider() {
+            isWrapperObjDisplayed = false;
+            
             // display label if the crate is at the top of the stack and the player is not carrying any other crate
-            if (!_playerScript.CheckIfCarryingCrate()) {
+            if (!_playerScript.CheckPlayerCarry()) {
                 if (!crateScript.crateAbove) {
-                    isDisplayed = true;
+                    isWrapperObjDisplayed = true;
                 }
             }
             // display label if the target crate is being carried
-            else if (crateScript.isBeingCarried) {
-                isDisplayed = true;
+            else if (crateScript.isCarried) {
+                isWrapperObjDisplayed = true;
             }
 
-            wrapper.gameObject.SetActive(isDisplayed);
-            _box.enabled = isDisplayed;
+            wrapper.gameObject.SetActive(isWrapperObjDisplayed);
+            _box.enabled = isWrapperObjDisplayed;
         }
     }
 }

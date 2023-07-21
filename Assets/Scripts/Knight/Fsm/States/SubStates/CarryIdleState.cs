@@ -9,9 +9,9 @@ namespace Knight.Fsm.States.SubStates {
         protected internal override void Enter() {
             base.Enter();
 
+            // 
             PlayerScript.SetPickUpFalse();
-            PlayerScript.SetCrateIsBeingCarried(true);
-            PlayerScript.SetIsCarrying(true);
+            PlayerScript.SetCarryProps(true);
             PlayerScript.SetCrateOnPlayer();
         }
 
@@ -25,6 +25,7 @@ namespace Knight.Fsm.States.SubStates {
                 StateMachine.ChangeState(PlayerScript.CarryWalkState);
             }
 
+            // if PickUp btn pressed - perform Throw, and change to Idle State
             if (PickCrateInput) {
                 PlayerScript.SetPickUpFalse();
                 PlayerScript.ThrowCrate();

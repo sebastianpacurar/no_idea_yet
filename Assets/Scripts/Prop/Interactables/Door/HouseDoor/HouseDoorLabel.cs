@@ -8,9 +8,15 @@ namespace Prop.Interactables.Door.HouseDoor {
         [SerializeField] private SpriteRenderer lightImg;
         [SerializeField] private SpriteRenderer darkImg;
 
+        [SerializeField] private SpriteRenderer[] listedSrs;
+
+        private void Awake() {
+            listedSrs = new[] { wrapper, lightImg, darkImg };
+        }
+
 
         private void Start() {
-            LabelUtils.SetSprites(gameObject, false);
+            LabelUtils.SetSprites(listedSrs, false);
         }
 
 
@@ -21,7 +27,7 @@ namespace Prop.Interactables.Door.HouseDoor {
 
         private void OnTriggerEnter2D(Collider2D other) {
             if (other.gameObject.CompareTag("Player")) {
-                LabelUtils.SetSprites(gameObject, value: true);
+                LabelUtils.SetSprites(listedSrs, value: true);
                 StartCoroutine(nameof(ToggleBtnImgCoroutine));
             }
         }
@@ -29,7 +35,7 @@ namespace Prop.Interactables.Door.HouseDoor {
 
         private void OnTriggerExit2D(Collider2D other) {
             if (other.gameObject.CompareTag("Player")) {
-                LabelUtils.SetSprites(gameObject, value: false);
+                LabelUtils.SetSprites(listedSrs, value: false);
                 StopCoroutine(nameof(ToggleBtnImgCoroutine));
             }
         }

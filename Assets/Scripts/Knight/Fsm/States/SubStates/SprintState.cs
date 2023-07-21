@@ -17,14 +17,17 @@ namespace Knight.Fsm.States.SubStates {
 
             PlayerScript.CheckIfShouldFlip(XInput);
 
+            // if no movement - change to Idle State
             if (XInput == 0) {
                 StateMachine.ChangeState(PlayerScript.IdleState);
             }
 
+            // if Sprint btn released - change to Run State
             if (!SprintInput) {
                 StateMachine.ChangeState(PlayerScript.RunState);
             }
 
+            // if Crouch btn pressed - change to CrouchWalk State
             if (CrouchInput) {
                 StateMachine.ChangeState(PlayerScript.CrouchWalkState);
             }

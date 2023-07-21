@@ -8,18 +8,22 @@ namespace Prop.Interactables.Door.ExitDoor {
         [SerializeField] private SpriteRenderer lightImg;
         [SerializeField] private SpriteRenderer darkImg;
 
+        [SerializeField] private SpriteRenderer[] listedSrs;
+
+
         private ExitDoorScript _exitDoor;
         private BoxCollider2D _box;
 
 
         private void Awake() {
             _box = GetComponent<BoxCollider2D>();
+            listedSrs = new[] { wrapper, lightImg, darkImg };
         }
 
 
         private void Start() {
             _exitDoor = transform.parent.gameObject.GetComponent<ExitDoorScript>();
-            LabelUtils.SetSprites(gameObject, false);
+            LabelUtils.SetSprites(listedSrs, false);
         }
 
         private void Update() {
@@ -48,7 +52,8 @@ namespace Prop.Interactables.Door.ExitDoor {
             if (!other.gameObject.CompareTag("Player")) return;
             if (!_exitDoor.IsTargetReached()) return;
 
-            LabelUtils.SetSprites(gameObject, value: true);
+            // display label when 
+            LabelUtils.SetSprites(listedSrs, value: true);
             StartCoroutine(nameof(ToggleBtnImgCoroutine));
         }
 
@@ -57,7 +62,8 @@ namespace Prop.Interactables.Door.ExitDoor {
             if (!other.gameObject.CompareTag("Player")) return;
             if (!wrapper.enabled) return;
 
-            LabelUtils.SetSprites(gameObject, value: false);
+            // hide label when wrapper is enabled
+            LabelUtils.SetSprites(listedSrs, value: false);
             StopCoroutine(nameof(ToggleBtnImgCoroutine));
         }
     }

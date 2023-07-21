@@ -29,6 +29,7 @@ namespace Knight {
         [SerializeField] private LayerMask pushableLayer;
         #endregion
 
+
         #region Components
         public InputManager Input { get; private set; }
         public Animator Anim { get; private set; }
@@ -38,7 +39,6 @@ namespace Knight {
 
         #region Crate Components
         [SerializeField] private CrateScript crateScript;
-        [SerializeField] private bool isCarryingCrate;
         private Transform _crateTransform;
         private Rigidbody2D _crateRb;
         #endregion
@@ -59,6 +59,7 @@ namespace Knight {
 
         [Header("Debug")]
         [SerializeField] private Vector2 throwForce;
+        [SerializeField] private bool isCarrying;
 
 
         #region Unity Callback Functions
@@ -92,6 +93,8 @@ namespace Knight {
         private void Update() {
             CurrentVelocity = _rb.velocity;
 
+            ValidateCarryDistance();
+
             if (Input.IsPickCratePressed && !CheckIfCanGrabCrate()) {
                 Input.IsPickCratePressed = false;
             }
@@ -103,6 +106,7 @@ namespace Knight {
             StateMachine.CurrentState.PhysicsUpdate();
         }
 
+        // set crate data for crate in range with Label collider
         private void OnTriggerStay2D(Collider2D other) {
             // if parent of Label is Crate
             if (other.transform.parent.CompareTag("Crate")) {
@@ -111,9 +115,12 @@ namespace Knight {
                 _crateTransform = targetObject.transform;
                 crateScript = targetObject.GetComponentInChildren<CrateScript>();
                 _crateRb = targetObject.GetComponentInChildren<Rigidbody2D>();
+
+                SetCrateData(_crateTransform, crateScript, _crateRb);
             }
         }
 
+        // unset crate data for current crate out of range of Label collider
         private void OnTriggerExit2D(Collider2D other) {
             // if parent of Label is Crate
             if (other.transform.parent.CompareTag("Crate")) {
@@ -121,17 +128,15 @@ namespace Knight {
 
                 // if the collision object is the same with the assigned script then perform cleanup
                 //   set null only if crate is not carried
-                if (targetObject.GetComponentInChildren<CrateScript>().Equals(crateScript) && !isCarryingCrate) {
-                    _crateTransform = null;
-                    crateScript = null;
-                    _crateRb = null;
+                if (targetObject.GetComponentInChildren<CrateScript>().Equals(crateScript) && !isCarrying) {
+                    UnsetCrateData();
                 }
             }
         }
         #endregion
 
 
-        #region Set Functions
+        #region Player Set Functions
         // stop movement
         public void SetVelocityX(float velocity) {
             _vector2Holder.Set(velocity, CurrentVelocity.y);
@@ -162,9 +167,7 @@ namespace Knight {
 
 
         // set jump input to false
-        public void SetJumpFalse() {
-            Input.IsJumpPressed = false;
-        }
+        public void SetJumpFalse() => Input.IsJumpPressed = false;
 
 
         // if Pick Crate input is true, then set to false 
@@ -174,17 +177,13 @@ namespace Knight {
             }
         }
 
-
-        public void SetCrateIsBeingCarried(bool value) {
-            crateScript.isBeingCarried = value;
+        
+        public void SetLineRendererActive(bool value) {
+            predictionLineRenderer.enabled = value;
         }
 
 
-        public void SetIsCarrying(bool value) {
-            isCarryingCrate = value;
-        }
-
-
+        // place crate on top of player using transform
         public void SetCrateOnPlayer() {
             // set crate velocity to 0
             _vector2Holder.Set(0f, 0f);
@@ -199,22 +198,63 @@ namespace Knight {
 
 
         public void SetCrateVelToPlayerVel() {
-            if (crateScript) {
-                var xVal = CurrentVelocity.x > 0 ? -0.1f : 0.1f;
+            var xVal = CurrentVelocity.x > 0 ? -0.1f : 0.1f;
 
-                _vector2Holder.Set(CurrentVelocity.x + xVal, CurrentVelocity.y);
-                _crateRb.velocity = _vector2Holder;
-            }
+            _vector2Holder.Set(CurrentVelocity.x + xVal, CurrentVelocity.y);
+            _crateRb.velocity = _vector2Holder;
         }
+
 
         public void SetCrateVelToZero() {
-            if (crateScript) {
-                _crateRb.velocity = Vector2.zero;
-            }
+            _crateRb.velocity = Vector2.zero;
         }
 
-        public void SetLineRendererActive(bool value) {
-            predictionLineRenderer.enabled = value;
+
+        //
+        // Crate Related
+
+        private void SetPlayerCarry(bool value) => isCarrying = value;
+        private void SetCrateCarry(bool value) => crateScript.isCarried = value;
+        private void SetThrowTrue() => crateScript.isBeingThrown = true;
+
+        
+        // set isCarrying and isCarried to false
+        public void SetCarryProps(bool value) {
+            SetPlayerCarry(value);
+            SetCrateCarry(value);
+        }
+
+        
+        // set crate in range
+        private void SetCrateData(Transform t, CrateScript s, Rigidbody2D rb) {
+            _crateTransform = t;
+            crateScript = s;
+            _crateRb = rb;
+        }
+
+
+        // unset crate in range
+        private void UnsetCrateData() {
+            _crateTransform = null;
+            crateScript = null;
+            _crateRb = null;
+        }
+
+
+        // set carry props to false, and unset crate data
+        private void CleanUpCrateData() {
+            SetCarryProps(false);
+            UnsetCrateData();
+        }
+
+        
+        // if distance between player and carried crate is bigger than 2.5f, then reset current carry state
+        public void ValidateCarryDistance() {
+            if (CheckPlayerCarry()) {
+                if (Vector2.Distance(transform.position, _crateTransform.position) > 2.5f) {
+                    CleanUpCrateData();
+                }
+            }
         }
         #endregion
 
@@ -236,19 +276,7 @@ namespace Knight {
             }
         }
 
-        public bool CheckIfCarryingCrate() {
-            return isCarryingCrate;
-        }
-
-        public bool CheckIfCrateIsBeingCarried() {
-            var isCrateCarried = false;
-
-            if (crateScript) {
-                isCrateCarried = crateScript.isBeingCarried;
-            }
-
-            return isCrateCarried;
-        }
+        public bool CheckPlayerCarry() => isCarrying;
 
 
         private bool CheckIfFacingInputDirection(int xInput) {
@@ -264,19 +292,16 @@ namespace Knight {
 
         #region Misc Functions
         public void ThrowCrate() {
-            crateScript.isBeingThrown = true;
-            SetCrateIsBeingCarried(false);
-            SetIsCarrying(false);
+            SetThrowTrue();
+            SetCarryProps(false);
+            SetCrateVelToZero();
 
             _vector2Holder.Set(GetFacingDirection() * throwForce.x, throwForce.y);
-            SetCrateVelToZero();
             _crateRb.AddForce(_vector2Holder, ForceMode2D.Impulse);
         }
 
 
         public void GeneratePredictionLine() {
-            if (!crateScript) return;
-
             var startPos = _crateRb.position;
             _vector2Holder.Set(GetFacingDirection() * throwForce.x, throwForce.y);
 
@@ -296,7 +321,7 @@ namespace Knight {
             var gravityScale = _crateRb.gravityScale;
             var mass = _crateRb.mass;
 
-            for (int i = 0; i < lineSegmentCount; i++) {
+            for (var i = 0; i < lineSegmentCount; i++) {
                 linePoints[i] = currentPos;
 
                 // NOTE: formula to blend in gravity with mass is: (lineGravity * gravityScale) * (Mathf.Pow(mass, 2))
