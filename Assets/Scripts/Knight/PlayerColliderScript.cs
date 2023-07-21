@@ -20,6 +20,9 @@ namespace Knight {
 
         private InputManager _input;
 
+        // used for fade animation
+        public bool isTransitioning;
+
 
         private void Awake() {
             _sr = GetComponentInChildren<SpriteRenderer>();

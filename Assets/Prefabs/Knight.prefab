@@ -31,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1258598615208435579}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 184.54, y: -44.43, z: 0}
+  m_LocalPosition: {x: 47.23, y: -43, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -130,7 +130,7 @@ Rigidbody2D:
   m_Mass: 1.5
   m_LinearDrag: 1
   m_AngularDrag: 0.05
-  m_GravityScale: 2.5
+  m_GravityScale: 4
   m_Material: {fileID: 6200000, guid: 587536b689d1ef0448b66cf9ddd90fda, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
@@ -227,13 +227,13 @@ MonoBehaviour:
   pushableLayer:
     serializedVersion: 2
     m_Bits: 64
-  crateInRange: {fileID: 0}
-  isCarryingCrate: 0
+  crateScript: {fileID: 0}
   predictionLineRenderer: {fileID: 2957742040052436221}
   lineSegmentCount: 300
   lineSegmentSpacing: 0.01
   lineGravity: 9.8
   throwForce: {x: 12, y: 24}
+  isCarrying: 0
 --- !u!114 &1667972314069250478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,6 +246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71917aab35c5b6dd88cf46d20ae84c6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTransitioning: 0
 --- !u!1 &2053757960271887526
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,8 +523,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.09458728, y: -0.4797309}
-  m_Size: {x: 2.2842655, y: 1.3061334}
+  m_Offset: {x: 0.15007348, y: -0.49265215}
+  m_Size: {x: 2.7836394, y: 1.3791066}
   m_Direction: 1
 --- !u!1 &5519859093111188052
 GameObject:
@@ -821,7 +822,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8148016776348193716}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.09, z: 0}
+  m_LocalPosition: {x: 0, y: 0.03, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -860,8 +861,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.09458726, y: -0.6327974}
-  m_Size: {x: 2.2842653, y: 1.0000001}
+  m_Offset: {x: 0.09458726, y: -0.82}
+  m_Size: {x: 2.2842655, y: 0.8989469}
   m_Direction: 1
 --- !u!1 &8623980301808427120
 GameObject:

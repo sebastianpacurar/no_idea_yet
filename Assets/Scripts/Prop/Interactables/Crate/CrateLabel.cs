@@ -68,7 +68,7 @@ namespace Prop.Interactables.Crate {
             
             // display label if the crate is at the top of the stack and the player is not carrying any other crate
             if (!_playerScript.CheckPlayerCarry()) {
-                if (!crateScript.crateAbove) {
+                if (!crateScript.aboveCrate) {
                     isWrapperObjDisplayed = true;
                 }
             }

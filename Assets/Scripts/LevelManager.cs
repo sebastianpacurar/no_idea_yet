@@ -1,6 +1,7 @@
 using System.Collections;
 using AYellowpaper.SerializedCollections;
 using Cinemachine;
+using Knight;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -16,6 +17,7 @@ public class LevelManager : MonoBehaviour {
 
     private Tilemap _exitDoors;
     private CinemachineConfiner2D _currentConfiner;
+    private PlayerColliderScript _colliderScript;
     private Transform _playerTransform;
     private Image _fadeImage;
 
@@ -29,8 +31,11 @@ public class LevelManager : MonoBehaviour {
 
 
     private void Start() {
+        var player = GameObject.FindGameObjectWithTag("Player");
+        _playerTransform = player.transform;
+        _colliderScript = player.GetComponent<PlayerColliderScript>();
+
         _exitDoors = GameObject.FindGameObjectWithTag("ExitDoorsTilemap").GetComponent<Tilemap>();
-        _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         _fadeImage = GameObject.FindGameObjectWithTag("FadeImage").GetComponent<Image>();
         _currentConfiner = GameObject.FindGameObjectWithTag("VirtualCam").GetComponent<CinemachineConfiner2D>();
         _currentConfiner.m_BoundingShape2D = levels[currentLevel];
@@ -47,6 +52,9 @@ public class LevelManager : MonoBehaviour {
     }
 
     private IEnumerator PerformLevelTransition(Vector3 targetDoor) {
+        // begin transition
+        _colliderScript.isTransitioning = true;
+
         // fade out section
         var fadeTimer = 0f;
 
@@ -73,6 +81,9 @@ public class LevelManager : MonoBehaviour {
             SetFadeImageAlpha(alpha);
             yield return null;
         }
+
+        // stop transition
+        _colliderScript.isTransitioning = false;
 
         StopCoroutine(nameof(PerformLevelTransition));
     }

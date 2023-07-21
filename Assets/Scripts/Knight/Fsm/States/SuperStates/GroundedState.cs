@@ -12,6 +12,7 @@ namespace Knight.Fsm.States.SuperStates {
 
         protected GroundedState(PlayerScript player, PlayerStateMachine stateMachine, PlayerDataSo playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName) { }
 
+
         protected internal override void LogicUpdate() {
             base.LogicUpdate();
 
@@ -21,18 +22,32 @@ namespace Knight.Fsm.States.SuperStates {
             CrouchInput = PlayerScript.Input.IsCrouching;
             PickCrateInput = PlayerScript.Input.IsPickCratePressed;
 
-            if (_jumpInput && !_isCarry) {
-                PlayerScript.SetJumpFalse();
 
-                if (_isGrounded) {
-                    StateMachine.ChangeState(PlayerScript.JumpState);
+            // if player in transition prevent movement, and force Idle State
+            if (PlayerScript.CheckPlayerTransition()) {
+                XInput = 0;
+                PlayerScript.SetVelocityX(0);
+            }
+
+            // if player not in transition
+            else {
+                // if jump pressed and not carrying crate
+                if (_jumpInput && !_isCarry) {
+                    PlayerScript.SetJumpFalse();
+
+                    // if grounded perform jump - change to Jump State
+                    if (_isGrounded) {
+                        StateMachine.ChangeState(PlayerScript.JumpState);
+                    }
+                }
+
+                // if not on ground (fall) - change to InAir State
+                if (!_isGrounded) {
+                    StateMachine.ChangeState(PlayerScript.InAirState);
                 }
             }
-
-            if (!_isGrounded) {
-                StateMachine.ChangeState(PlayerScript.InAirState);
-            }
         }
+
 
         protected override void DoChecks() {
             base.DoChecks();

@@ -7,7 +7,6 @@ namespace Knight.Fsm.States.SubStates {
 
         protected internal override void Enter() {
             base.Enter();
-            // PlayerScript.SetVelocityY(0f);
             PlayerScript.AddJumpForce(PlayerData.JumpForce);
             IsAbilityDone = true;
         }

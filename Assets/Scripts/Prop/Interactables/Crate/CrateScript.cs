@@ -13,19 +13,28 @@ namespace Prop.Interactables.Crate {
         [SerializeField] private CartScript cartScript;
 
         // south, west or east contact. used to check if isBeingThrown can be set to false
+        public CrateScript aboveCrate;
         [SerializeField] private CrateScript nearbyCrate;
-        public CrateScript crateAbove;
+        [SerializeField] private CrateScript bottomCrate;
         public bool isCarried;
         public bool isBeingThrown;
         public bool isGrounded;
 
         private CrateRayCasts _ray;
         private Rigidbody2D _rb;
+        private BoxCollider2D _box;
+
+        private Vector2 _crateSize;
 
 
         private void Awake() {
             _rb = GetComponent<Rigidbody2D>();
+            _box = GetComponent<BoxCollider2D>();
             _ray = GetComponent<CrateRayCasts>();
+        }
+
+        private void Start() {
+            SetCrateSize();
         }
 
 
@@ -36,7 +45,15 @@ namespace Prop.Interactables.Crate {
             SetPhysicsMaterial();
             selectedPm2D = _rb.sharedMaterial;
 
-            SetCrateAbove();
+            ValidateAboveCrate();
+            ValidateNearbyCrate();
+            ValidateBottomCrate();
+        }
+
+        private void SetCrateSize() {
+            var parentMap = transform.parent.localScale;
+            var size = _box.size;
+            _crateSize = new Vector2(size.x * parentMap.x, size.y * parentMap.y);
         }
 
 
@@ -47,18 +64,77 @@ namespace Prop.Interactables.Crate {
 
         // is crate got thrown, and reaches ground, cart or nearbyCrate, set to false
         private void HandleThrow() {
-            if (isBeingThrown && (isGrounded || cartScript || nearbyCrate)) {
+            if (isBeingThrown && (isGrounded || cartScript || nearbyCrate || bottomCrate)) {
                 isBeingThrown = false;
             }
         }
 
-        // HACK: needed since collision doesn't detect when the player is picked up, since it's based on set transform of crate on player
-        // NOTE: Check SetCrateOnPlayer() in PlayerScript.cs
-        private void SetCrateAbove() {
-            if (crateAbove) {
-                if (crateAbove.isCarried) {
-                    crateAbove = null;
+        // validate aboveCrate 
+        private void ValidateAboveCrate() {
+            if (!aboveCrate) return;
+
+            // if current crate is not carried but the above crate is carried, then set above crate to false
+            //  reason - crate is being picked up based on position - check SetCrateOnPlayer() in PlayerScript.cs
+            if (!isCarried && aboveCrate.isCarried) {
+                aboveCrate = null;
+            }
+
+            // else apply for regular physics interaction 
+            else {
+                var abovePos = aboveCrate.transform.position;
+                var selfPos = transform.position;
+
+                // axis based distance
+                var distX = Mathf.Abs(abovePos.x - selfPos.x);
+                var distY = Mathf.Abs(abovePos.y - selfPos.y);
+
+                // if any of the distances is higher than the size + offset, set aboveCrate to null
+                if (distX > _crateSize.x + 0.1f || distY > _crateSize.y + 0.1f) {
+                    aboveCrate = null;
                 }
+            }
+        }
+
+
+        // validate bottomCrate
+        private void ValidateBottomCrate() {
+            if (!bottomCrate) return;
+
+            // if current crate is carried then set bottom crate to false
+            if (isCarried) {
+                bottomCrate = null;
+            }
+
+            // else apply for regular physics interaction 
+            else {
+                var bottomPos = bottomCrate.transform.position;
+                var selfPos = transform.position;
+
+                // axis based distance
+                var distX = Mathf.Abs(bottomPos.x - selfPos.x);
+                var distY = Mathf.Abs(bottomPos.y - selfPos.y);
+
+                // if any of the distances is higher than the size + offset, set aboveCrate to null
+                if (distX > _crateSize.x + 0.1f || distY > _crateSize.y + 0.1f) {
+                    bottomCrate = null;
+                }
+            }
+        }
+
+
+        // validate nearbyCrate
+        private void ValidateNearbyCrate() {
+            if (!nearbyCrate) return;
+            var nearbyPos = nearbyCrate.transform.position;
+            var selfPos = transform.position;
+
+            // axis based distance
+            var distX = Mathf.Abs(nearbyPos.x - selfPos.x);
+            var distY = Mathf.Abs(nearbyPos.y - selfPos.y);
+
+            // if any of the distances is higher than the size + offset, set aboveCrate to null
+            if (distX > _crateSize.x + 0.05f || distY > _crateSize.y * 0.75f) {
+                nearbyCrate = null;
             }
         }
 
@@ -68,8 +144,7 @@ namespace Prop.Interactables.Crate {
             // start with high friction
             var frictionMat = data.HighFriction;
 
-            // if grounded, prevent player from pushing at same speed as cart
-            if (isGrounded) {
+            if (isGrounded && IsPlayerDetected()) {
                 frictionMat = data.GroundFriction;
             }
 
@@ -145,12 +220,16 @@ namespace Prop.Interactables.Crate {
             }
 
             if (other.gameObject.CompareTag("Crate")) {
-                if (CollisionUtils.IsCollisionBottom(other) || CollisionUtils.IsCollisionSideways(other)) {
+                if (CollisionUtils.IsCollisionTop(other)) {
+                    aboveCrate = other.gameObject.GetComponent<CrateScript>();
+                }
+
+                if (CollisionUtils.IsCollisionSideways(other)) {
                     nearbyCrate = other.gameObject.GetComponent<CrateScript>();
                 }
 
-                if (CollisionUtils.IsCollisionTop(other)) {
-                    crateAbove = other.gameObject.GetComponent<CrateScript>();
+                if (CollisionUtils.IsCollisionBottom(other)) {
+                    bottomCrate = other.gameObject.GetComponent<CrateScript>();
                 }
             }
 
@@ -166,20 +245,6 @@ namespace Prop.Interactables.Crate {
 
             if (other.gameObject.CompareTag("Terrain")) {
                 isGrounded = false;
-            }
-
-            if (other.gameObject.CompareTag("Crate")) {
-                var otherCrate = other.gameObject;
-
-                if (nearbyCrate) {
-                    if (otherCrate.Equals(nearbyCrate.gameObject)) {
-                        nearbyCrate = null;
-                    }
-                } else if (crateAbove) {
-                    if (otherCrate.Equals(crateAbove.gameObject)) {
-                        crateAbove = null;
-                    }
-                }
             }
         }
     }

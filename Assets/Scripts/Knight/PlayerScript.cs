@@ -60,6 +60,7 @@ namespace Knight {
         [Header("Debug")]
         [SerializeField] private Vector2 throwForce;
         [SerializeField] private bool isCarrying;
+        private PlayerColliderScript _colliderScript;
 
 
         #region Unity Callback Functions
@@ -81,6 +82,7 @@ namespace Knight {
             // get components
             _rb = GetComponent<Rigidbody2D>();
             Anim = GetComponent<Animator>();
+            _colliderScript = GetComponent<PlayerColliderScript>();
         }
 
         private void Start() {
@@ -177,9 +179,23 @@ namespace Knight {
             }
         }
 
-        
+
         public void SetLineRendererActive(bool value) {
             predictionLineRenderer.enabled = value;
+        }
+        #endregion
+
+
+        #region Crate Set Functionw
+        private void SetPlayerCarry(bool value) => isCarrying = value;
+        private void SetCrateCarry(bool value) => crateScript.isCarried = value;
+        private void SetThrowTrue() => crateScript.isBeingThrown = true;
+
+
+        // set isCarrying and isCarried to false
+        public void SetCarryProps(bool value) {
+            SetPlayerCarry(value);
+            SetCrateCarry(value);
         }
 
 
@@ -210,21 +226,6 @@ namespace Knight {
         }
 
 
-        //
-        // Crate Related
-
-        private void SetPlayerCarry(bool value) => isCarrying = value;
-        private void SetCrateCarry(bool value) => crateScript.isCarried = value;
-        private void SetThrowTrue() => crateScript.isBeingThrown = true;
-
-        
-        // set isCarrying and isCarried to false
-        public void SetCarryProps(bool value) {
-            SetPlayerCarry(value);
-            SetCrateCarry(value);
-        }
-
-        
         // set crate in range
         private void SetCrateData(Transform t, CrateScript s, Rigidbody2D rb) {
             _crateTransform = t;
@@ -247,7 +248,7 @@ namespace Knight {
             UnsetCrateData();
         }
 
-        
+
         // if distance between player and carried crate is bigger than 2.5f, then reset current carry state
         public void ValidateCarryDistance() {
             if (CheckPlayerCarry()) {
@@ -275,6 +276,12 @@ namespace Knight {
                 Flip();
             }
         }
+
+
+        public bool CheckPlayerTransition() {
+            return _colliderScript.isTransitioning;
+        }
+
 
         public bool CheckPlayerCarry() => isCarrying;
 
