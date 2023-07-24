@@ -4909,7 +4909,7 @@ GameObject:
   - component: {fileID: 7323950766747802923}
   - component: {fileID: 8077930011634023793}
   m_Layer: 6
-  m_Name: Crate
+  m_Name: SmallCrate
   m_TagString: Crate
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4973,7 +4973,7 @@ SpriteRenderer:
   m_SortingLayerID: -299158587
   m_SortingLayer: -3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 7810966f0f690954c87305933cabf2b0, type: 3}
+  m_Sprite: {fileID: 21300002, guid: 7810966f0f690954c87305933cabf2b0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -5043,18 +5043,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.025}
+  m_Offset: {x: 0, y: 0.02}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.0454545, y: 2.0454545}
+    oldSize: {x: 1.5909091, y: 1.5909091}
     newSize: {x: 1.09375, y: 1.09375}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 1.575, y: 1.55}
   m_EdgeRadius: 0
 --- !u!114 &9045449132705657539
 MonoBehaviour:
@@ -5071,11 +5071,13 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 62d5b5f3443b75bed8ddff236927e2ea, type: 2}
   selectedPm2D: {fileID: 0}
   cartScript: {fileID: 0}
+  aboveCrate: {fileID: 0}
   nearbyCrate: {fileID: 0}
-  crateAbove: {fileID: 0}
-  isBeingCarried: 0
+  bottomCrate: {fileID: 0}
+  isCarried: 0
   isBeingThrown: 0
   isGrounded: 0
+  crateSize: {x: 0, y: 0}
 --- !u!114 &7323950766747802923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5165,18 +5167,6 @@ PrefabInstance:
     - target: {fileID: 7977869976619731221, guid: 02eba9ed48e42df9195708b5ef2ed3cf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8086995009938742841, guid: 02eba9ed48e42df9195708b5ef2ed3cf, type: 3}
-      propertyPath: m_Size.y
-      value: 1.8981158
-      objectReference: {fileID: 0}
-    - target: {fileID: 8086995009938742841, guid: 02eba9ed48e42df9195708b5ef2ed3cf, type: 3}
-      propertyPath: m_Offset.x
-      value: -0.010752678
-      objectReference: {fileID: 0}
-    - target: {fileID: 8086995009938742841, guid: 02eba9ed48e42df9195708b5ef2ed3cf, type: 3}
-      propertyPath: m_Offset.y
-      value: -0.28473133
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

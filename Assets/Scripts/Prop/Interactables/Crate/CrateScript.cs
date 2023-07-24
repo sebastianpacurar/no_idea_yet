@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using Prop.Interactables.Cart;
 using ScriptableObjects;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Utils;
 
 
@@ -14,8 +16,8 @@ namespace Prop.Interactables.Crate {
 
         // south, west or east contact. used to check if isBeingThrown can be set to false
         public CrateScript aboveCrate;
-        [SerializeField] private CrateScript nearbyCrate;
         [SerializeField] private CrateScript bottomCrate;
+        [SerializeField] private List<CrateScript> sidewaysCrates;
         public bool isCarried;
         public bool isBeingThrown;
         public bool isGrounded;
@@ -24,13 +26,15 @@ namespace Prop.Interactables.Crate {
         private Rigidbody2D _rb;
         private BoxCollider2D _box;
 
-        private Vector2 _crateSize;
+        public Vector2 crateSize;
 
 
         private void Awake() {
             _rb = GetComponent<Rigidbody2D>();
             _box = GetComponent<BoxCollider2D>();
             _ray = GetComponent<CrateRayCasts>();
+
+            sidewaysCrates = new List<CrateScript>();
         }
 
         private void Start() {
@@ -46,14 +50,14 @@ namespace Prop.Interactables.Crate {
             selectedPm2D = _rb.sharedMaterial;
 
             ValidateAboveCrate();
-            ValidateNearbyCrate();
+            ValidateSidewaysCrates();
             ValidateBottomCrate();
         }
 
         private void SetCrateSize() {
             var parentMap = transform.parent.localScale;
             var size = _box.size;
-            _crateSize = new Vector2(size.x * parentMap.x, size.y * parentMap.y);
+            crateSize = new Vector2(size.x * parentMap.x, size.y * parentMap.y);
         }
 
 
@@ -62,12 +66,13 @@ namespace Prop.Interactables.Crate {
             SetGravity();
         }
 
-        // is crate got thrown, and reaches ground, cart or nearbyCrate, set to false
+        // is crate got thrown, and reaches ground, cart or sidewaysCrates, set to false
         private void HandleThrow() {
-            if (isBeingThrown && (isGrounded || cartScript || nearbyCrate || bottomCrate)) {
+            if (isBeingThrown && (isGrounded || cartScript || sidewaysCrates.Count > 0 || bottomCrate)) {
                 isBeingThrown = false;
             }
         }
+
 
         // validate aboveCrate 
         private void ValidateAboveCrate() {
@@ -81,15 +86,11 @@ namespace Prop.Interactables.Crate {
 
             // else apply for regular physics interaction 
             else {
-                var abovePos = aboveCrate.transform.position;
-                var selfPos = transform.position;
-
-                // axis based distance
-                var distX = Mathf.Abs(abovePos.x - selfPos.x);
-                var distY = Mathf.Abs(abovePos.y - selfPos.y);
+                var dist = GetDistFromCrate(aboveCrate.transform.position);
+                var threshold = GetParsedSize(aboveCrate);
 
                 // if any of the distances is higher than the size + offset, set aboveCrate to null
-                if (distX > _crateSize.x + 0.1f || distY > _crateSize.y + 0.1f) {
+                if (dist.x > threshold.x + 0.1f || dist.y > threshold.y + 0.1f) {
                     aboveCrate = null;
                 }
             }
@@ -107,35 +108,57 @@ namespace Prop.Interactables.Crate {
 
             // else apply for regular physics interaction 
             else {
-                var bottomPos = bottomCrate.transform.position;
-                var selfPos = transform.position;
-
-                // axis based distance
-                var distX = Mathf.Abs(bottomPos.x - selfPos.x);
-                var distY = Mathf.Abs(bottomPos.y - selfPos.y);
+                var dist = GetDistFromCrate(bottomCrate.transform.position);
+                var threshold = GetParsedSize(bottomCrate);
 
                 // if any of the distances is higher than the size + offset, set aboveCrate to null
-                if (distX > _crateSize.x + 0.1f || distY > _crateSize.y + 0.1f) {
+                if (dist.x > threshold.x + 0.1f || dist.y > threshold.y + 0.1f) {
                     bottomCrate = null;
                 }
             }
         }
 
 
-        // validate nearbyCrate
-        private void ValidateNearbyCrate() {
-            if (!nearbyCrate) return;
-            var nearbyPos = nearbyCrate.transform.position;
-            var selfPos = transform.position;
+        // validate sidewaysCrates
+        private void ValidateSidewaysCrates() {
+            if (sidewaysCrates.Count == 0) return;
 
-            // axis based distance
-            var distX = Mathf.Abs(nearbyPos.x - selfPos.x);
-            var distY = Mathf.Abs(nearbyPos.y - selfPos.y);
+            var cratesToRemove = new List<CrateScript>();
 
-            // if any of the distances is higher than the size + offset, set aboveCrate to null
-            if (distX > _crateSize.x + 0.05f || distY > _crateSize.y * 0.75f) {
-                nearbyCrate = null;
+            // iterate over sidewaysCrates and add the crates needed to remove to cratesToRemove list
+            foreach (var crate in sidewaysCrates) {
+                var dist = GetDistFromCrate(crate.transform.position);
+                var threshold = GetParsedSize(crate);
+
+                // if any of the distances is higher than the size + offset, add crate to the removal list
+                if (dist.x > threshold.x + 0.05f || dist.y > threshold.y * 0.9f) {
+                    cratesToRemove.Add(crate);
+                }
             }
+
+            // remove all cratesToRemove present in sidewaysCrates
+            foreach (var crate in cratesToRemove) {
+                sidewaysCrates.Remove(crate);
+            }
+        }
+
+
+        // return the distX and distY based on subtraction
+        private Vector2 GetDistFromCrate(Vector2 targetCratePos) {
+            var selfPos = transform.position;
+            var distX = Mathf.Abs(targetCratePos.x - selfPos.x);
+            var distY = Mathf.Abs(targetCratePos.y - selfPos.y);
+
+            return new Vector2(distX, distY);
+        }
+
+
+        // similar to adding the bounds.extent of the sprites, but based on crate size
+        private Vector2 GetParsedSize(CrateScript targetCrate) {
+            var thresholdX = targetCrate.crateSize.x / 2 + crateSize.x / 2;
+            var thresholdY = targetCrate.crateSize.y / 2 + crateSize.y / 2;
+
+            return new Vector2(thresholdX, thresholdY);
         }
 
 
@@ -219,19 +242,26 @@ namespace Prop.Interactables.Crate {
                 }
             }
 
+
             if (other.gameObject.CompareTag("Crate")) {
                 if (CollisionUtils.IsCollisionTop(other)) {
                     aboveCrate = other.gameObject.GetComponent<CrateScript>();
                 }
 
                 if (CollisionUtils.IsCollisionSideways(other)) {
-                    nearbyCrate = other.gameObject.GetComponent<CrateScript>();
+                    var nearbyCrate = other.gameObject.GetComponent<CrateScript>();
+
+                    if (!sidewaysCrates.Contains(nearbyCrate)) {
+                        sidewaysCrates.Add(nearbyCrate);
+                    }
                 }
+
 
                 if (CollisionUtils.IsCollisionBottom(other)) {
                     bottomCrate = other.gameObject.GetComponent<CrateScript>();
                 }
             }
+
 
             if (other.gameObject.CompareTag("Terrain")) {
                 isGrounded = true;

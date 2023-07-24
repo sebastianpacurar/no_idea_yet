@@ -14,6 +14,7 @@ namespace Input {
         public bool IsCrouching { get; set; }
         public bool IsInteractPressed { get; set; }
         public bool IsPickCratePressed { get; set; }
+        public bool IsRestartPressed { get; set; }
 
         private InputControls _controls;
         private Rigidbody2D _rb;
@@ -27,6 +28,7 @@ namespace Input {
         private InputAction _crouchAction;
         private InputAction _interactAction;
         private InputAction _pickCrateAction;
+        private InputAction _restartLevelAction;
         #endregion
 
         #region input action phases
@@ -113,6 +115,13 @@ namespace Input {
                 _ => IsPickCratePressed
             };
         }
+
+        private void OnRestartLevel(InputAction.CallbackContext ctx) {
+            IsRestartPressed = ctx.phase switch {
+                PhaseStarted or PhasePerformed => true,
+                _ => IsRestartPressed
+            };
+        }
         #endregion
 
 
@@ -126,6 +135,7 @@ namespace Input {
             _attackAction = _controls.Player.Attack;
             _interactAction = _controls.Player.Interact;
             _pickCrateAction = _controls.Player.PickCrate;
+            _restartLevelAction = _controls.UI.RestartLevel;
         }
 
 
@@ -139,6 +149,7 @@ namespace Input {
             _crouchAction.Enable();
             _interactAction.Enable();
             _pickCrateAction.Enable();
+            _restartLevelAction.Enable();
 
             //Unsubscribe the Move, Jump and Attack methods (call relevant methods when actions are performed) 
             _runAction.performed += OnMove;
@@ -154,6 +165,7 @@ namespace Input {
             _interactAction.performed += OnInteract;
             _interactAction.canceled += OnInteract;
             _pickCrateAction.performed += OnPickCrate;
+            _restartLevelAction.performed += OnRestartLevel;
         }
 
 
@@ -172,6 +184,7 @@ namespace Input {
             _interactAction.performed -= OnInteract;
             _interactAction.canceled -= OnInteract;
             _pickCrateAction.performed -= OnPickCrate;
+            _restartLevelAction.performed -= OnRestartLevel;
 
             _runAction.Disable();
             _aimAction.Disable();
@@ -181,6 +194,7 @@ namespace Input {
             _crouchAction.Disable();
             _interactAction.Disable();
             _pickCrateAction.Disable();
+            _restartLevelAction.Disable();
         }
         #endregion
     }

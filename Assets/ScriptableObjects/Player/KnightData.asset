@@ -15,7 +15,7 @@ MonoBehaviour:
   runSpeed: 12
   sprintSpeed: 15
   crouchSpeed: 9
-  jumpForce: 22
+  jumpForce: 27.5
   carrySpeed: 7
   aimSpeed: 35
   minMaxAimRange: {x: 40, y: 140}

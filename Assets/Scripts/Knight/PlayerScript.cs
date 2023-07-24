@@ -48,6 +48,7 @@ namespace Knight {
         public Vector2 CurrentVelocity { get; set; }
         private Vector2 _vector2Holder;
         private Vector3 _vector3Holder;
+        private RaycastHit2D hitTopGround;
         #endregion
 
 
@@ -207,14 +208,14 @@ namespace Knight {
 
             // set crate position on top of the player
             var pos = transform.position;
-            var offset = 1.25f;
+            var offset = 1.35f;
             _vector3Holder.Set(pos.x, pos.y + offset, pos.z);
             _crateTransform.position = _vector3Holder;
         }
 
 
         public void SetCrateVelToPlayerVel() {
-            var xVal = CurrentVelocity.x > 0 ? -0.1f : 0.1f;
+            var xVal = CurrentVelocity.x > 0 ? -0.15f : 0.15f;
 
             _vector2Holder.Set(CurrentVelocity.x + xVal, CurrentVelocity.y);
             _crateRb.velocity = _vector2Holder;
@@ -231,6 +232,10 @@ namespace Knight {
             _crateTransform = t;
             crateScript = s;
             _crateRb = rb;
+        }
+
+        public void CastRays() {
+            // _hitBo
         }
 
 
@@ -309,7 +314,7 @@ namespace Knight {
 
 
         public void GeneratePredictionLine() {
-            var startPos = _crateRb.position;
+            var startPos = _crateTransform.position;
             _vector2Holder.Set(GetFacingDirection() * throwForce.x, throwForce.y);
 
             SetLineRendererActive(true);
