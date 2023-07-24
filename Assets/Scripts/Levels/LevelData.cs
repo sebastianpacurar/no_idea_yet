@@ -1,35 +1,37 @@
 using System.Collections.Generic;
 using System.Linq;
+using Prop.Interactables.Platform;
 using UnityEngine;
 using Utils;
 using Object = UnityEngine.Object;
 
+
 namespace Levels {
     public class LevelData {
         public Transform entryDoor;
+        public PlatformScript[] platforms;
 
-        private List<LevelObject> levelObjects;
-        private readonly PolygonCollider2D _levelArea;
+        private List<SpawnableObject> spawnableObjects;
+        public readonly PolygonCollider2D levelArea;
+
 
         public LevelData(PolygonCollider2D levelArea) {
-            _levelArea = levelArea;
+            this.levelArea = levelArea;
+            SetGameObjects();
+            SetSpawnableObjects(); // set spawnableObjects for the current LevelData
         }
 
 
-        // set levelObjects for the current LevelData
-        public void SetLevelObjects() {
-            levelObjects = new List<LevelObject>();
+        private void SetSpawnableObjects() {
+            spawnableObjects = new List<SpawnableObject>();
 
-            var crateObjects = AreaUtils.FindObjectsWithTagInArea("Crate", _levelArea);
-            var cartObjects = AreaUtils.FindObjectsWithTagInArea("Cart", _levelArea);
-            var tag = _levelArea.name.Equals("Lvl 1 Poly") ? "ExitDoor" : "EntryDoor";
-            entryDoor = AreaUtils.FindObjectWithTagInArea(tag, _levelArea).transform;
-
+            var crateObjects = AreaUtils.FindObjectsWithTagInArea("Crate", levelArea);
+            var cartObjects = AreaUtils.FindObjectsWithTagInArea("Cart", levelArea);
             var gameObjects = crateObjects.Concat(cartObjects).ToArray();
 
-            // attach all needed data to a new LevelObject 
+            // attach all needed data to a new SpawnableObject 
             foreach (var obj in gameObjects) {
-                var levelObject = new LevelObject {
+                var levelObject = new SpawnableObject {
                     GameObject = obj,
                     Name = obj.name,
                     Position = obj.transform.position,
@@ -37,16 +39,21 @@ namespace Levels {
                     Prefab = Resources.Load<GameObject>(GetPrefabLocation(obj.name)),
                 };
 
-                // add to level objects dict
-                levelObjects.Add(levelObject);
+                // add to spawnable objects dict
+                spawnableObjects.Add(levelObject);
             }
         }
 
+        private void SetGameObjects() {
+            entryDoor = AreaUtils.FindObjectWithTagInArea("EntryDoor", levelArea).transform;
+            platforms = AreaUtils.FindObjectsWithTagInArea("ExitPlatform", levelArea).Select(obj => obj.GetComponent<PlatformScript>()).ToArray();
+        }
 
-        // restart level by setting all existing LevelObjects to their regular positions
-        // in case the GameObject is destroyed then recreate it and attach it to the current LevelObject
+
+        // restart level by setting all existing spawnableObjects to their regular positions
+        // in case the GameObject is destroyed then recreate it and attach it to the current SpawnableObject
         public void ResetLevel() {
-            foreach (var obj in levelObjects) {
+            foreach (var obj in spawnableObjects) {
                 if (obj.GameObject) {
                     // if game object exists, then reset position
                     obj.GameObject.transform.position = obj.Position;
@@ -57,6 +64,7 @@ namespace Levels {
                 }
             }
         }
+
 
         // get prefab file locations
         private string GetPrefabLocation(string objName) {

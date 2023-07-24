@@ -3,6 +3,9 @@ using UnityEngine;
 namespace ScriptableObjects {
     [CreateAssetMenu(fileName = "PlayerDataSO", menuName = "Data/CratePhysicsDataSo")]
     public class CratePhysicsDataSo : ScriptableObject {
+        [Header("Crate Identifier")]
+        [SerializeField] private bool isSmallCrate;
+
         [Header("RigidBody")]
         [SerializeField] private float defaultMass;
         [SerializeField] private float defaultGravity;
@@ -15,6 +18,8 @@ namespace ScriptableObjects {
         [SerializeField] private PhysicsMaterial2D groundFriction;
 
         #region getters
+        public bool IsSmallCrate => isSmallCrate;
+
         public float DefaultMass => defaultMass;
         public float DefaultGravity => defaultGravity;
         public float FreeFallGravity => freeFallGravity;

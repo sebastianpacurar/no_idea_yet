@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Prop.Interactables.Cart;
 using ScriptableObjects;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Utils;
 
 
@@ -65,6 +64,9 @@ namespace Prop.Interactables.Crate {
             SetStackedCrateMass();
             SetGravity();
         }
+        
+        public bool IsSmallCrate() => data.IsSmallCrate;
+
 
         // is crate got thrown, and reaches ground, cart or sidewaysCrates, set to false
         private void HandleThrow() {

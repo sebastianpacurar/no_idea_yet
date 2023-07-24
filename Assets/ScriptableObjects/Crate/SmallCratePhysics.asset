@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 728e43a782734fe1b60f215605019709, type: 3}
   m_Name: SmallCratePhysics
   m_EditorClassIdentifier: 
+  isSmallCrate: 1
   defaultMass: 4
   defaultGravity: 2
   freeFallGravity: 5.25
