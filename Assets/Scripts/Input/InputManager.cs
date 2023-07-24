@@ -11,7 +11,7 @@ namespace Input {
         public bool IsSprintPressed { get; set; }
         public bool IsJumpPressed { get; set; }
         public bool IsAttacking { get; set; }
-        public bool IsCrouching { get; set; }
+        public bool IsCrouchPressed { get; set; }
         public bool IsInteractPressed { get; set; }
         public bool IsPickCratePressed { get; set; }
         public bool IsRestartPressed { get; set; }
@@ -58,6 +58,7 @@ namespace Input {
             };
         }
 
+        
         private void OnAim(InputAction.CallbackContext ctx) {
             AimVal = ctx.phase switch {
                 PhaseStarted or PhasePerformed => (int)_aimAction.ReadValue<float>(),
@@ -92,10 +93,11 @@ namespace Input {
             };
         }
 
+        
         private void OnCrouch(InputAction.CallbackContext ctx) {
-            IsCrouching = ctx.phase switch {
-                PhaseStarted or PhasePerformed => !IsCrouching,
-                _ => IsCrouching
+            IsCrouchPressed = ctx.phase switch {
+                PhaseStarted or PhasePerformed => true,
+                _ => IsCrouchPressed
             };
         }
 
@@ -115,6 +117,7 @@ namespace Input {
                 _ => IsPickCratePressed
             };
         }
+        
 
         private void OnRestartLevel(InputAction.CallbackContext ctx) {
             IsRestartPressed = ctx.phase switch {

@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 namespace TilemapManagement {
     public class SortingLayerSetterScript : MonoBehaviour {
-        [Header("The 2 tilemaps used for props")]
+        [Header("The Tilemaps used for props")]
         [SerializeField] private GameObject[] targetTilemaps;
 
         // used to grab the sprite layer and renderer, for dynamic allocation

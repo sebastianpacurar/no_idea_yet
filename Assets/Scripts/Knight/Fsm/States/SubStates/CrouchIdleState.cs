@@ -3,7 +3,16 @@ using ScriptableObjects;
 
 namespace Knight.Fsm.States.SubStates {
     public class CrouchIdleState : GroundedState {
+        private bool _isTopGrounded;
+
         public CrouchIdleState(PlayerScript player, PlayerStateMachine stateMachine, PlayerDataSo playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName) { }
+
+
+        protected internal override void Enter() {
+            base.Enter();
+
+            PlayerScript.SetCrouchInputFalse();
+        }
 
 
         protected internal override void LogicUpdate() {
@@ -15,7 +24,7 @@ namespace Knight.Fsm.States.SubStates {
             }
 
             // if Crouch btn pressed - change to Idle State
-            if (!CrouchInput) {
+            if (CrouchInput && !_isTopGrounded) {
                 StateMachine.ChangeState(PlayerScript.IdleState);
             }
 
@@ -24,6 +33,21 @@ namespace Knight.Fsm.States.SubStates {
                 StateMachine.ChangeState(PlayerScript.CarryIdleState);
             }
         }
+
+
+        protected internal override void Exit() {
+            base.Exit();
+
+            PlayerScript.SetCrouchInputFalse();
+        }
+
+
+        protected override void DoChecks() {
+            base.DoChecks();
+
+            _isTopGrounded = PlayerScript.CheckIfTopGrounded();
+        }
+
 
         protected internal override void PhysicsUpdate() {
             base.PhysicsUpdate();

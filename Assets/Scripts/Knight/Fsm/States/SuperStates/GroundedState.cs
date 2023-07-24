@@ -19,7 +19,7 @@ namespace Knight.Fsm.States.SuperStates {
             XInput = PlayerScript.Input.MoveVal;
             SprintInput = PlayerScript.Input.IsSprintPressed;
             _jumpInput = PlayerScript.Input.IsJumpPressed;
-            CrouchInput = PlayerScript.Input.IsCrouching;
+            CrouchInput = PlayerScript.Input.IsCrouchPressed;
             PickCrateInput = PlayerScript.Input.IsPickCratePressed;
 
 

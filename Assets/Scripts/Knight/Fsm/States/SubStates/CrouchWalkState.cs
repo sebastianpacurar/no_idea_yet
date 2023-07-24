@@ -3,14 +3,17 @@ using ScriptableObjects;
 
 namespace Knight.Fsm.States.SubStates {
     public class CrouchWalkState : GroundedState {
+        private bool _isTopGrounded;
+
         public CrouchWalkState(PlayerScript player, PlayerStateMachine stateMachine, PlayerDataSo playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName) { }
 
         protected internal override void Enter() {
             base.Enter();
 
             PlayerScript.CurrentSpeed = PlayerData.CarrySpeed;
-            PlayerScript.SetPickUpFalse();
+            PlayerScript.SetCrouchInputFalse();
         }
+
 
         protected internal override void LogicUpdate() {
             base.LogicUpdate();
@@ -23,7 +26,7 @@ namespace Knight.Fsm.States.SubStates {
             }
 
             // if Crouch btn pressed - change to Run State
-            if (!CrouchInput) {
+            if (CrouchInput && !_isTopGrounded) {
                 StateMachine.ChangeState(PlayerScript.RunState);
             }
 
@@ -32,6 +35,20 @@ namespace Knight.Fsm.States.SubStates {
                 StateMachine.ChangeState(PlayerScript.CarryIdleState);
             }
         }
+
+
+        protected internal override void Exit() {
+            base.Exit();
+            PlayerScript.SetCrouchInputFalse();
+        }
+
+
+        protected override void DoChecks() {
+            base.DoChecks();
+
+            _isTopGrounded = PlayerScript.CheckIfTopGrounded();
+        }
+
 
         protected internal override void PhysicsUpdate() {
             base.PhysicsUpdate();

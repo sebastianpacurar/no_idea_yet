@@ -65,6 +65,9 @@ TagManager:
   - name: Trees Back
     uniqueID: 4274923595
     locked: 0
+  - name: TrapsBack
+    uniqueID: 3303987221
+    locked: 0
   - name: TerrainBack
     uniqueID: 1210168417
     locked: 0

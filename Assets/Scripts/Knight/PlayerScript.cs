@@ -24,6 +24,7 @@ namespace Knight {
         #endregion
 
         #region References
+        [SerializeField] private Transform topGroundChecker;
         [SerializeField] private Transform groundChecker;
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private LayerMask pushableLayer;
@@ -109,6 +110,7 @@ namespace Knight {
             StateMachine.CurrentState.PhysicsUpdate();
         }
 
+
         // set crate data for crate in range with Label collider
         private void OnTriggerStay2D(Collider2D other) {
             // if parent of Label is Crate
@@ -122,6 +124,7 @@ namespace Knight {
                 SetCrateData(_crateTransform, crateScript, _crateRb);
             }
         }
+
 
         // unset crate data for current crate out of range of Label collider
         private void OnTriggerExit2D(Collider2D other) {
@@ -173,10 +176,17 @@ namespace Knight {
         public void SetJumpFalse() => Input.IsJumpPressed = false;
 
 
-        // if Pick Crate input is true, then set to false 
+        // set pick crate to false if true
         public void SetPickUpFalse() {
             if (Input.IsPickCratePressed) {
                 Input.IsPickCratePressed = false;
+            }
+        }
+
+        // set crouch to false if true
+        public void SetCrouchInputFalse() {
+            if (Input.IsCrouchPressed) {
+                Input.IsCrouchPressed = false;
             }
         }
 
@@ -267,12 +277,20 @@ namespace Knight {
 
         #region Check Functions
         public bool CheckIfGrounded() {
+            _vector2Holder.Set(1.1f, 0.8f);
             var pos = groundChecker.position;
-            var size = new Vector2(1.1f, 0.8f);
-            var direction = CapsuleDirection2D.Horizontal;
-            var angle = 0f;
+            var size = _vector2Holder;
 
-            return Physics2D.OverlapCapsule(pos, size, direction, angle, groundLayer | pushableLayer);
+            return Physics2D.OverlapCapsule(pos, size, CapsuleDirection2D.Horizontal, 0f, groundLayer | pushableLayer);
+        }
+
+
+        public bool CheckIfTopGrounded() {
+            _vector2Holder.Set(2.3f, 1f);
+            var pos = topGroundChecker.position;
+            var size = _vector2Holder;
+
+            return Physics2D.OverlapCapsule(pos, size, CapsuleDirection2D.Horizontal, 0f, groundLayer | pushableLayer);
         }
 
 

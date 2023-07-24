@@ -116,6 +116,10 @@ PrefabInstance:
       propertyPath: m_LocalBounds.m_Extent.y
       value: 1.25215
       objectReference: {fileID: 0}
+    - target: {fileID: 4729286325638812360, guid: 5b802391d732562878a48161bbb59c23, type: 3}
+      propertyPath: requiredCrateNo
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5555252036967755083, guid: 5b802391d732562878a48161bbb59c23, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.38
