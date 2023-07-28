@@ -58,7 +58,7 @@ namespace Prop.Interactables.Platform {
 
         // if platform is for small crate and is small crate or if platform is not for small crate and not small crate
         private bool CheckIfMatch(GameObject obj) {
-            var smallCrate = obj.GetComponent<CrateScript>().IsSmallCrate();
+            var smallCrate = obj.GetComponent<CrateScript>().IsSmallCrate;
             return (smallCrate && forSmallCrate) || (!smallCrate && !forSmallCrate);
         }
     }

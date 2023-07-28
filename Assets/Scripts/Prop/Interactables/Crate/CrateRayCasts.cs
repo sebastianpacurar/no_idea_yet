@@ -19,7 +19,6 @@ namespace Prop.Interactables.Crate {
 
         public RaycastHit2D HitPlayerLeft { get; private set; }
         public RaycastHit2D HitPlayerRight { get; private set; }
-        public RaycastHit2D HitGroundBottom { get; private set; }
 
 
         private void Awake() {
@@ -62,7 +61,6 @@ namespace Prop.Interactables.Crate {
 
             HitPlayerLeft = Physics2D.Raycast(origin, Vector2.left, distFromPlayerX, playerLayer);
             HitPlayerRight = Physics2D.Raycast(origin, Vector2.right, distFromPlayerX, playerLayer);
-            HitGroundBottom = Physics2D.Raycast(transform.position, Vector2.down, distFromGround, groundLayer);
         }
     }
 }

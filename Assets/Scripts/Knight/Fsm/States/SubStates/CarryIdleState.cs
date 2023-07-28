@@ -8,10 +8,10 @@ namespace Knight.Fsm.States.SubStates {
 
         protected internal override void Enter() {
             base.Enter();
-            
+
             PlayerScript.SetPickUpFalse();
             PlayerScript.SetCarryProps(true);
-            PlayerScript.SetCrateOnPlayer();
+            PlayerScript.AttachCrateToPlayer();
         }
 
 
@@ -39,7 +39,6 @@ namespace Knight.Fsm.States.SubStates {
             base.PhysicsUpdate();
 
             PlayerScript.SetVelocityX(0f);
-            PlayerScript.SetCrateVelToZero();
         }
     }
 }

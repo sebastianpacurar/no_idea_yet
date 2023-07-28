@@ -32,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 1258598615208435579}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 172.2, y: -43, z: 0}
+  m_LocalPosition: {x: 177.01, y: -40.47, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -236,6 +236,7 @@ MonoBehaviour:
   lineGravity: 9.8
   throwForce: {x: 12, y: 24}
   isCarrying: 0
+  distFromCrate: 0
 --- !u!114 &1667972314069250478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -486,7 +487,7 @@ Transform:
   m_GameObject: {fileID: 4049504435229568150}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.09, z: 0}
+  m_LocalPosition: {x: 0.109, y: -0.585, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -524,8 +525,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.15007348, y: -0.49265215}
-  m_Size: {x: 2.7836394, y: 1.3791066}
+  m_Offset: {x: 0.06595606, y: -0.000000007862575}
+  m_Size: {x: 1.9130193, y: 1.3791165}
   m_Direction: 1
 --- !u!1 &5519859093111188052
 GameObject:
@@ -823,7 +824,7 @@ Transform:
   m_GameObject: {fileID: 7832838590675184115}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.118, z: 0}
+  m_LocalPosition: {x: 0.061, y: -0.118, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -862,7 +863,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 2.3, y: 1}
+  m_Size: {x: 1.115, y: 1}
   m_Direction: 1
 --- !u!1 &8148016776348193716
 GameObject:
@@ -890,7 +891,7 @@ Transform:
   m_GameObject: {fileID: 8148016776348193716}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.03, z: 0}
+  m_LocalPosition: {x: 0.104, y: -0.8199999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -928,7 +929,7 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.09458861, y: -0.81999993}
+  m_Offset: {x: 0, y: 0}
   m_Size: {x: 1.4247657, y: 0.8989471}
   m_Direction: 1
 --- !u!1 &8623980301808427120
@@ -1098,5 +1099,5 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1.1, y: 0.8}
+  m_Size: {x: 0.75, y: 0.65}
   m_Direction: 1

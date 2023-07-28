@@ -15,7 +15,7 @@ namespace Prop.Interactables.Crate {
 
         // south, west or east contact. used to check if isBeingThrown can be set to false
         public CrateScript aboveCrate;
-        [SerializeField] private CrateScript bottomCrate;
+        public CrateScript bottomCrate;
         [SerializeField] private List<CrateScript> sidewaysCrates;
         public bool isCarried;
         public bool isBeingThrown;
@@ -24,7 +24,7 @@ namespace Prop.Interactables.Crate {
         private CrateRayCasts _ray;
         private Rigidbody2D _rb;
         private BoxCollider2D _box;
-
+        private FixedJoint2D _fj;
         public Vector2 crateSize;
 
 
@@ -32,6 +32,7 @@ namespace Prop.Interactables.Crate {
             _rb = GetComponent<Rigidbody2D>();
             _box = GetComponent<BoxCollider2D>();
             _ray = GetComponent<CrateRayCasts>();
+            _fj = GetComponent<FixedJoint2D>();
 
             sidewaysCrates = new List<CrateScript>();
         }
@@ -53,6 +54,12 @@ namespace Prop.Interactables.Crate {
             ValidateBottomCrate();
         }
 
+
+        public bool HasBottomCrate() {
+            return bottomCrate;
+        }
+
+
         private void SetCrateSize() {
             var parentMap = transform.parent.localScale;
             var size = _box.size;
@@ -64,8 +71,11 @@ namespace Prop.Interactables.Crate {
             SetStackedCrateMass();
             SetGravity();
         }
-        
-        public bool IsSmallCrate() => data.IsSmallCrate;
+
+
+        public bool IsSmallCrate => data.IsSmallCrate;
+        public float AttachPosOffset => data.PosOffset;
+        public Vector2 AimRangeValue => data.MinMaxAimRange;
 
 
         // is crate got thrown, and reaches ground, cart or sidewaysCrates, set to false
@@ -75,13 +85,12 @@ namespace Prop.Interactables.Crate {
             }
         }
 
-
         // validate aboveCrate 
         private void ValidateAboveCrate() {
             if (!aboveCrate) return;
 
             // if current crate is not carried but the above crate is carried, then set above crate to false
-            //  reason - crate is being picked up based on position - check SetCrateOnPlayer() in PlayerScript.cs
+            //  reason - crate is being picked up based on position - check PlaceCrateOnPlayer() in PlayerScript.cs
             if (!isCarried && aboveCrate.isCarried) {
                 aboveCrate = null;
             }
@@ -103,8 +112,8 @@ namespace Prop.Interactables.Crate {
         private void ValidateBottomCrate() {
             if (!bottomCrate) return;
 
-            // if current crate is carried then set bottom crate to false
-            if (isCarried) {
+            // if current crate is carried and not attached to player then set bottom crate to false
+            if (isCarried && !_fj.enabled) {
                 bottomCrate = null;
             }
 
@@ -169,6 +178,10 @@ namespace Prop.Interactables.Crate {
             // start with high friction
             var frictionMat = data.HighFriction;
 
+            if (isCarried) {
+                frictionMat = data.NoFriction;
+            }
+
             if (isGrounded && IsPlayerDetected()) {
                 frictionMat = data.GroundFriction;
             }
@@ -204,24 +217,11 @@ namespace Prop.Interactables.Crate {
         private void SetStackedCrateMass() {
             // if carried or thrown set initial mass to initial mass
             if (isCarried || isBeingThrown) {
+                _rb.mass = data.CarryThrowMass;
+            } else if (bottomCrate) {
+                _rb.mass = data.StackMass;
+            } else {
                 _rb.mass = data.DefaultMass;
-            }
-
-            // if crate is in stack (either grounded or on cart, or on another crate)
-            else {
-                var bottomRayHit = _ray.HitGroundBottom;
-
-                if (bottomRayHit.collider) {
-                    var hitPos = bottomRayHit.point;
-
-                    // calculate the distance between the own position and the position of the raycast hit point
-                    _rb.mass = Vector2.Distance(transform.position, hitPos) switch {
-                        > 1 and <= 2 => data.DefaultMass - 0.25f, // if 2nd level from ground
-                        > 2 and <= 3 => data.DefaultMass - 0.5f, // if 3rd level from ground
-                        > 3 => 1f, // if 4th level and above from ground
-                        _ => data.DefaultMass // if 1st level from ground (the lobby area)
-                    };
-                }
             }
         }
 

@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2753050983146918642}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8617251869534170521}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &2772199753027409475
 ParticleSystem:
@@ -4908,6 +4908,7 @@ GameObject:
   - component: {fileID: 9045449132705657539}
   - component: {fileID: 7323950766747802923}
   - component: {fileID: 8077930011634023793}
+  - component: {fileID: 1893774114625939411}
   m_Layer: 6
   m_Name: SmallCrate
   m_TagString: Crate
@@ -4922,6 +4923,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7979725809892615438}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -4930,7 +4932,6 @@ Transform:
   - {fileID: 3114803436379682625}
   - {fileID: 2499784287476651005}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3272843583769763330
 SpriteRenderer:
@@ -5072,8 +5073,8 @@ MonoBehaviour:
   selectedPm2D: {fileID: 0}
   cartScript: {fileID: 0}
   aboveCrate: {fileID: 0}
-  nearbyCrate: {fileID: 0}
   bottomCrate: {fileID: 0}
+  sidewaysCrates: []
   isCarried: 0
   isBeingThrown: 0
   isGrounded: 0
@@ -5112,6 +5113,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnOn: 0
+--- !u!255 &1893774114625939411
+FixedJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7979725809892615438}
+  m_Enabled: 0
+  serializedVersion: 4
+  m_EnableCollision: 1
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_BreakAction: 3
+  m_AutoConfigureConnectedAnchor: 0
+  m_Anchor: {x: 0, y: -1}
+  m_ConnectedAnchor: {x: 0, y: 0}
+  m_DampingRatio: 0
+  m_Frequency: 0
 --- !u!1001 &5011687529720577620
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5167,6 +5187,14 @@ PrefabInstance:
     - target: {fileID: 7977869976619731221, guid: 02eba9ed48e42df9195708b5ef2ed3cf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8086995009938742841, guid: 02eba9ed48e42df9195708b5ef2ed3cf, type: 3}
+      propertyPath: m_Size.y
+      value: 1.7435572
+      objectReference: {fileID: 0}
+    - target: {fileID: 8086995009938742841, guid: 02eba9ed48e42df9195708b5ef2ed3cf, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.2467786
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

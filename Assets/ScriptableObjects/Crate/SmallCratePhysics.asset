@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: SmallCratePhysics
   m_EditorClassIdentifier: 
   isSmallCrate: 1
-  defaultMass: 4
+  posOffset: 1.75
+  minMaxAimRange: {x: 40, y: 120}
+  defaultMass: 3
+  stackMass: 2.5
   defaultGravity: 2
   freeFallGravity: 5.25
-  carryThrowGravity: 5
+  carryThrowMass: 2.5
+  carryThrowGravity: 7
   lowFriction: {fileID: 6200000, guid: 51658da45135f8c06960e317040ea876, type: 2}
   highFriction: {fileID: 6200000, guid: f8de3bd95d900c20097391549bebec3f, type: 2}
   groundFriction: {fileID: 6200000, guid: 3c152d50065809b1fbd519f7ca921392, type: 2}
+  noFriction: {fileID: 6200000, guid: 587536b689d1ef0448b66cf9ddd90fda, type: 2}
