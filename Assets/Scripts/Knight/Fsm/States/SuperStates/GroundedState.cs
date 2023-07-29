@@ -3,7 +3,6 @@ using ScriptableObjects;
 namespace Knight.Fsm.States.SuperStates {
     public class GroundedState : PlayerState {
         protected int XInput;
-        protected bool SprintInput;
         protected bool CrouchInput;
         protected bool PickCrateInput;
         private bool _jumpInput;
@@ -17,7 +16,6 @@ namespace Knight.Fsm.States.SuperStates {
             base.LogicUpdate();
 
             XInput = PlayerScript.Input.MoveVal;
-            SprintInput = PlayerScript.Input.IsSprintPressed;
             _jumpInput = PlayerScript.Input.IsJumpPressed;
             CrouchInput = PlayerScript.Input.IsCrouchPressed;
             PickCrateInput = PlayerScript.Input.IsPickCratePressed;

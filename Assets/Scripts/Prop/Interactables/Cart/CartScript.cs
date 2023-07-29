@@ -1,30 +1,26 @@
+using ScriptableObjects;
 using UnityEngine;
 using Utils;
 
 
 namespace Prop.Interactables.Cart {
     public class CartScript : MonoBehaviour {
-        private Rigidbody2D _rb;
-        private BoxCollider2D _box;
+        [SerializeField] private CartPhysicsDataSo data;
 
         [Header("Current PhysicsMaterial2D")]
         [SerializeField] private PhysicsMaterial2D selectedPm2D;
 
         [Header("References")]
         [SerializeField] private GameObject[] wheels;
-        [SerializeField] private float speedThreshold;
-        [SerializeField] private float rotationFactor;
-        [SerializeField] private PhysicsMaterial2D lowFriction;
-        [SerializeField] private PhysicsMaterial2D highFriction;
-
-        [SerializeField] private float massWhenStationary;
-        [SerializeField] private float massWhenPushed;
 
         [Header("For Debugging")]
         [SerializeField] private float speed;
         [SerializeField] private float direction;
         [SerializeField] private Vector2 localVelocity;
         public bool isPlayerCollision;
+
+        private Rigidbody2D _rb;
+        private BoxCollider2D _box;
 
 
         private void Awake() {
@@ -37,7 +33,7 @@ namespace Prop.Interactables.Cart {
             SetSpeedAndDirection();
 
             // set the friction to low if player collision
-            SetPhysicsMaterial(isPlayerCollision ? lowFriction : highFriction);
+            SetPhysicsMaterial(isPlayerCollision ? data.LowFriction : data.HighFriction);
 
             selectedPm2D = _box.sharedMaterial;
 
@@ -54,7 +50,7 @@ namespace Prop.Interactables.Cart {
 
 
         private void SetMaxVelocity() {
-            var parsedX = Mathf.Clamp(_rb.velocity.x, -speedThreshold, speedThreshold);
+            var parsedX = Mathf.Clamp(_rb.velocity.x, -data.MaxSpeed, data.MaxSpeed);
             _rb.velocity = new Vector2(parsedX, _rb.velocity.y);
         }
 
@@ -64,7 +60,7 @@ namespace Prop.Interactables.Cart {
             localVelocity = transform.InverseTransformDirection(_rb.velocity);
 
             // get the length (speed) of the localVelocity (multiplied by rotFactor to get desired effect)
-            speed = localVelocity.magnitude * rotationFactor;
+            speed = localVelocity.magnitude * data.WheelRotationFactor;
 
             // rotation is done on the opposite side of the direction
             direction = -Mathf.Sign(localVelocity.x);
@@ -89,7 +85,7 @@ namespace Prop.Interactables.Cart {
 
         // set high mass for cart when not collided
         private void MassBasedOnCollision() {
-            _rb.mass = isPlayerCollision ? massWhenPushed : massWhenStationary;
+            _rb.mass = isPlayerCollision ? data.MassWhenPushed : data.MassWhenStationary;
         }
 
 

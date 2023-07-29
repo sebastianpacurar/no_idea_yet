@@ -1,3 +1,4 @@
+using System;
 using Input;
 using Knight.Fsm;
 using Knight.Fsm.States.SubStates;
@@ -12,7 +13,6 @@ namespace Knight {
         public PlayerStateMachine StateMachine { get; private set; }
         public IdleState IdleState { get; private set; }
         public RunState RunState { get; private set; }
-        public SprintState SprintState { get; private set; }
         public InAirState InAirState { get; private set; }
         public JumpState JumpState { get; private set; }
         public CrouchIdleState CrouchIdleState { get; private set; }
@@ -62,7 +62,6 @@ namespace Knight {
         [Header("Debug")]
         [SerializeField] private Vector2 throwForce;
         [SerializeField] private bool isCarrying;
-        [SerializeField] private float distFromCrate;
 
 
         #region Unity Callback Functions
@@ -73,7 +72,6 @@ namespace Knight {
             // initiate states
             IdleState = new IdleState(this, StateMachine, playerData, "idle");
             RunState = new RunState(this, StateMachine, playerData, "run");
-            SprintState = new SprintState(this, StateMachine, playerData, "sprint");
             InAirState = new InAirState(this, StateMachine, playerData, "inAir");
             JumpState = new JumpState(this, StateMachine, playerData, "inAir");
             CrouchIdleState = new CrouchIdleState(this, StateMachine, playerData, "crouchIdle");
@@ -85,7 +83,6 @@ namespace Knight {
             _rb = GetComponent<Rigidbody2D>();
             Anim = GetComponent<Animator>();
             _colliderScript = GetComponent<PlayerColliderScript>();
-            // _ray = GetComponent<PlayerRayCasts>();
         }
 
         private void Start() {
@@ -97,9 +94,6 @@ namespace Knight {
 
         private void Update() {
             CurrentVelocity = _rb.velocity;
-
-            // ValidateCarryDistance();
-
 
             if (Input.IsPickCratePressed && !CheckIfCanGrabCrate()) {
                 Input.IsPickCratePressed = false;
@@ -159,6 +153,10 @@ namespace Knight {
             var threshold = crateScript.AimRangeValue;
             var aimSpeed = playerData.AimSpeed;
 
+            if (Input.IsShiftAimPressed) {
+                aimSpeed *= playerData.AimMultiplier;
+            }
+
             throwForce.x += Input.AimVal * aimSpeed / 2 * Time.deltaTime;
             throwForce.x = Mathf.Clamp(throwForce.x, threshold.x / 2, threshold.y / 2);
 
@@ -216,7 +214,7 @@ namespace Knight {
         // active during Carry states
         private void EnableFixedJoint() {
             _crateJoint.enabled = true;
-            _crateJoint.anchor = new Vector2(0f, -1f);
+            _crateJoint.anchor = crateScript.FixedJointAnchor;
             _crateJoint.connectedAnchor = new Vector2(0, 0f);
             _crateJoint.connectedBody = _rb;
         }
@@ -226,15 +224,6 @@ namespace Knight {
         public void AttachCrateToPlayer() {
             PlaceCrateOnPlayer();
             EnableFixedJoint();
-        }
-
-
-        // Set crate to player speed (when InAir) 
-        public void SetCrateVelToPlayerVel() {
-            var xVal = CurrentVelocity.x > 0 ? -0.15f : 0.15f;
-
-            _vector2Holder.Set(CurrentVelocity.x + xVal, CurrentVelocity.y);
-            _crateRb.velocity = _vector2Holder;
         }
 
 
@@ -334,7 +323,11 @@ namespace Knight {
 
         // check if carried crate is blocked by anything while in air
         private bool CheckIfCarriedCrateHangsOnEdge() {
-            return crateScript.isGrounded || crateScript.HasBottomCrate();
+            try {
+                return crateScript.isGrounded || crateScript.HasBottomCrate();
+            } catch (NullReferenceException) {
+                return false;
+            }
         }
 
 

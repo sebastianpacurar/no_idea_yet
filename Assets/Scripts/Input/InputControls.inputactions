@@ -24,7 +24,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Sprint",
+                    "name": "ShiftAim",
                     "type": "Button",
                     "id": "6a4a95cb-2cb2-4d68-847a-9bbeb2d7fa43",
                     "expectedControlType": "Button",
@@ -148,11 +148,11 @@
                 {
                     "name": "",
                     "id": "b3c93211-8257-4dcd-bb89-53ae35562905",
-                    "path": "<Keyboard>/s",
+                    "path": "<Keyboard>/leftShift",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Sprint",
+                    "action": "ShiftAim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

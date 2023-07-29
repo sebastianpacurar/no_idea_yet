@@ -8,7 +8,7 @@ namespace Input {
 
         public int MoveVal { get; set; }
         public int AimVal { get; set; }
-        public bool IsSprintPressed { get; set; }
+        public bool IsShiftAimPressed { get; set; }
         public bool IsJumpPressed { get; set; }
         public bool IsAttacking { get; set; }
         public bool IsCrouchPressed { get; set; }
@@ -22,7 +22,7 @@ namespace Input {
         #region input actions
         private InputAction _runAction;
         private InputAction _aimAction;
-        private InputAction _sprintAction;
+        private InputAction _shiftAimAction;
         private InputAction _jumpAction;
         private InputAction _attackAction;
         private InputAction _crouchAction;
@@ -58,7 +58,7 @@ namespace Input {
             };
         }
 
-        
+
         private void OnAim(InputAction.CallbackContext ctx) {
             AimVal = ctx.phase switch {
                 PhaseStarted or PhasePerformed => (int)_aimAction.ReadValue<float>(),
@@ -68,11 +68,11 @@ namespace Input {
         }
 
 
-        private void OnSprint(InputAction.CallbackContext ctx) {
-            IsSprintPressed = ctx.phase switch {
+        private void OnShiftAim(InputAction.CallbackContext ctx) {
+            IsShiftAimPressed = ctx.phase switch {
                 PhaseStarted or PhasePerformed => true,
                 PhaseCanceled => false,
-                _ => IsSprintPressed
+                _ => IsShiftAimPressed
             };
         }
 
@@ -93,7 +93,7 @@ namespace Input {
             };
         }
 
-        
+
         private void OnCrouch(InputAction.CallbackContext ctx) {
             IsCrouchPressed = ctx.phase switch {
                 PhaseStarted or PhasePerformed => true,
@@ -117,7 +117,7 @@ namespace Input {
                 _ => IsPickCratePressed
             };
         }
-        
+
 
         private void OnRestartLevel(InputAction.CallbackContext ctx) {
             IsRestartPressed = ctx.phase switch {
@@ -132,7 +132,7 @@ namespace Input {
             _controls = new InputControls();
             _runAction = _controls.Player.Run;
             _aimAction = _controls.Player.Aim;
-            _sprintAction = _controls.Player.Sprint;
+            _shiftAimAction = _controls.Player.ShiftAim;
             _jumpAction = _controls.Player.Jump;
             _crouchAction = _controls.Player.Crouch;
             _attackAction = _controls.Player.Attack;
@@ -146,7 +146,7 @@ namespace Input {
         private void OnEnable() {
             _runAction.Enable();
             _aimAction.Enable();
-            _sprintAction.Enable();
+            _shiftAimAction.Enable();
             _jumpAction.Enable();
             _attackAction.Enable();
             _crouchAction.Enable();
@@ -159,8 +159,8 @@ namespace Input {
             _runAction.canceled += OnMove;
             _aimAction.performed += OnAim;
             _aimAction.canceled += OnAim;
-            _sprintAction.performed += OnSprint;
-            _sprintAction.canceled += OnSprint;
+            _shiftAimAction.performed += OnShiftAim;
+            _shiftAimAction.canceled += OnShiftAim;
             _jumpAction.performed += OnJump;
             _jumpAction.canceled += OnJump;
             _attackAction.performed += OnAttack;
@@ -178,8 +178,8 @@ namespace Input {
             _runAction.canceled -= OnMove;
             _aimAction.performed -= OnAim;
             _aimAction.canceled -= OnAim;
-            _sprintAction.performed -= OnSprint;
-            _sprintAction.canceled -= OnSprint;
+            _shiftAimAction.performed -= OnShiftAim;
+            _shiftAimAction.canceled -= OnShiftAim;
             _jumpAction.performed -= OnJump;
             _jumpAction.canceled -= OnJump;
             _attackAction.performed -= OnAttack;
@@ -191,7 +191,7 @@ namespace Input {
 
             _runAction.Disable();
             _aimAction.Disable();
-            _sprintAction.Disable();
+            _shiftAimAction.Disable();
             _jumpAction.Disable();
             _attackAction.Disable();
             _crouchAction.Disable();

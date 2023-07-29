@@ -21,10 +21,6 @@ namespace Prop.Interactables.Crate {
                 // right player detection
                 Gizmos.color = Color.red;
                 Gizmos.DrawLine(origin, new Vector3((pos.x + _rayCasts.distFromPlayerX), origin.y, pos.z));
-
-                // bottom ground detection
-                Gizmos.color = Color.gray;
-                Gizmos.DrawLine(pos, new Vector3(pos.x, -_rayCasts.distFromGround, pos.z));
             }
         }
     }

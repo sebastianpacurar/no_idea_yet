@@ -46,7 +46,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Sprint"",
+                    ""name"": ""ShiftAim"",
                     ""type"": ""Button"",
                     ""id"": ""6a4a95cb-2cb2-4d68-847a-9bbeb2d7fa43"",
                     ""expectedControlType"": ""Button"",
@@ -170,11 +170,11 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""b3c93211-8257-4dcd-bb89-53ae35562905"",
-                    ""path"": ""<Keyboard>/s"",
+                    ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""Sprint"",
+                    ""action"": ""ShiftAim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -282,7 +282,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
-        m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
+        m_Player_ShiftAim = m_Player.FindAction("ShiftAim", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
@@ -354,7 +354,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Run;
     private readonly InputAction m_Player_Aim;
-    private readonly InputAction m_Player_Sprint;
+    private readonly InputAction m_Player_ShiftAim;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Crouch;
     private readonly InputAction m_Player_Attack;
@@ -366,7 +366,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         public PlayerActions(@InputControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Run => m_Wrapper.m_Player_Run;
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
-        public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
+        public InputAction @ShiftAim => m_Wrapper.m_Player_ShiftAim;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
@@ -387,9 +387,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
             @Aim.started += instance.OnAim;
             @Aim.performed += instance.OnAim;
             @Aim.canceled += instance.OnAim;
-            @Sprint.started += instance.OnSprint;
-            @Sprint.performed += instance.OnSprint;
-            @Sprint.canceled += instance.OnSprint;
+            @ShiftAim.started += instance.OnShiftAim;
+            @ShiftAim.performed += instance.OnShiftAim;
+            @ShiftAim.canceled += instance.OnShiftAim;
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
@@ -415,9 +415,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
             @Aim.started -= instance.OnAim;
             @Aim.performed -= instance.OnAim;
             @Aim.canceled -= instance.OnAim;
-            @Sprint.started -= instance.OnSprint;
-            @Sprint.performed -= instance.OnSprint;
-            @Sprint.canceled -= instance.OnSprint;
+            @ShiftAim.started -= instance.OnShiftAim;
+            @ShiftAim.performed -= instance.OnShiftAim;
+            @ShiftAim.canceled -= instance.OnShiftAim;
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
@@ -509,7 +509,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
     {
         void OnRun(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
-        void OnSprint(InputAction.CallbackContext context);
+        void OnShiftAim(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);

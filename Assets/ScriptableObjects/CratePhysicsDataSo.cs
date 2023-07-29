@@ -1,13 +1,14 @@
 using UnityEngine;
 
 namespace ScriptableObjects {
-    [CreateAssetMenu(fileName = "PlayerDataSO", menuName = "Data/CratePhysicsDataSo")]
+    [CreateAssetMenu(fileName = "CratePhysicsDataSO", menuName = "Data/CratePhysicsData")]
     public class CratePhysicsDataSo : ScriptableObject {
         [Header("Crate Identifier")]
         [SerializeField] private bool isSmallCrate;
 
-        [Header("Attach Crate Pos Offset")]
+        [Header("Attach Crate")]
         [SerializeField] private float posOffset;
+        [SerializeField] private Vector2 fixedJointAnchor;
 
         [Header("Min-MAx Throw Force Threshold")]
         [SerializeField] private Vector2 minMaxAimRange;
@@ -30,6 +31,7 @@ namespace ScriptableObjects {
         public bool IsSmallCrate => isSmallCrate;
 
         public float PosOffset => posOffset;
+        public Vector2 FixedJointAnchor => fixedJointAnchor;
 
         public Vector2 MinMaxAimRange => minMaxAimRange;
 

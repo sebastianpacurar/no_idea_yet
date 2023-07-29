@@ -4905,10 +4905,10 @@ GameObject:
   - component: {fileID: 3272843583769763330}
   - component: {fileID: 3749029106089627468}
   - component: {fileID: 5403135204421284376}
+  - component: {fileID: 1893774114625939411}
   - component: {fileID: 9045449132705657539}
   - component: {fileID: 7323950766747802923}
   - component: {fileID: 8077930011634023793}
-  - component: {fileID: 1893774114625939411}
   m_Layer: 6
   m_Name: SmallCrate
   m_TagString: Crate
@@ -5057,6 +5057,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.575, y: 1.55}
   m_EdgeRadius: 0
+--- !u!255 &1893774114625939411
+FixedJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7979725809892615438}
+  m_Enabled: 0
+  serializedVersion: 4
+  m_EnableCollision: 1
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_BreakAction: 3
+  m_AutoConfigureConnectedAnchor: 0
+  m_Anchor: {x: 0, y: -1}
+  m_ConnectedAnchor: {x: 0, y: 0}
+  m_DampingRatio: 0
+  m_Frequency: 0
 --- !u!114 &9045449132705657539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5113,25 +5132,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnOn: 0
---- !u!255 &1893774114625939411
-FixedJoint2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7979725809892615438}
-  m_Enabled: 0
-  serializedVersion: 4
-  m_EnableCollision: 1
-  m_ConnectedRigidBody: {fileID: 0}
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_BreakAction: 3
-  m_AutoConfigureConnectedAnchor: 0
-  m_Anchor: {x: 0, y: -1}
-  m_ConnectedAnchor: {x: 0, y: 0}
-  m_DampingRatio: 0
-  m_Frequency: 0
 --- !u!1001 &5011687529720577620
 PrefabInstance:
   m_ObjectHideFlags: 0

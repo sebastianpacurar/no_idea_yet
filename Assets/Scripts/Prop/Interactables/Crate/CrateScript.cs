@@ -28,6 +28,15 @@ namespace Prop.Interactables.Crate {
         public Vector2 crateSize;
 
 
+        #region Scriptable Object Getters
+        public bool IsSmallCrate => data.IsSmallCrate;
+        public float AttachPosOffset => data.PosOffset;
+        public Vector2 AimRangeValue => data.MinMaxAimRange;
+        public Vector2 FixedJointAnchor => data.FixedJointAnchor;
+        #endregion
+
+
+        #region Unity Callback Functions
         private void Awake() {
             _rb = GetComponent<Rigidbody2D>();
             _box = GetComponent<BoxCollider2D>();
@@ -55,6 +64,58 @@ namespace Prop.Interactables.Crate {
         }
 
 
+        private void FixedUpdate() {
+            SetCrateMass();
+            SetGravity();
+        }
+
+
+        private void OnCollisionStay2D(Collision2D other) {
+            if (other.gameObject.CompareTag("Cart")) {
+                if (CollisionUtils.IsCollisionBottom(other)) {
+                    cartScript = other.gameObject.GetComponent<CartScript>();
+                }
+            }
+
+
+            if (other.gameObject.CompareTag("Crate")) {
+                if (CollisionUtils.IsCollisionTop(other)) {
+                    aboveCrate = other.gameObject.GetComponent<CrateScript>();
+                }
+
+                if (CollisionUtils.IsCollisionSideways(other)) {
+                    var nearbyCrate = other.gameObject.GetComponent<CrateScript>();
+
+                    if (!sidewaysCrates.Contains(nearbyCrate)) {
+                        sidewaysCrates.Add(nearbyCrate);
+                    }
+                }
+
+
+                if (CollisionUtils.IsCollisionBottom(other)) {
+                    bottomCrate = other.gameObject.GetComponent<CrateScript>();
+                }
+            }
+
+
+            if (other.gameObject.CompareTag("Terrain")) {
+                isGrounded = true;
+            }
+        }
+
+
+        private void OnCollisionExit2D(Collision2D other) {
+            if (other.gameObject.CompareTag("Cart")) {
+                cartScript = null;
+            }
+
+            if (other.gameObject.CompareTag("Terrain")) {
+                isGrounded = false;
+            }
+        }
+        #endregion
+
+
         public bool HasBottomCrate() {
             return bottomCrate;
         }
@@ -67,17 +128,6 @@ namespace Prop.Interactables.Crate {
         }
 
 
-        private void FixedUpdate() {
-            SetStackedCrateMass();
-            SetGravity();
-        }
-
-
-        public bool IsSmallCrate => data.IsSmallCrate;
-        public float AttachPosOffset => data.PosOffset;
-        public Vector2 AimRangeValue => data.MinMaxAimRange;
-
-
         // is crate got thrown, and reaches ground, cart or sidewaysCrates, set to false
         private void HandleThrow() {
             if (isBeingThrown && (isGrounded || cartScript || sidewaysCrates.Count > 0 || bottomCrate)) {
@@ -85,7 +135,7 @@ namespace Prop.Interactables.Crate {
             }
         }
 
-        // validate aboveCrate 
+
         private void ValidateAboveCrate() {
             if (!aboveCrate) return;
 
@@ -108,7 +158,6 @@ namespace Prop.Interactables.Crate {
         }
 
 
-        // validate bottomCrate
         private void ValidateBottomCrate() {
             if (!bottomCrate) return;
 
@@ -130,7 +179,6 @@ namespace Prop.Interactables.Crate {
         }
 
 
-        // validate sidewaysCrates
         private void ValidateSidewaysCrates() {
             if (sidewaysCrates.Count == 0) return;
 
@@ -205,17 +253,7 @@ namespace Prop.Interactables.Crate {
         }
 
 
-        private bool IsPlayerDetected() {
-            var isLeftInRange = _ray.HitPlayerLeft.collider;
-            var isRightInRange = _ray.HitPlayerRight.collider;
-
-            return isLeftInRange || isRightInRange;
-        }
-
-
-        // decrease every vertical stacked unit with 0.25f from initial position
-        private void SetStackedCrateMass() {
-            // if carried or thrown set initial mass to initial mass
+        private void SetCrateMass() {
             if (isCarried || isBeingThrown) {
                 _rb.mass = data.CarryThrowMass;
             } else if (bottomCrate) {
@@ -225,8 +263,8 @@ namespace Prop.Interactables.Crate {
             }
         }
 
+
         private void SetGravity() {
-            // when crate is falling 
             if (_rb.velocity.y < -1f && !isBeingThrown && !isCarried) {
                 _rb.gravityScale = data.FreeFallGravity;
             } else if (isCarried || isBeingThrown) {
@@ -237,47 +275,11 @@ namespace Prop.Interactables.Crate {
         }
 
 
-        private void OnCollisionStay2D(Collision2D other) {
-            if (other.gameObject.CompareTag("Cart")) {
-                if (CollisionUtils.IsCollisionBottom(other)) {
-                    cartScript = other.gameObject.GetComponent<CartScript>();
-                }
-            }
+        private bool IsPlayerDetected() {
+            var isLeftInRange = _ray.HitPlayerLeft.collider;
+            var isRightInRange = _ray.HitPlayerRight.collider;
 
-
-            if (other.gameObject.CompareTag("Crate")) {
-                if (CollisionUtils.IsCollisionTop(other)) {
-                    aboveCrate = other.gameObject.GetComponent<CrateScript>();
-                }
-
-                if (CollisionUtils.IsCollisionSideways(other)) {
-                    var nearbyCrate = other.gameObject.GetComponent<CrateScript>();
-
-                    if (!sidewaysCrates.Contains(nearbyCrate)) {
-                        sidewaysCrates.Add(nearbyCrate);
-                    }
-                }
-
-
-                if (CollisionUtils.IsCollisionBottom(other)) {
-                    bottomCrate = other.gameObject.GetComponent<CrateScript>();
-                }
-            }
-
-
-            if (other.gameObject.CompareTag("Terrain")) {
-                isGrounded = true;
-            }
-        }
-
-        private void OnCollisionExit2D(Collision2D other) {
-            if (other.gameObject.CompareTag("Cart")) {
-                cartScript = null;
-            }
-
-            if (other.gameObject.CompareTag("Terrain")) {
-                isGrounded = false;
-            }
+            return isLeftInRange || isRightInRange;
         }
     }
 }
