@@ -490,6 +490,7 @@ GameObject:
   - component: {fileID: 3942865418756451590}
   - component: {fileID: 3929991169160764054}
   - component: {fileID: 8275181244225375162}
+  - component: {fileID: 524702027383778382}
   m_Layer: 6
   m_Name: CartObj
   m_TagString: Cart
@@ -549,7 +550,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6245485635808712195}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -608,6 +609,41 @@ MonoBehaviour:
   direction: 0
   localVelocity: {x: 0, y: 0}
   isPlayerCollision: 0
+--- !u!70 &524702027383778382
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6245485635808712195}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.21416722, y: -0.6081358}
+  m_Size: {x: 5.380654, y: 1.1643496}
+  m_Direction: 1
 --- !u!1 &6258882993032062309
 GameObject:
   m_ObjectHideFlags: 0

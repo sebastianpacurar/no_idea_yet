@@ -90,8 +90,7 @@ namespace Prop.Interactables.Crate {
                         sidewaysCrates.Add(nearbyCrate);
                     }
                 }
-
-
+                
                 if (CollisionUtils.IsCollisionBottom(other)) {
                     bottomCrate = other.gameObject.GetComponent<CrateScript>();
                 }
