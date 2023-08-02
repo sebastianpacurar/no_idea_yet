@@ -16,12 +16,14 @@ MonoBehaviour:
   posOffset: 2.1
   fixedJointAnchor: {x: 0, y: -1.2}
   minMaxAimRange: {x: 50, y: 140}
-  defaultMass: 3
-  stackMass: 1
-  defaultGravity: 3
+  defaultMass: 8
+  stackMass: 3.5
+  defaultGravity: 1
   freeFallGravity: 7.25
   carryThrowMass: 3.35
   carryThrowGravity: 8
+  bridgeMass: 300
+  bridgeGravity: 1
   lowFriction: {fileID: 6200000, guid: 51658da45135f8c06960e317040ea876, type: 2}
   highFriction: {fileID: 6200000, guid: f8de3bd95d900c20097391549bebec3f, type: 2}
   groundFriction: {fileID: 6200000, guid: 3c152d50065809b1fbd519f7ca921392, type: 2}

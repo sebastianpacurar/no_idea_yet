@@ -2,8 +2,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-namespace Input {
-    public class InputManager : MonoBehaviour {
+namespace Input
+{
+    public class InputManager : MonoBehaviour
+    {
         public static InputManager Instance { get; private set; }
 
         public int MoveVal { get; set; }
@@ -38,10 +40,13 @@ namespace Input {
         #endregion
 
 
-        private void Awake() {
-            if (Instance != null && Instance != this) {
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
                 Destroy(gameObject);
-            } else {
+            } else
+            {
                 Instance = this;
             }
 
@@ -50,8 +55,10 @@ namespace Input {
 
 
         #region input actions related methods
-        private void OnMove(InputAction.CallbackContext ctx) {
-            MoveVal = ctx.phase switch {
+        private void OnMove(InputAction.CallbackContext ctx)
+        {
+            MoveVal = ctx.phase switch
+            {
                 PhaseStarted or PhasePerformed => (int)_runAction.ReadValue<float>(),
                 PhaseCanceled => 0,
                 _ => MoveVal
@@ -59,8 +66,10 @@ namespace Input {
         }
 
 
-        private void OnAim(InputAction.CallbackContext ctx) {
-            AimVal = ctx.phase switch {
+        private void OnAim(InputAction.CallbackContext ctx)
+        {
+            AimVal = ctx.phase switch
+            {
                 PhaseStarted or PhasePerformed => (int)_aimAction.ReadValue<float>(),
                 PhaseCanceled => 0,
                 _ => AimVal
@@ -68,8 +77,10 @@ namespace Input {
         }
 
 
-        private void OnShiftAim(InputAction.CallbackContext ctx) {
-            IsShiftAimPressed = ctx.phase switch {
+        private void OnShiftAim(InputAction.CallbackContext ctx)
+        {
+            IsShiftAimPressed = ctx.phase switch
+            {
                 PhaseStarted or PhasePerformed => true,
                 PhaseCanceled => false,
                 _ => IsShiftAimPressed
@@ -77,8 +88,10 @@ namespace Input {
         }
 
 
-        private void OnJump(InputAction.CallbackContext ctx) {
-            IsJumpPressed = ctx.phase switch {
+        private void OnJump(InputAction.CallbackContext ctx)
+        {
+            IsJumpPressed = ctx.phase switch
+            {
                 PhaseStarted or PhasePerformed => true,
                 PhaseCanceled => false,
                 _ => IsJumpPressed
@@ -86,24 +99,30 @@ namespace Input {
         }
 
 
-        private void OnAttack(InputAction.CallbackContext ctx) {
-            IsAttacking = ctx.phase switch {
+        private void OnAttack(InputAction.CallbackContext ctx)
+        {
+            IsAttacking = ctx.phase switch
+            {
                 PhaseStarted or PhasePerformed => true,
                 _ => IsAttacking
             };
         }
 
 
-        private void OnCrouch(InputAction.CallbackContext ctx) {
-            IsCrouchPressed = ctx.phase switch {
+        private void OnCrouch(InputAction.CallbackContext ctx)
+        {
+            IsCrouchPressed = ctx.phase switch
+            {
                 PhaseStarted or PhasePerformed => true,
                 _ => IsCrouchPressed
             };
         }
 
 
-        private void OnInteract(InputAction.CallbackContext ctx) {
-            IsInteractPressed = ctx.phase switch {
+        private void OnInteract(InputAction.CallbackContext ctx)
+        {
+            IsInteractPressed = ctx.phase switch
+            {
                 PhaseStarted or PhasePerformed => true,
                 PhaseCanceled => false,
                 _ => IsInteractPressed
@@ -111,16 +130,20 @@ namespace Input {
         }
 
 
-        private void OnPickCrate(InputAction.CallbackContext ctx) {
-            IsPickCratePressed = ctx.phase switch {
+        private void OnPickCrate(InputAction.CallbackContext ctx)
+        {
+            IsPickCratePressed = ctx.phase switch
+            {
                 PhaseStarted or PhasePerformed => true,
                 _ => IsPickCratePressed
             };
         }
 
 
-        private void OnRestartLevel(InputAction.CallbackContext ctx) {
-            IsRestartPressed = ctx.phase switch {
+        private void OnRestartLevel(InputAction.CallbackContext ctx)
+        {
+            IsRestartPressed = ctx.phase switch
+            {
                 PhaseStarted or PhasePerformed => true,
                 _ => IsRestartPressed
             };
@@ -128,7 +151,8 @@ namespace Input {
         #endregion
 
 
-        private void InitializeInputControls() {
+        private void InitializeInputControls()
+        {
             _controls = new InputControls();
             _runAction = _controls.Player.Run;
             _aimAction = _controls.Player.Aim;
@@ -143,7 +167,8 @@ namespace Input {
 
 
         #region Subscribe/Unsubscribe methods as callbacks for events
-        private void OnEnable() {
+        private void OnEnable()
+        {
             _runAction.Enable();
             _aimAction.Enable();
             _shiftAimAction.Enable();
@@ -172,7 +197,8 @@ namespace Input {
         }
 
 
-        private void OnDisable() {
+        private void OnDisable()
+        {
             //Unsubscribe the Move, Jump and Attack methods
             _runAction.performed -= OnMove;
             _runAction.canceled -= OnMove;

@@ -1,18 +1,25 @@
 using UnityEngine;
 
-namespace Prop.Interactables.Crate {
-    public class CrateGizmos : MonoBehaviour {
+namespace Prop.Interactables.Crate
+{
+    public class CrateGizmos : MonoBehaviour
+    {
         [SerializeField] private bool turnOn;
         private CrateRayCasts _rayCasts;
 
-        private void Awake() {
+        
+        private void Awake()
+        {
             _rayCasts = GetComponent<CrateRayCasts>();
         }
 
-        private void OnDrawGizmos() {
+        
+        private void OnDrawGizmos()
+        {
             var pos = transform.position;
 
-            if (turnOn) {
+            if (turnOn)
+            {
                 var origin = _rayCasts.GetRayOriginVector();
 
                 Gizmos.color = Color.blue;

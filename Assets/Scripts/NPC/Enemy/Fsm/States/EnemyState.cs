@@ -2,8 +2,10 @@ using ScriptableObjects;
 using UnityEngine;
 
 
-namespace NPC.Enemy.Fsm.States {
-    public abstract class EnemyState {
+namespace NPC.Enemy.Fsm.States
+{
+    public abstract class EnemyState
+    {
         protected readonly EnemyScript EnemyScript;
         protected readonly EnemyStateMachine StateMachine;
         protected readonly EnemyDataSo EnemyData;
@@ -17,7 +19,8 @@ namespace NPC.Enemy.Fsm.States {
         // used to handle animations through states
         private readonly string _animBoolName;
 
-        protected EnemyState(EnemyScript enemy, EnemyStateMachine stateMachine, EnemyDataSo enemyData, string animBoolName) {
+        protected EnemyState(EnemyScript enemy, EnemyStateMachine stateMachine, EnemyDataSo enemyData, string animBoolName)
+        {
             EnemyScript = enemy;
             StateMachine = stateMachine;
             EnemyData = enemyData;
@@ -25,7 +28,8 @@ namespace NPC.Enemy.Fsm.States {
         }
 
         // execute when entering a state
-        protected internal virtual void Enter() {
+        protected internal virtual void Enter()
+        {
             DoChecks();
             EnemyScript.Anim.SetBool(_animBoolName, true);
             StartTime = Time.time;
@@ -33,7 +37,8 @@ namespace NPC.Enemy.Fsm.States {
         }
 
         // execute when Exiting a state
-        protected internal virtual void Exit() {
+        protected internal virtual void Exit()
+        {
             EnemyScript.Anim.SetBool(_animBoolName, false);
         }
 
@@ -41,7 +46,8 @@ namespace NPC.Enemy.Fsm.States {
         protected internal virtual void LogicUpdate() { }
 
         // overrides FixedUpdate()
-        protected internal virtual void PhysicsUpdate() {
+        protected internal virtual void PhysicsUpdate()
+        {
             DoChecks();
         }
 

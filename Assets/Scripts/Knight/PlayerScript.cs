@@ -7,8 +7,10 @@ using ScriptableObjects;
 using UnityEngine;
 
 
-namespace Knight {
-    public class PlayerScript : MonoBehaviour {
+namespace Knight
+{
+    public class PlayerScript : MonoBehaviour
+    {
         #region State Variables
         public PlayerStateMachine StateMachine { get; private set; }
         public IdleState IdleState { get; private set; }
@@ -65,7 +67,8 @@ namespace Knight {
 
 
         #region Unity Callback Functions
-        private void Awake() {
+        private void Awake()
+        {
             // instantiate state machine
             StateMachine = new PlayerStateMachine();
 
@@ -85,32 +88,38 @@ namespace Knight {
             _colliderScript = GetComponent<PlayerColliderScript>();
         }
 
-        private void Start() {
+        private void Start()
+        {
             Input = InputManager.Instance;
 
             // start in Idle State
             StateMachine.Initialize(IdleState);
         }
 
-        private void Update() {
+        private void Update()
+        {
             CurrentVelocity = _rb.velocity;
 
-            if (Input.IsPickCratePressed && !CheckIfCanGrabCrate()) {
+            if (Input.IsPickCratePressed && !CheckIfCanGrabCrate())
+            {
                 Input.IsPickCratePressed = false;
             }
 
             StateMachine.CurrentState.LogicUpdate();
         }
 
-        private void FixedUpdate() {
+        private void FixedUpdate()
+        {
             StateMachine.CurrentState.PhysicsUpdate();
         }
 
 
         // set crate data for crate in range with Label collider
-        private void OnTriggerStay2D(Collider2D other) {
+        private void OnTriggerStay2D(Collider2D other)
+        {
             // if parent of Label is Crate
-            if (other.transform.parent.CompareTag("Crate")) {
+            if (other.transform.parent.CompareTag("Crate"))
+            {
                 // save crate's script, transform, rigidbody and fixed joint
                 var targetObject = other.transform.parent.gameObject;
                 var t = targetObject.transform;
@@ -124,14 +133,17 @@ namespace Knight {
 
 
         // unset crate data for current crate out of range of Label collider
-        private void OnTriggerExit2D(Collider2D other) {
+        private void OnTriggerExit2D(Collider2D other)
+        {
             // if parent of Label is Crate
-            if (other.transform.parent.CompareTag("Crate")) {
+            if (other.transform.parent.CompareTag("Crate"))
+            {
                 var targetObject = other.transform.parent.gameObject;
 
                 // if the collision object is the same with the assigned script then perform cleanup
                 //   set null only if crate is not carried
-                if (targetObject.GetComponentInChildren<CrateScript>().Equals(crateScript) && !isCarrying) {
+                if (targetObject.GetComponentInChildren<CrateScript>().Equals(crateScript) && !isCarrying)
+                {
                     UnsetCrateInRange();
                 }
             }
@@ -141,7 +153,8 @@ namespace Knight {
 
         #region Player Set Functions
         // stop movement
-        public void SetVelocityX(float velocity) {
+        public void SetVelocityX(float velocity)
+        {
             _vector2Holder.Set(velocity, CurrentVelocity.y);
             _rb.velocity = _vector2Holder;
             CurrentVelocity = _vector2Holder;
@@ -149,11 +162,13 @@ namespace Knight {
 
 
         // increase/decrease throw force vector => x = y /2, therefore Vector2(y/2, y)
-        private void SetAimTrajectory() {
+        private void SetAimTrajectory()
+        {
             var threshold = crateScript.AimRangeValue;
             var aimSpeed = playerData.AimSpeed;
 
-            if (Input.IsShiftAimPressed) {
+            if (Input.IsShiftAimPressed)
+            {
                 aimSpeed *= playerData.AimMultiplier;
             }
 
@@ -166,7 +181,8 @@ namespace Knight {
 
 
         // perform jump
-        public void AddJumpForce(float force) {
+        public void AddJumpForce(float force)
+        {
             _vector2Holder.Set(0f, force);
             _rb.AddForce(_vector2Holder, ForceMode2D.Impulse);
             CurrentVelocity = _rb.velocity;
@@ -178,21 +194,26 @@ namespace Knight {
 
 
         // set pick crate to false if true
-        public void SetPickUpFalse() {
-            if (Input.IsPickCratePressed) {
+        public void SetPickUpFalse()
+        {
+            if (Input.IsPickCratePressed)
+            {
                 Input.IsPickCratePressed = false;
             }
         }
 
         // set crouch to false if true
-        public void SetCrouchInputFalse() {
-            if (Input.IsCrouchPressed) {
+        public void SetCrouchInputFalse()
+        {
+            if (Input.IsCrouchPressed)
+            {
                 Input.IsCrouchPressed = false;
             }
         }
 
 
-        public void SetLineRendererActive(bool value) {
+        public void SetLineRendererActive(bool value)
+        {
             predictionLineRenderer.enabled = value;
         }
         #endregion
@@ -205,14 +226,16 @@ namespace Knight {
 
 
         // set isCarrying and isCarried to false
-        public void SetCarryProps(bool value) {
+        public void SetCarryProps(bool value)
+        {
             SetPlayerCarry(value);
             SetCrateCarry(value);
         }
 
 
         // active during Carry states
-        private void EnableFixedJoint() {
+        private void EnableFixedJoint()
+        {
             _crateJoint.enabled = true;
             _crateJoint.anchor = crateScript.FixedJointAnchor;
             _crateJoint.connectedAnchor = new Vector2(0, 0f);
@@ -221,20 +244,23 @@ namespace Knight {
 
 
         // attach crate based on transform on top of player and attach fixed joint
-        public void AttachCrateToPlayer() {
+        public void AttachCrateToPlayer()
+        {
             PlaceCrateOnPlayer();
             EnableFixedJoint();
         }
 
 
         // set crate speed to 0
-        private void SetCrateVelToZero() {
+        private void SetCrateVelToZero()
+        {
             _crateRb.velocity = Vector2.zero;
         }
 
 
         // place crate above player based on transform
-        private void PlaceCrateOnPlayer() {
+        private void PlaceCrateOnPlayer()
+        {
             // set crate velocity to 0
             _vector2Holder.Set(0f, 0f);
             _crateRb.velocity = _vector2Holder;
@@ -248,7 +274,8 @@ namespace Knight {
 
 
         // set crate in range
-        private void SetCrateInRange(Transform t, CrateScript s, Rigidbody2D rb, FixedJoint2D fj) {
+        private void SetCrateInRange(Transform t, CrateScript s, Rigidbody2D rb, FixedJoint2D fj)
+        {
             _crateTransform = t;
             crateScript = s;
             _crateRb = rb;
@@ -257,7 +284,8 @@ namespace Knight {
 
 
         // unset crate in range
-        private void UnsetCrateInRange() {
+        private void UnsetCrateInRange()
+        {
             _crateTransform = null;
             crateScript = null;
             _crateRb = null;
@@ -270,15 +298,18 @@ namespace Knight {
 
 
         // set carry props to false, and unset crate data
-        private void CleanUpCrateData() {
+        private void CleanUpCrateData()
+        {
             SetCarryProps(false);
             UnsetCrateInRange();
         }
 
 
         // if distance between player and carried crate is bigger than crate GripDistance, then release crate and cleanup data
-        public void ValidateCarryDistance() {
-            if (CheckIfCarriedCrateHangsOnEdge()) {
+        public void ValidateCarryDistance()
+        {
+            if (CheckIfCarriedCrateHangsOnEdge())
+            {
                 CleanUpCrateData();
             }
         }
@@ -287,7 +318,8 @@ namespace Knight {
 
         #region Check Functions
         // check if player grounded on Ground and Pushable layers
-        public bool CheckIfGrounded() {
+        public bool CheckIfGrounded()
+        {
             var pos = groundChecker.position;
             _vector2Holder.Set(0.5f, 0.3f);
             var size = _vector2Holder;
@@ -297,7 +329,8 @@ namespace Knight {
 
 
         // check if there is space to uncrouch
-        public bool CheckIfTopGrounded() {
+        public bool CheckIfTopGrounded()
+        {
             var pos = topGroundChecker.position;
             _vector2Holder.Set(1.115f, 1f);
             var size = _vector2Holder;
@@ -306,14 +339,17 @@ namespace Knight {
         }
 
 
-        public void CheckIfShouldFlip(int xInput) {
-            if (xInput != 0 && !CheckIfFacingInputDirection(xInput)) {
+        public void CheckIfShouldFlip(int xInput)
+        {
+            if (xInput != 0 && !CheckIfFacingInputDirection(xInput))
+            {
                 Flip();
             }
         }
 
 
-        public bool CheckPlayerTransition() {
+        public bool CheckPlayerTransition()
+        {
             return _colliderScript.isTransitioning;
         }
 
@@ -322,28 +358,34 @@ namespace Knight {
 
 
         // check if carried crate is blocked by anything while in air
-        private bool CheckIfCarriedCrateHangsOnEdge() {
-            try {
+        private bool CheckIfCarriedCrateHangsOnEdge()
+        {
+            try
+            {
                 return crateScript.isGrounded || crateScript.HasBottomCrate();
-            } catch (NullReferenceException) {
+            } catch (NullReferenceException)
+            {
                 return false;
             }
         }
 
 
-        private bool CheckIfFacingInputDirection(int xInput) {
+        private bool CheckIfFacingInputDirection(int xInput)
+        {
             return xInput == GetFacingDirection();
         }
 
 
-        private bool CheckIfCanGrabCrate() {
+        private bool CheckIfCanGrabCrate()
+        {
             return crateScript;
         }
         #endregion
 
 
         #region Misc Functions
-        public void ThrowCrate() {
+        public void ThrowCrate()
+        {
             SetThrowTrue();
             SetCrateVelToZero();
 
@@ -354,7 +396,8 @@ namespace Knight {
         }
 
 
-        public void GeneratePredictionLine() {
+        public void GeneratePredictionLine()
+        {
             var startPos = _crateTransform.position;
             _vector2Holder.Set(GetFacingDirection() * throwForce.x, throwForce.y);
 
@@ -366,7 +409,8 @@ namespace Knight {
         }
 
 
-        private Vector3[] CalculatePredictionLinePoints(Vector2 startPos, Vector2 force) {
+        private Vector3[] CalculatePredictionLinePoints(Vector2 startPos, Vector2 force)
+        {
             var linePoints = new Vector3[lineSegmentCount];
 
             var currentPos = startPos;
@@ -374,7 +418,8 @@ namespace Knight {
             var gravityScale = _crateRb.gravityScale;
             var mass = _crateRb.mass;
 
-            for (var i = 0; i < lineSegmentCount; i++) {
+            for (var i = 0; i < lineSegmentCount; i++)
+            {
                 linePoints[i] = currentPos;
 
                 // NOTE: formula to blend in gravity with mass is: (lineGravity * gravityScale) * (Mathf.Pow(mass, 2))
@@ -386,8 +431,10 @@ namespace Knight {
         }
 
 
-        private int GetFacingDirection() {
-            return transform.rotation.eulerAngles.y switch {
+        private int GetFacingDirection()
+        {
+            return transform.rotation.eulerAngles.y switch
+            {
                 0f => 1,
                 180f => -1,
                 _ => 0
@@ -395,7 +442,8 @@ namespace Knight {
         }
 
 
-        private void Flip() {
+        private void Flip()
+        {
             var currRot = transform.rotation.eulerAngles.y;
             transform.rotation = Quaternion.Euler(0f, currRot.Equals(0) ? 180f : 0f, 0f);
         }

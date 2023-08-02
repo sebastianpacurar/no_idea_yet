@@ -2,8 +2,10 @@ using System.Collections;
 using UnityEngine;
 using Utils;
 
-namespace Prop.Interactables.Door.ExitDoor {
-    public class ExitDoorLabel : MonoBehaviour {
+namespace Prop.Interactables.Door.ExitDoor
+{
+    public class ExitDoorLabel : MonoBehaviour
+    {
         [SerializeField] private SpriteRenderer wrapper;
         [SerializeField] private SpriteRenderer lightImg;
         [SerializeField] private SpriteRenderer darkImg;
@@ -15,40 +17,48 @@ namespace Prop.Interactables.Door.ExitDoor {
         private BoxCollider2D _box;
 
 
-        private void Awake() {
+        private void Awake()
+        {
             _box = GetComponent<BoxCollider2D>();
             listedSrs = new[] { wrapper, lightImg, darkImg };
         }
 
 
-        private void Start() {
+        private void Start()
+        {
             _exitDoor = transform.parent.gameObject.GetComponent<ExitDoorScript>();
             LabelUtils.SetSprites(listedSrs, false);
         }
 
-        private void Update() {
+        private void Update()
+        {
             ToggleBoxCollider();
         }
 
 
-        private void ToggleBoxCollider() {
+        private void ToggleBoxCollider()
+        {
             // if target reached and box is disabled, then enable box
-            if (_exitDoor.IsTargetReached() && !_box.enabled) {
+            if (_exitDoor.IsTargetReached() && !_box.enabled)
+            {
                 _box.enabled = true;
             }
             // if target not reached and box is enabled, then disable box
-            else if (!_exitDoor.IsTargetReached() && _box.enabled) {
+            else if (!_exitDoor.IsTargetReached() && _box.enabled)
+            {
                 _box.enabled = false;
             }
         }
 
 
-        private IEnumerator ToggleBtnImgCoroutine() {
+        private IEnumerator ToggleBtnImgCoroutine()
+        {
             yield return LabelUtils.ToggleBtnImg(lightImg, darkImg);
         }
 
 
-        private void OnTriggerEnter2D(Collider2D other) {
+        private void OnTriggerEnter2D(Collider2D other)
+        {
             if (!other.gameObject.CompareTag("Player")) return;
             if (!_exitDoor.IsTargetReached()) return;
 
@@ -58,7 +68,8 @@ namespace Prop.Interactables.Door.ExitDoor {
         }
 
 
-        private void OnTriggerExit2D(Collider2D other) {
+        private void OnTriggerExit2D(Collider2D other)
+        {
             if (!other.gameObject.CompareTag("Player")) return;
             if (!wrapper.enabled) return;
 

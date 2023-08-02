@@ -1,8 +1,10 @@
 using UnityEngine;
 
 
-namespace Prop.Interactables.Crate {
-    public class CrateRayCasts : MonoBehaviour {
+namespace Prop.Interactables.Crate
+{
+    public class CrateRayCasts : MonoBehaviour
+    {
         [Header("Layers")]
         [SerializeField] private LayerMask playerLayer;
         [SerializeField] private LayerMask groundLayer;
@@ -21,22 +23,26 @@ namespace Prop.Interactables.Crate {
         public RaycastHit2D HitPlayerRight { get; private set; }
 
 
-        private void Awake() {
+        private void Awake()
+        {
             _boxCollider = GetComponent<BoxCollider2D>();
         }
 
 
-        private void Start() {
+        private void Start()
+        {
             _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
 
 
-        private void Update() {
+        private void Update()
+        {
             CastRays();
         }
 
         // get a dynamic origin Y based on the crate sprite's size
-        public Vector2 GetRayOriginVector() {
+        public Vector2 GetRayOriginVector()
+        {
             var cratePos = transform.position;
             var playerPos = _playerTransform.position;
             var maxPointY = _boxCollider.bounds.extents.y;
@@ -54,7 +60,8 @@ namespace Prop.Interactables.Crate {
         }
 
 
-        private void CastRays() {
+        private void CastRays()
+        {
             var origin = GetRayOriginVector();
 
             distFromPlayerX = _boxCollider.size.x * distFromPlayerFactorX;

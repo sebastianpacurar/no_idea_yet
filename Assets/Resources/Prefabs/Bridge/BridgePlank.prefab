@@ -266,7 +266,7 @@ GameObject:
   - component: {fileID: 2245909982675723528}
   m_Layer: 3
   m_Name: BridgePlank
-  m_TagString: Terrain
+  m_TagString: BridgePlank
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -362,12 +362,12 @@ HingeJoint2D:
   serializedVersion: 4
   m_EnableCollision: 1
   m_ConnectedRigidBody: {fileID: 0}
-  m_BreakForce: 10000
+  m_BreakForce: 5000
   m_BreakTorque: Infinity
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -1.0035303, y: -0.17140886}
-  m_ConnectedAnchor: {x: -0.0035247803, y: -0.17140865}
+  m_ConnectedAnchor: {x: -1.0035303, y: -0.17140886}
   m_UseMotor: 0
   m_Motor:
     m_MotorSpeed: 30

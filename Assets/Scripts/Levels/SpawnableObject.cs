@@ -1,8 +1,10 @@
 using UnityEngine;
 
-namespace Levels {
+namespace Levels
+{
     // Data about GameObjects on a specific level
-    public class SpawnableObject {
+    public class SpawnableObject
+    {
         public GameObject GameObject { get; set; } // general data about the target obj
         public string Name { get; set; } // name (for debugging)
         public Vector3 Position { get; set; } // spawn position

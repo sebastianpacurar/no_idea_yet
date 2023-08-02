@@ -22,6 +22,8 @@ TagManager:
   - HouseDoorsTilemap
   - FadeImage
   - EntryDoor
+  - Bridge
+  - BridgePlank
   layers:
   - Default
   - TransparentFX

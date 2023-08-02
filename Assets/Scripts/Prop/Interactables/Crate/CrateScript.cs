@@ -5,8 +5,10 @@ using UnityEngine;
 using Utils;
 
 
-namespace Prop.Interactables.Crate {
-    public class CrateScript : MonoBehaviour {
+namespace Prop.Interactables.Crate
+{
+    public class CrateScript : MonoBehaviour
+    {
         [SerializeField] private CratePhysicsDataSo data;
 
         [Header("Debug")]
@@ -20,6 +22,7 @@ namespace Prop.Interactables.Crate {
         public bool isCarried;
         public bool isBeingThrown;
         public bool isGrounded;
+        public bool isOnBridge;
 
         private CrateRayCasts _ray;
         private Rigidbody2D _rb;
@@ -37,7 +40,8 @@ namespace Prop.Interactables.Crate {
 
 
         #region Unity Callback Functions
-        private void Awake() {
+        private void Awake()
+        {
             _rb = GetComponent<Rigidbody2D>();
             _box = GetComponent<BoxCollider2D>();
             _ray = GetComponent<CrateRayCasts>();
@@ -46,12 +50,14 @@ namespace Prop.Interactables.Crate {
             sidewaysCrates = new List<CrateScript>();
         }
 
-        private void Start() {
+        private void Start()
+        {
             SetCrateSize();
         }
 
 
-        private void Update() {
+        private void Update()
+        {
             HandleThrow();
 
             // if player is in range, horizontally, then cause crate to have low friction, else place 20f friction
@@ -64,63 +70,88 @@ namespace Prop.Interactables.Crate {
         }
 
 
-        private void FixedUpdate() {
-            SetCrateMass();
+        private void FixedUpdate()
+        {
+            SetMass();
             SetGravity();
         }
 
 
-        private void OnCollisionStay2D(Collision2D other) {
-            if (other.gameObject.CompareTag("Cart")) {
-                if (CollisionUtils.IsCollisionBottom(other)) {
+        private void OnCollisionStay2D(Collision2D other)
+        {
+            if (other.gameObject.CompareTag("Cart"))
+            {
+                if (CollisionUtils.IsCollisionBottom(other))
+                {
                     cartScript = other.gameObject.GetComponent<CartScript>();
                 }
             }
 
 
-            if (other.gameObject.CompareTag("Crate")) {
-                if (CollisionUtils.IsCollisionTop(other)) {
+            if (other.gameObject.CompareTag("Crate"))
+            {
+                if (CollisionUtils.IsCollisionTop(other))
+                {
                     aboveCrate = other.gameObject.GetComponent<CrateScript>();
                 }
 
-                if (CollisionUtils.IsCollisionSideways(other)) {
+                if (CollisionUtils.IsCollisionSideways(other))
+                {
                     var nearbyCrate = other.gameObject.GetComponent<CrateScript>();
 
-                    if (!sidewaysCrates.Contains(nearbyCrate)) {
+                    if (!sidewaysCrates.Contains(nearbyCrate))
+                    {
                         sidewaysCrates.Add(nearbyCrate);
                     }
                 }
-                
-                if (CollisionUtils.IsCollisionBottom(other)) {
+
+                if (CollisionUtils.IsCollisionBottom(other))
+                {
                     bottomCrate = other.gameObject.GetComponent<CrateScript>();
                 }
             }
 
 
-            if (other.gameObject.CompareTag("Terrain")) {
+            if (other.gameObject.CompareTag("Terrain"))
+            {
                 isGrounded = true;
+            }
+
+            if (other.gameObject.CompareTag("BridgePlank"))
+            {
+                isOnBridge = true;
             }
         }
 
 
-        private void OnCollisionExit2D(Collision2D other) {
-            if (other.gameObject.CompareTag("Cart")) {
+        private void OnCollisionExit2D(Collision2D other)
+        {
+            if (other.gameObject.CompareTag("Cart"))
+            {
                 cartScript = null;
             }
 
-            if (other.gameObject.CompareTag("Terrain")) {
+            if (other.gameObject.CompareTag("Terrain"))
+            {
                 isGrounded = false;
+            }
+
+            if (other.gameObject.CompareTag("BridgePlank"))
+            {
+                isOnBridge = false;
             }
         }
         #endregion
 
 
-        public bool HasBottomCrate() {
+        public bool HasBottomCrate()
+        {
             return bottomCrate;
         }
 
 
-        private void SetCrateSize() {
+        private void SetCrateSize()
+        {
             var parentMap = transform.parent.localScale;
             var size = _box.size;
             crateSize = new Vector2(size.x * parentMap.x, size.y * parentMap.y);
@@ -128,81 +159,96 @@ namespace Prop.Interactables.Crate {
 
 
         // is crate got thrown, and reaches ground, cart or sidewaysCrates, set to false
-        private void HandleThrow() {
-            if (isBeingThrown && (isGrounded || cartScript || sidewaysCrates.Count > 0 || bottomCrate)) {
+        private void HandleThrow()
+        {
+            if (isBeingThrown && (isGrounded || cartScript || sidewaysCrates.Count > 0 || bottomCrate || isOnBridge))
+            {
                 isBeingThrown = false;
             }
         }
 
 
-        private void ValidateAboveCrate() {
+        private void ValidateAboveCrate()
+        {
             if (!aboveCrate) return;
 
             // if current crate is not carried but the above crate is carried, then set above crate to false
             //  reason - crate is being picked up based on position - check PlaceCrateOnPlayer() in PlayerScript.cs
-            if (!isCarried && aboveCrate.isCarried) {
+            if (!isCarried && aboveCrate.isCarried)
+            {
                 aboveCrate = null;
             }
 
             // else apply for regular physics interaction 
-            else {
+            else
+            {
                 var dist = GetDistFromCrate(aboveCrate.transform.position);
                 var threshold = GetParsedSize(aboveCrate);
 
                 // if any of the distances is higher than the size + offset, set aboveCrate to null
-                if (dist.x > threshold.x + 0.1f || dist.y > threshold.y + 0.1f) {
+                if (dist.x > threshold.x + 0.1f || dist.y > threshold.y + 0.1f)
+                {
                     aboveCrate = null;
                 }
             }
         }
 
 
-        private void ValidateBottomCrate() {
+        private void ValidateBottomCrate()
+        {
             if (!bottomCrate) return;
 
             // if current crate is carried and not attached to player then set bottom crate to false
-            if (isCarried && !_fj.enabled) {
+            if (isCarried && !_fj.enabled)
+            {
                 bottomCrate = null;
             }
 
             // else apply for regular physics interaction 
-            else {
+            else
+            {
                 var dist = GetDistFromCrate(bottomCrate.transform.position);
                 var threshold = GetParsedSize(bottomCrate);
 
                 // if any of the distances is higher than the size + offset, set aboveCrate to null
-                if (dist.x > threshold.x + 0.1f || dist.y > threshold.y + 0.1f) {
+                if (dist.x > threshold.x + 0.1f || dist.y > threshold.y + 0.1f)
+                {
                     bottomCrate = null;
                 }
             }
         }
 
 
-        private void ValidateSidewaysCrates() {
+        private void ValidateSidewaysCrates()
+        {
             if (sidewaysCrates.Count == 0) return;
 
             var cratesToRemove = new List<CrateScript>();
 
             // iterate over sidewaysCrates and add the crates needed to remove to cratesToRemove list
-            foreach (var crate in sidewaysCrates) {
+            foreach (var crate in sidewaysCrates)
+            {
                 var dist = GetDistFromCrate(crate.transform.position);
                 var threshold = GetParsedSize(crate);
 
                 // if any of the distances is higher than the size + offset, add crate to the removal list
-                if (dist.x > threshold.x + 0.05f || dist.y > threshold.y * 0.9f) {
+                if (dist.x > threshold.x + 0.05f || dist.y > threshold.y * 0.9f)
+                {
                     cratesToRemove.Add(crate);
                 }
             }
 
             // remove all cratesToRemove present in sidewaysCrates
-            foreach (var crate in cratesToRemove) {
+            foreach (var crate in cratesToRemove)
+            {
                 sidewaysCrates.Remove(crate);
             }
         }
 
 
         // return the distX and distY based on subtraction
-        private Vector2 GetDistFromCrate(Vector2 targetCratePos) {
+        private Vector2 GetDistFromCrate(Vector2 targetCratePos)
+        {
             var selfPos = transform.position;
             var distX = Mathf.Abs(targetCratePos.x - selfPos.x);
             var distY = Mathf.Abs(targetCratePos.y - selfPos.y);
@@ -212,7 +258,8 @@ namespace Prop.Interactables.Crate {
 
 
         // similar to adding the bounds.extent of the sprites, but based on crate size
-        private Vector2 GetParsedSize(CrateScript targetCrate) {
+        private Vector2 GetParsedSize(CrateScript targetCrate)
+        {
             var thresholdX = targetCrate.crateSize.x / 2 + crateSize.x / 2;
             var thresholdY = targetCrate.crateSize.y / 2 + crateSize.y / 2;
 
@@ -221,26 +268,33 @@ namespace Prop.Interactables.Crate {
 
 
         // Set the PhysicsMaterial2D to provide friction or no friction
-        private void SetPhysicsMaterial() {
+        private void SetPhysicsMaterial()
+        {
             // start with high friction
             var frictionMat = data.HighFriction;
 
-            if (isCarried) {
-                frictionMat = data.NoFriction;
-            }
+            //TODO: check for use cases
+            // if (isCarried)
+            // {
+            //     frictionMat = data.NoFriction;
+            // }
 
-            if (isGrounded && IsPlayerDetected()) {
+            if (isGrounded && IsPlayerDetected())
+            {
                 frictionMat = data.GroundFriction;
             }
 
             // if crate is not being carried and not in air from being thrown
-            else if (!isCarried && !isBeingThrown) {
-                if (IsPlayerDetected()) {
+            else if (!isCarried && !isBeingThrown)
+            {
+                if (IsPlayerDetected())
+                {
                     // set to lowFriction if player detected
                     frictionMat = data.LowFriction;
 
                     // if the crate is on a cart 
-                    if (cartScript) {
+                    if (cartScript)
+                    {
                         // NOTE: this allows for crates to be pushed first if the crate is not entirely on the cart (stands in the way of player collider and cart collider)
                         //   if player is pushing the cart from left or right set high friction to crate, else set low friction to crate.
                         frictionMat = cartScript.isPlayerCollision ? data.HighFriction : data.LowFriction;
@@ -252,29 +306,44 @@ namespace Prop.Interactables.Crate {
         }
 
 
-        private void SetCrateMass() {
-            if (isCarried || isBeingThrown) {
+        private void SetMass()
+        {
+            if (isCarried || isBeingThrown)
+            {
                 _rb.mass = data.CarryThrowMass;
-            } else if (bottomCrate) {
+            } else if (isOnBridge && !isGrounded)
+            {
+                _rb.mass = data.BridgeMass;
+            } else if (bottomCrate)
+            {
                 _rb.mass = data.StackMass;
-            } else {
+            } else
+            {
                 _rb.mass = data.DefaultMass;
             }
         }
 
 
-        private void SetGravity() {
-            if (_rb.velocity.y < -1f && !isBeingThrown && !isCarried) {
+        private void SetGravity()
+        {
+            if (_rb.velocity.y is < -1f or > 1f && !isBeingThrown && !isCarried)
+            {
                 _rb.gravityScale = data.FreeFallGravity;
-            } else if (isCarried || isBeingThrown) {
+            } else if (isCarried || isBeingThrown)
+            {
                 _rb.gravityScale = data.CarryThrowGravity;
-            } else {
+            } else if (isOnBridge)
+            {
+                _rb.gravityScale = data.BridgeGravity;
+            } else
+            {
                 _rb.gravityScale = data.DefaultGravity;
             }
         }
 
 
-        private bool IsPlayerDetected() {
+        private bool IsPlayerDetected()
+        {
             var isLeftInRange = _ray.HitPlayerLeft.collider;
             var isRightInRange = _ray.HitPlayerRight.collider;
 

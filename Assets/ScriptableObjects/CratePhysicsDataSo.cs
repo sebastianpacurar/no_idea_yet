@@ -1,8 +1,10 @@
 using UnityEngine;
 
-namespace ScriptableObjects {
+namespace ScriptableObjects
+{
     [CreateAssetMenu(fileName = "CratePhysicsDataSO", menuName = "Data/CratePhysicsData")]
-    public class CratePhysicsDataSo : ScriptableObject {
+    public class CratePhysicsDataSo : ScriptableObject
+    {
         [Header("Crate Identifier")]
         [SerializeField] private bool isSmallCrate;
 
@@ -20,6 +22,9 @@ namespace ScriptableObjects {
         [SerializeField] private float freeFallGravity;
         [SerializeField] private float carryThrowMass;
         [SerializeField] private float carryThrowGravity;
+
+        [SerializeField] private float bridgeMass;
+        [SerializeField] private float bridgeGravity;
 
         [Header("Physics Material 2D")]
         [SerializeField] private PhysicsMaterial2D lowFriction;
@@ -42,9 +47,14 @@ namespace ScriptableObjects {
         public float CarryThrowMass => carryThrowMass;
         public float CarryThrowGravity => carryThrowGravity;
 
+        public float BridgeMass => bridgeMass;
+        public float BridgeGravity => bridgeGravity;
+
         public PhysicsMaterial2D LowFriction => lowFriction;
         public PhysicsMaterial2D HighFriction => highFriction;
         public PhysicsMaterial2D GroundFriction => groundFriction;
+
+        //TODO: causes inability to carry multiple crates at once
         public PhysicsMaterial2D NoFriction => noFriction;
         #endregion
     }

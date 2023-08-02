@@ -1,8 +1,10 @@
 using ScriptableObjects;
 
 
-namespace NPC.Enemy.Fsm.States.SuperStates {
-    public class GroundedState : EnemyState {
+namespace NPC.Enemy.Fsm.States.SuperStates
+{
+    public class GroundedState : EnemyState
+    {
         protected GroundedState(EnemyScript enemy, EnemyStateMachine stateMachine, EnemyDataSo enemyData, string animBoolName) : base(enemy, stateMachine, enemyData, animBoolName) { }
 
         // define all the checks used in the sub states
@@ -12,24 +14,28 @@ namespace NPC.Enemy.Fsm.States.SuperStates {
         private bool _isLateNight;
         private bool _isHit;
 
-        
-        protected internal override void LogicUpdate() {
+
+        protected internal override void LogicUpdate()
+        {
             base.LogicUpdate();
 
             // set to hit state
-            if (_isHit) {
+            if (_isHit)
+            {
                 EnemyScript.SetHitFalse();
                 StateMachine.ChangeState(EnemyScript.TakeHitState);
             }
 
             // set to death state if day light comes
-            if (!_isLateNight) {
+            if (!_isLateNight)
+            {
                 StateMachine.ChangeState(EnemyScript.DeathState);
             }
         }
 
-        
-        protected override void DoChecks() {
+
+        protected override void DoChecks()
+        {
             base.DoChecks();
             CanFollowPlayer = EnemyScript.CheckIfCanFollowPlayer();
             CanAttackPlayer = EnemyScript.CheckIfCanAttackPlayer();

@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-namespace Prop.Uninteractables {
-    public class LampPostScript : MonoBehaviour {
+namespace Prop.Uninteractables
+{
+    public class LampPostScript : MonoBehaviour
+    {
         [Header("Light On / Off")]
         [SerializeField] private GameObject lightOnObj;
         [SerializeField] private GameObject lightOffObj;
@@ -19,24 +21,29 @@ namespace Prop.Uninteractables {
         // use as ref for SmoothDampAngle
         private float _rotVelocity = 0f;
 
-        private void Start() {
+        private void Start()
+        {
             _globalLight = GameObject.FindGameObjectWithTag("GlobalLight").GetComponent<Light2D>();
         }
 
-        private void Update() {
+        private void Update()
+        {
             HandleSwing();
             HandleLampTurnOnOff();
         }
 
-        private void HandleSwing() {
+        private void HandleSwing()
+        {
             // daytime
-            if (_globalLight.intensity < minIntensity) {
+            if (_globalLight.intensity < minIntensity)
+            {
                 // calculate the rotation based on Sin movement
                 var rotZ = Mathf.Sin(Time.time * sinFreq) * sinAmplitude + swingObj.transform.localRotation.z;
                 swingObj.transform.localRotation = Quaternion.Euler(0f, 0f, rotZ);
             }
             // nighttime
-            else {
+            else
+            {
                 // stop swinging using smoothness
                 var rotZ = Mathf.SmoothDampAngle(swingObj.transform.localRotation.eulerAngles.z, Quaternion.Euler(0f, 0f, 0f).z, ref _rotVelocity, stopSmoothTime);
                 swingObj.transform.localRotation = Quaternion.Euler(0f, 0f, rotZ);
@@ -44,7 +51,8 @@ namespace Prop.Uninteractables {
         }
 
         //TODO: tweak this some more (remember the enemy and mist are also using minIntensity!!!!
-        private void HandleLampTurnOnOff() {
+        private void HandleLampTurnOnOff()
+        {
             // cause lamp to turn off after the swinging is over, and z rotation of swingObj equals to 0
             lightOnObj.SetActive(_globalLight.intensity <= minIntensity + 0.05f);
             lightOffObj.SetActive(_globalLight.intensity >= minIntensity + 0.05f);

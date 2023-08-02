@@ -3,8 +3,8 @@ using UnityEngine;
 using Utils;
 
 
-namespace Prop.Interactables.Cart {
-    public class CartScript : MonoBehaviour {
+namespace Prop.Interactables.Cart{
+    public class CartScript : MonoBehaviour{
         [SerializeField] private CartPhysicsDataSo data;
 
         [Header("Current PhysicsMaterial2D")]
@@ -20,42 +20,48 @@ namespace Prop.Interactables.Cart {
         public bool isPlayerCollision;
 
         private Rigidbody2D _rb;
-        private BoxCollider2D _box;
+        private CapsuleCollider2D _capsule;
 
 
-        private void Awake() {
+        private void Awake()
+        {
             _rb = GetComponent<Rigidbody2D>();
-            _box = GetComponent<BoxCollider2D>();
+            _capsule = GetComponent<CapsuleCollider2D>();
         }
 
 
-        private void Update() {
+        private void Update()
+        {
             SetSpeedAndDirection();
 
             // set the friction to low if player collision
             SetPhysicsMaterial(isPlayerCollision ? data.LowFriction : data.HighFriction);
 
-            selectedPm2D = _box.sharedMaterial;
+            selectedPm2D = _capsule.sharedMaterial;
 
             // rotate wheels
-            foreach (var wheel in wheels) {
+            foreach (var wheel in wheels)
+            {
                 wheel.transform.Rotate(0, 0, speed * direction * Time.deltaTime);
             }
         }
 
-        private void FixedUpdate() {
+        private void FixedUpdate()
+        {
             SetMaxVelocity();
             MassBasedOnCollision();
         }
 
 
-        private void SetMaxVelocity() {
+        private void SetMaxVelocity()
+        {
             var parsedX = Mathf.Clamp(_rb.velocity.x, -data.MaxSpeed, data.MaxSpeed);
             _rb.velocity = new Vector2(parsedX, _rb.velocity.y);
         }
 
 
-        private void SetSpeedAndDirection() {
+        private void SetSpeedAndDirection()
+        {
             // transform velocity from WorldSpace to LocalSpace
             localVelocity = transform.InverseTransformDirection(_rb.velocity);
 
@@ -67,31 +73,37 @@ namespace Prop.Interactables.Cart {
         }
 
 
-        private void OnCollisionEnter2D(Collision2D other) {
+        private void OnCollisionEnter2D(Collision2D other)
+        {
             if (!other.gameObject.CompareTag("Player")) return;
 
             // if player is on the left or right of the cart, then return true
-            if (CollisionUtils.IsCollisionSideways(other)) {
+            if (CollisionUtils.IsCollisionSideways(other))
+            {
                 isPlayerCollision = true;
             }
         }
 
 
-        private void OnCollisionExit2D(Collision2D other) {
-            if (other.gameObject.CompareTag("Player")) {
+        private void OnCollisionExit2D(Collision2D other)
+        {
+            if (other.gameObject.CompareTag("Player"))
+            {
                 isPlayerCollision = false;
             }
         }
 
         // set high mass for cart when not collided
-        private void MassBasedOnCollision() {
+        private void MassBasedOnCollision()
+        {
             _rb.mass = isPlayerCollision ? data.MassWhenPushed : data.MassWhenStationary;
         }
 
 
         // Set the PhysicsMaterial2D with the provided version
-        private void SetPhysicsMaterial(PhysicsMaterial2D material) {
-            _box.sharedMaterial = material;
+        private void SetPhysicsMaterial(PhysicsMaterial2D material)
+        {
+            _capsule.sharedMaterial = material;
         }
     }
 }

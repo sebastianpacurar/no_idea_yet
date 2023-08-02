@@ -1,8 +1,10 @@
 using ScriptableObjects;
 using UnityEngine;
 
-namespace Knight.Fsm.States {
-    public class PlayerState {
+namespace Knight.Fsm.States
+{
+    public class PlayerState
+    {
         protected readonly PlayerScript PlayerScript;
         protected readonly PlayerStateMachine StateMachine;
         protected readonly PlayerDataSo PlayerData;
@@ -16,7 +18,8 @@ namespace Knight.Fsm.States {
         // used to handle animations through states
         private readonly string _animBoolName;
 
-        protected PlayerState(PlayerScript player, PlayerStateMachine stateMachine, PlayerDataSo playerData, string animBoolName) {
+        protected PlayerState(PlayerScript player, PlayerStateMachine stateMachine, PlayerDataSo playerData, string animBoolName)
+        {
             PlayerScript = player;
             StateMachine = stateMachine;
             PlayerData = playerData;
@@ -24,7 +27,8 @@ namespace Knight.Fsm.States {
         }
 
         // execute when entering a state
-        protected internal virtual void Enter() {
+        protected internal virtual void Enter()
+        {
             DoChecks();
             PlayerScript.Anim.SetBool(_animBoolName, true);
             StartTime = Time.time;
@@ -32,7 +36,8 @@ namespace Knight.Fsm.States {
         }
 
         // execute when Exiting a state
-        protected internal virtual void Exit() {
+        protected internal virtual void Exit()
+        {
             PlayerScript.Anim.SetBool(_animBoolName, false);
         }
 
@@ -40,7 +45,8 @@ namespace Knight.Fsm.States {
         protected internal virtual void LogicUpdate() { }
 
         // overrides FixedUpdate()
-        protected internal virtual void PhysicsUpdate() {
+        protected internal virtual void PhysicsUpdate()
+        {
             DoChecks();
         }
 

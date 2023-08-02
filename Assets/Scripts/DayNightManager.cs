@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class DayNightManager : MonoBehaviour {
+public class DayNightManager : MonoBehaviour{
     [SerializeField] private float maxIntensity;
     [SerializeField] private float minIntensity;
     [SerializeField] private float cycleDuration; // how long should a day last, in seconds
@@ -10,7 +10,9 @@ public class DayNightManager : MonoBehaviour {
 
     private Light2D _globalLight;
 
-    private void Start() {
+    
+    private void Start()
+    {
         _globalLight = GameObject.FindGameObjectWithTag("GlobalLight").GetComponent<Light2D>();
         _globalLight.intensity = maxIntensity;
         currentTime = cycleDuration / 2; // start from mid of day
@@ -18,10 +20,14 @@ public class DayNightManager : MonoBehaviour {
         StartCoroutine(StartCycle());
     }
 
-    private IEnumerator StartCycle() {
-        while (true) {
+    
+    private IEnumerator StartCycle()
+    {
+        while (true)
+        {
             // daytime - ranges from 0 to cycleDuration 
-            while (currentTime < cycleDuration / 2f) {
+            while (currentTime < cycleDuration / 2f)
+            {
                 currentTime += Time.deltaTime;
                 /*
                  * NOTE:
@@ -37,7 +43,8 @@ public class DayNightManager : MonoBehaviour {
             }
 
             // night - ranges from "cycleDuration / 2f" to "cycleDuration".
-            while (currentTime < cycleDuration) {
+            while (currentTime < cycleDuration)
+            {
                 currentTime += Time.deltaTime;
                 /* NOTE:
                  * subtract cycleDuration / 2f from currentTime to shift the range to start from 0.
